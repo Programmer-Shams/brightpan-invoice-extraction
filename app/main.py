@@ -1,6 +1,7 @@
 """Extraction API.  uv run uvicorn app.main:app --port 8040"""
 import csv
 import hmac
+import io
 import logging
 import os
 import uuid
@@ -8,6 +9,7 @@ from contextlib import asynccontextmanager
 from typing import Literal
 
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
+import pypdfium2 as pdfium
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
@@ -118,6 +120,25 @@ def get_file(document_id: str):
         raise HTTPException(404, "document not found")
     return Response(bytes(row["file_bytes"]), media_type=row["content_type"],
                     headers={"Content-Disposition": f'inline; filename="{row["filename"]}"'})
+
+
+PREVIEW_DPI = 110
+
+
+@app.get("/documents/{document_id}/pages/{page}")
+def page_image(document_id: str, page: int):
+    """One page of a PDF as PNG, so every browser shows the original the same way beside the fields."""
+    row = db.get_file(valid_id(document_id))
+    if row is None:
+        raise HTTPException(404, "document not found")
+    if row["content_type"] != "application/pdf":
+        raise HTTPException(400, "only PDFs have page images; use /file for images")
+    pdf = pdfium.PdfDocument(bytes(row["file_bytes"]))
+    if not 1 <= page <= len(pdf):
+        raise HTTPException(404, "page not found")
+    buf = io.BytesIO()
+    pdf[page - 1].render(scale=PREVIEW_DPI / 72).to_pil().save(buf, format="PNG", optimize=True)
+    return Response(buf.getvalue(), media_type="image/png", headers={"Cache-Control": "private, max-age=3600"})
 
 
 @app.get("/review")
