@@ -4,7 +4,7 @@ Implements the same contract as the real API:
   POST /documents        multipart `file` (+ optional form `source`) -> 202 {"id", "status"}
   GET  /documents/{id}   -> {"id", "filename", "status", "pages", "received_at", "finished_at",
                              "processing_seconds", "record", "usage", "error"}
-  POST /admin/reset      -> clears stored documents (eval runs start clean)
+  POST /admin/reset      -> removes earlier eval uploads (eval runs start clean)
 
 Every field of the record is null, so the eval measures a true zero baseline.
 Run: uv run uvicorn eval.stub_api:app --port 8040

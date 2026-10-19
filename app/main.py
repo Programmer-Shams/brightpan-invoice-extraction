@@ -86,5 +86,4 @@ def health():
 def reset():
     if not config.ALLOW_RESET:
         raise HTTPException(403, "reset is disabled (set ALLOW_RESET=1 for local eval runs)")
-    db.reset()
-    return {"ok": True}
+    return {"ok": True, "deleted_eval_documents": db.reset_eval()}

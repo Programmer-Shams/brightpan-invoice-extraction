@@ -42,12 +42,16 @@ def requeue_stale(minutes: int = 10) -> int:
                             "and started_at < now() - make_interval(mins => %s)", (minutes,)).rowcount
 
 
-def is_duplicate(key: str | None, document_id) -> bool:
+def is_duplicate(key: str | None, document_id, source: str) -> bool:
+    """Same vendor + invoice number already stored. Eval uploads are their own scope, so the test set
+    never marks a real invoice as a duplicate (or the other way round)."""
     if key is None:
         return False
     with pool.connection() as conn:
-        return conn.execute("select 1 from extractions where duplicate_key = %s and document_id <> %s limit 1",
-                            (key, document_id)).fetchone() is not None
+        return conn.execute(
+            "select 1 from extractions e join documents d on d.id = e.document_id "
+            "where e.duplicate_key = %s and e.document_id <> %s and (d.source = 'eval') = %s limit 1",
+            (key, document_id, source == "eval")).fetchone() is not None
 
 
 def save_result(document_id, record: dict, key: str | None, pages: int, input_mode: str, usage: dict,
@@ -95,6 +99,7 @@ def get_file(document_id) -> dict | None:
                             (document_id,)).fetchone()
 
 
-def reset() -> None:
+def reset_eval() -> int:
+    """Removes eval uploads only; real uploads and emails are kept."""
     with pool.connection() as conn:
-        conn.execute("truncate documents cascade")
+        return conn.execute("delete from documents where source = 'eval'").rowcount

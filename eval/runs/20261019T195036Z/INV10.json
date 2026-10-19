@@ -1,0 +1,78 @@
+{
+  "id": "fcd64aec-d56b-4ceb-a4b0-80fb6278fd89",
+  "filename": "INV10.pdf",
+  "content_type": "application/pdf",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "error": null,
+  "received_at": "2026-10-19T19:52:00.598118+00:00",
+  "finished_at": "2026-10-19T19:52:06.160094+00:00",
+  "processing_seconds": 5.561976,
+  "record": {
+    "tax": 0.0,
+    "flags": [
+      "totals_mismatch"
+    ],
+    "route": "review",
+    "total": 490.0,
+    "checks": {
+      "totals": {
+        "line_sum": 405.0,
+        "computed_total": 440.0,
+        "printed_minus_computed": 50.0,
+        "line_sum_minus_subtotal": 0.0
+      }
+    },
+    "currency": "USD",
+    "discount": 0.0,
+    "due_date": "2026-10-25",
+    "shipping": 35.0,
+    "subtotal": 405.0,
+    "po_number": "PO-5511",
+    "confidence": {
+      "tax": 0.9,
+      "total": 0.95,
+      "currency": 0.98,
+      "discount": 0.9,
+      "due_date": 0.97,
+      "shipping": 0.97,
+      "subtotal": 0.97,
+      "po_number": 0.97,
+      "line_items": 0.97,
+      "vendor_name": 0.98,
+      "invoice_date": 0.98,
+      "invoice_number": 0.98
+    },
+    "line_items": [
+      {
+        "amount": 285.0,
+        "quantity": 300.0,
+        "unit_price": 0.95,
+        "description": "Retail box, knife set, printed"
+      },
+      {
+        "amount": 120.0,
+        "quantity": 300.0,
+        "unit_price": 0.4,
+        "description": "Foam insert, knife set"
+      }
+    ],
+    "vendor_name": "Pacific Packaging Co.",
+    "invoice_date": "2026-09-25",
+    "invoice_number": "PP-88377"
+  },
+  "input_mode": "pdf_text",
+  "outputs_status": null,
+  "review": {
+    "status": "open",
+    "note": null
+  },
+  "usage": {
+    "model": "claude-opus-5-5",
+    "input_tokens": 2810,
+    "output_tokens": 372,
+    "cost_usd": 0.01868
+  },
+  "seconds_source": "server"
+}

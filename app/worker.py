@@ -21,7 +21,7 @@ def process(client: anthropic.Anthropic, doc: dict) -> None:
     result = extract(client, bytes(doc["file_bytes"]), doc["content_type"])
     x = result["extraction"]
     key = duplicate_key(x.vendor_name, x.invoice_number)
-    record = build_record(x, is_duplicate=db.is_duplicate(key, doc["id"]),
+    record = build_record(x, is_duplicate=db.is_duplicate(key, doc["id"], doc["source"]),
                           threshold=config.CONFIDENCE_THRESHOLD, tolerance=config.TOLERANCE)
     db.save_result(doc["id"], record.model_dump(), key, result["pages"], result["input_mode"],
                    result["usage"], result["request_id"])

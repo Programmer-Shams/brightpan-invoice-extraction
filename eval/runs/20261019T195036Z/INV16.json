@@ -1,0 +1,78 @@
+{
+  "id": "f24cd273-d212-476b-b655-2b6fb05b5d29",
+  "filename": "INV16.jpg",
+  "content_type": "image/jpeg",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "error": null,
+  "received_at": "2026-10-19T19:53:29.727296+00:00",
+  "finished_at": "2026-10-19T19:53:41.086797+00:00",
+  "processing_seconds": 11.359501,
+  "record": {
+    "tax": 0.0,
+    "flags": [
+      "duplicate_invoice"
+    ],
+    "route": "review",
+    "total": 3202.5,
+    "checks": {
+      "totals": {
+        "line_sum": 3057.5,
+        "computed_total": 3202.5,
+        "printed_minus_computed": 0.0,
+        "line_sum_minus_subtotal": 0.0
+      }
+    },
+    "currency": "USD",
+    "discount": 0.0,
+    "due_date": "2026-11-03",
+    "shipping": 145.0,
+    "subtotal": 3057.5,
+    "po_number": "PO-5501",
+    "confidence": {
+      "tax": 0.9,
+      "total": 0.97,
+      "currency": 0.97,
+      "discount": 0.9,
+      "due_date": 0.96,
+      "shipping": 0.95,
+      "subtotal": 0.96,
+      "po_number": 0.95,
+      "line_items": 0.95,
+      "vendor_name": 0.98,
+      "invoice_date": 0.96,
+      "invoice_number": 0.96
+    },
+    "line_items": [
+      {
+        "amount": 1880.0,
+        "quantity": 200.0,
+        "unit_price": 9.4,
+        "description": "12-inch carbon steel skillet blank"
+      },
+      {
+        "amount": 1177.5,
+        "quantity": 150.0,
+        "unit_price": 7.85,
+        "description": "10-inch carbon steel skillet blank"
+      }
+    ],
+    "vendor_name": "Ferro Metalworks Inc.",
+    "invoice_date": "2026-10-04",
+    "invoice_number": "FM-10421"
+  },
+  "input_mode": "image",
+  "outputs_status": null,
+  "review": {
+    "status": "open",
+    "note": null
+  },
+  "usage": {
+    "model": "claude-opus-5-5",
+    "input_tokens": 5570,
+    "output_tokens": 335,
+    "cost_usd": 0.02898
+  },
+  "seconds_source": "server"
+}
