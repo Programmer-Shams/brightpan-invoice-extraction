@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import httpx
+from dotenv import dotenv_values
 from pypdf import PdfReader
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -101,7 +102,8 @@ def main() -> None:
     raw_dir.mkdir(parents=True, exist_ok=True)
 
     rows = []
-    with httpx.Client(base_url=args.api, timeout=60) as client:
+    token = dotenv_values(ROOT / ".env").get("API_TOKEN") or ""
+    with httpx.Client(base_url=args.api, timeout=60, headers={"Authorization": f"Bearer {token}"}) as client:
         if not args.no_reset:
             r = client.post("/admin/reset")
             if r.status_code != 200:

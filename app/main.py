@@ -1,13 +1,13 @@
 """Extraction API.  uv run uvicorn app.main:app --port 8040"""
 import csv
+import hmac
 import logging
 import os
 import uuid
 from contextlib import asynccontextmanager
 from typing import Literal
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
@@ -30,8 +30,17 @@ async def lifespan(app: FastAPI):
     db.pool.close()
 
 
-app = FastAPI(title="Brightpan invoice extraction API", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_methods=["*"], allow_headers=["*"])
+def require_token(request: Request) -> None:
+    if request.url.path == "/health":
+        return
+    if not config.API_TOKEN:
+        raise HTTPException(503, "API_TOKEN is not configured")
+    sent = request.headers.get("authorization", "").removeprefix("Bearer ").strip()
+    if not hmac.compare_digest(sent.encode(), config.API_TOKEN.encode()):
+        raise HTTPException(401, "missing or invalid API token")
+
+
+app = FastAPI(title="Brightpan invoice extraction API", lifespan=lifespan, dependencies=[Depends(require_token)])
 
 
 def sniff(data: bytes, declared: str | None) -> str | None:
