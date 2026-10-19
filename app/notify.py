@@ -1,0 +1,75 @@
+"""Sends each processed document to Demo 4's n8n: auto -> a row in the AP register sheet, review -> Slack.
+
+The payload is fully shaped here (sheet row + Slack message) so the n8n workflow only routes it.
+Eval uploads are not sent unless NOTIFY_EVAL=1, so eval runs don't fill the register or the channel.
+"""
+import logging
+
+import httpx
+
+from . import config
+
+log = logging.getLogger("notify")
+
+FLAG_TEXT = {
+    "totals_mismatch": "totals don't add up",
+    "duplicate_invoice": "duplicate of an invoice already received",
+    "low_confidence": "low confidence on a required field",
+    "missing_required_field": "missing or invalid required field",
+}
+
+
+def money(currency: str | None, v: float | None) -> str:
+    return "—" if v is None else f"{currency or ''} {v:,.2f}".strip()
+
+
+def sheet_row(doc: dict, r: dict) -> dict:
+    return {
+        "Received": doc["received_at"].isoformat(timespec="seconds"),
+        "Vendor": r["vendor_name"], "Invoice #": r["invoice_number"],
+        "Invoice date": r["invoice_date"], "Due date": r["due_date"] or "",
+        "Currency": r["currency"], "PO #": r["po_number"] or "",
+        "Subtotal": r["subtotal"], "Discount": r["discount"], "Tax": r["tax"], "Shipping": r["shipping"],
+        "Total": r["total"], "Line items": len(r["line_items"]),
+        "Source": doc["source"], "File": doc["filename"],
+        "Link": f"{config.FRONTEND_URL}/documents/{doc['id']}", "Document ID": str(doc["id"]),
+    }
+
+
+def slack_message(doc: dict, r: dict) -> dict:
+    t = r.get("checks", {}).get("totals", {})
+    reasons = []
+    for f in r["flags"]:
+        line = FLAG_TEXT.get(f, f)
+        if f == "totals_mismatch" and "computed_total" in t:
+            line += f" (printed {money(r['currency'], r['total'])}, lines add up to {money(r['currency'], t['computed_total'])})"
+        if f == "missing_required_field":
+            line += f" ({', '.join(r.get('checks', {}).get('missing_required', []))})"
+        if f == "low_confidence":
+            line += f" ({', '.join(r.get('checks', {}).get('low_confidence_fields', []))})"
+        reasons.append(f"• {line}")
+    title = f"{r['vendor_name'] or 'Unknown vendor'} {r['invoice_number'] or ''}".strip()
+    link = f"{config.FRONTEND_URL}/review/{doc['id']}"
+    text = (f":mag: *Invoice needs review:* {title}, {money(r['currency'], r['total'])}\n"
+            + "\n".join(reasons) + f"\nFile: {doc['filename']} ({doc['source']})  <{link}|Open in review queue>")
+    return {"text": text}
+
+
+def send(doc: dict, record: dict) -> str:
+    """Returns the outcome stored on the extraction: sent | skipped:<why> | failed:<why>."""
+    if not config.N8N_OUTPUTS_WEBHOOK_URL:
+        return "skipped:no webhook configured"
+    if doc["source"] == "eval" and not config.NOTIFY_EVAL:
+        return "skipped:eval upload"
+    payload = {"event": "document.processed", "document_id": str(doc["id"]), "route": record["route"],
+               "flags": record["flags"]}
+    if record["route"] == "auto":
+        payload["sheet_row"] = sheet_row(doc, record)
+    else:
+        payload["slack"] = slack_message(doc, record)
+    try:
+        httpx.post(config.N8N_OUTPUTS_WEBHOOK_URL, json=payload, timeout=10).raise_for_status()
+        return "sent"
+    except httpx.HTTPError as e:
+        log.warning("%s output webhook failed: %s", doc["id"], e)
+        return f"failed:{type(e).__name__}"

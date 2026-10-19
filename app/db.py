@@ -32,7 +32,7 @@ def claim_next() -> dict | None:
             "update documents set status = 'processing', started_at = now(), attempts = attempts + 1 "
             "where id = (select id from documents where status = 'queued' order by received_at "
             "            for update skip locked limit 1) "
-            "returning id, filename, content_type, file_bytes").fetchone()
+            "returning id, filename, content_type, source, received_at, file_bytes").fetchone()
 
 
 def requeue_stale(minutes: int = 10) -> int:
@@ -67,6 +67,11 @@ def save_result(document_id, record: dict, key: str | None, pages: int, input_mo
                      "where id = %s", (pages, document_id))
 
 
+def set_outputs_status(document_id, status: str) -> None:
+    with pool.connection() as conn:
+        conn.execute("update extractions set outputs_status = %s where document_id = %s", (status, document_id))
+
+
 def mark_failed(document_id, error: str) -> None:
     with pool.connection() as conn:
         conn.execute("update documents set status = 'failed', error = %s, finished_at = now() where id = %s",
@@ -78,7 +83,7 @@ def get_document(document_id) -> dict | None:
         return conn.execute(
             "select d.id, d.filename, d.content_type, d.source, d.status, d.pages, d.error, d.received_at, "
             "d.finished_at, extract(epoch from d.finished_at - d.received_at) as processing_seconds, "
-            "e.record, e.model, e.input_tokens, e.output_tokens, e.cost_usd, e.input_mode, "
+            "e.record, e.model, e.input_tokens, e.output_tokens, e.cost_usd, e.input_mode, e.outputs_status, "
             "r.status as review_status, r.reviewer_note "
             "from documents d left join extractions e on e.document_id = d.id "
             "left join review_queue r on r.document_id = d.id where d.id = %s", (document_id,)).fetchone()

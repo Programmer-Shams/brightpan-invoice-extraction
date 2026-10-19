@@ -37,6 +37,7 @@ create table if not exists extractions (
     request_id       text,
     created_at       timestamptz not null default now()
 );
+alter table extractions add column if not exists outputs_status text;  -- sent | skipped:<why> | failed:<why>
 create index if not exists extractions_duplicate_key on extractions (duplicate_key);
 
 -- Documents waiting for a person. resolution is set by the reviewer.

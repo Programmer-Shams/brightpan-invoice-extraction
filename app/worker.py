@@ -9,7 +9,7 @@ import time
 
 import anthropic
 
-from . import config, db
+from . import config, db, notify
 from .extract import ExtractionError, extract
 from .validate import build_record, duplicate_key
 
@@ -25,6 +25,7 @@ def process(client: anthropic.Anthropic, doc: dict) -> None:
                           threshold=config.CONFIDENCE_THRESHOLD, tolerance=config.TOLERANCE)
     db.save_result(doc["id"], record.model_dump(), key, result["pages"], result["input_mode"],
                    result["usage"], result["request_id"])
+    db.set_outputs_status(doc["id"], notify.send(doc, record.model_dump()))
     log.info("%s %s route=%s flags=%s", doc["id"], doc["filename"], record.route, record.flags)
 
 

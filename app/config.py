@@ -6,13 +6,16 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
 
-DATABASE_URL = os.environ["DATABASE_URL"]
+DATABASE_URL = os.getenv("DATABASE_URL", "")
 DB_SCHEMA = "invoice_extraction"
 MODEL = os.getenv("EXTRACTION_MODEL", "claude-opus-5-5")
 EFFORT = os.getenv("EXTRACTION_EFFORT", "medium")
 CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.80"))
 TOLERANCE = 0.02  # line math and totals must agree within two cents
 ALLOW_RESET = os.getenv("ALLOW_RESET", "0") == "1"  # POST /admin/reset wipes all documents; dev/eval only
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3040")
+N8N_OUTPUTS_WEBHOOK_URL = os.getenv("N8N_OUTPUTS_WEBHOOK_URL", "http://localhost:5679/webhook/brightpan-invoice-outputs")
+NOTIFY_EVAL = os.getenv("NOTIFY_EVAL", "0") == "1"
 CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:3040").split(",")
 
 # USD per million tokens, Anthropic first-party rates (cached 2026-10-06 in the Claude API docs).

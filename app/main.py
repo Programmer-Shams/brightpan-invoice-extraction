@@ -61,7 +61,7 @@ def get_document(document_id: str):
         "source": row["source"], "status": row["status"], "pages": row["pages"], "error": row["error"],
         "received_at": row["received_at"], "finished_at": row["finished_at"],
         "processing_seconds": float(seconds) if seconds is not None and row["status"] in ("done", "failed") else None,
-        "record": row["record"], "input_mode": row["input_mode"],
+        "record": row["record"], "input_mode": row["input_mode"], "outputs_status": row["outputs_status"],
         "review": {"status": row["review_status"], "note": row["reviewer_note"]} if row["review_status"] else None,
         "usage": {"model": row["model"], "input_tokens": row["input_tokens"], "output_tokens": row["output_tokens"],
                   "cost_usd": float(row["cost_usd"]) if row["cost_usd"] is not None else None},

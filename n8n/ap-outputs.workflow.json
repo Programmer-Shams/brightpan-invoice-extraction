@@ -1,0 +1,94 @@
+{
+  "name": "Demo 4 - AP outputs (Sheet + Slack)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "brightpan-invoice-outputs",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "5f0c9a52-6d1e-4a51-9a0e-2b7f1c3d4e01",
+      "name": "Document processed",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "0d6a3f7e-8b2c-4c1e-9f5a-0b0e1d2c0401"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2},
+          "conditions": [
+            {
+              "id": "c1a2b3c4-0000-4000-8000-000000000001",
+              "leftValue": "={{ $json.body.route }}",
+              "rightValue": "auto",
+              "operator": {"type": "string", "operation": "equals"}
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5f0c9a52-6d1e-4a51-9a0e-2b7f1c3d4e02",
+      "name": "Route is auto?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: $input.first().json.body.sheet_row }];"
+      },
+      "id": "5f0c9a52-6d1e-4a51-9a0e-2b7f1c3d4e03",
+      "name": "Register row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, -100]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": {"__rl": true, "mode": "url", "value": "={{ $env.AP_REGISTER_SHEET_URL }}"},
+        "sheetName": {"__rl": true, "mode": "id", "value": "0"},
+        "columns": {"mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [], "schema": []},
+        "options": {}
+      },
+      "id": "5f0c9a52-6d1e-4a51-9a0e-2b7f1c3d4e04",
+      "name": "Append to AP register",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [720, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body.slack) }}",
+        "options": {}
+      },
+      "id": "5f0c9a52-6d1e-4a51-9a0e-2b7f1c3d4e05",
+      "name": "Post review item to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 100]
+    }
+  ],
+  "connections": {
+    "Document processed": {"main": [[{"node": "Route is auto?", "type": "main", "index": 0}]]},
+    "Route is auto?": {
+      "main": [
+        [{"node": "Register row", "type": "main", "index": 0}],
+        [{"node": "Post review item to Slack", "type": "main", "index": 0}]
+      ]
+    },
+    "Register row": {"main": [[{"node": "Append to AP register", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "active": false
+}
