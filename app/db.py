@@ -103,3 +103,34 @@ def reset_eval() -> int:
     """Removes eval uploads only; real uploads and emails are kept."""
     with pool.connection() as conn:
         return conn.execute("delete from documents where source = 'eval'").rowcount
+
+
+SUMMARY_COLUMNS = (
+    "d.id, d.filename, d.content_type, d.source, d.status, d.pages, d.error, d.received_at, d.finished_at, "
+    "extract(epoch from d.finished_at - d.received_at) as processing_seconds, "
+    "e.record->>'vendor_name' as vendor_name, e.record->>'invoice_number' as invoice_number, "
+    "e.record->>'currency' as currency, (e.record->>'total')::numeric as total, e.route, e.flags, e.cost_usd, "
+    "r.status as review_status, r.reasons as review_reasons")
+SUMMARY_JOINS = ("from documents d left join extractions e on e.document_id = d.id "
+                 "left join review_queue r on r.document_id = d.id")
+
+
+def list_documents(limit: int, include_eval: bool) -> list[dict]:
+    with pool.connection() as conn:
+        return conn.execute(f"select {SUMMARY_COLUMNS} {SUMMARY_JOINS} where %s or d.source <> 'eval' "
+                            "order by d.received_at desc limit %s", (include_eval, limit)).fetchall()
+
+
+def list_review(status: str, include_eval: bool) -> list[dict]:
+    with pool.connection() as conn:
+        return conn.execute(f"select {SUMMARY_COLUMNS} {SUMMARY_JOINS} where r.status = %s "
+                            "and (%s or d.source <> 'eval') order by r.created_at", (status, include_eval)).fetchall()
+
+
+def resolve_review(document_id, status: str, note: str | None) -> dict | None:
+    """Closes an open review item. Returns the document (with record) or None if nothing was open."""
+    with pool.connection() as conn:
+        row = conn.execute("update review_queue set status = %s, reviewer_note = %s, resolved_at = now() "
+                           "where document_id = %s and status = 'open' returning document_id",
+                           (status, note, document_id)).fetchone()
+    return get_document(document_id) if row else None

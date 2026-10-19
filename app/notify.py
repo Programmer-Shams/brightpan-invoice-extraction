@@ -67,15 +67,17 @@ def slack_message(doc: dict, r: dict) -> dict:
     return {"text": text}
 
 
-def send(doc: dict, record: dict) -> str:
-    """Returns the outcome stored on the extraction: sent | skipped:<why> | failed:<why>."""
+def send(doc: dict, record: dict, event: str = "document.processed") -> str:
+    """Auto documents and approved review items go to the AP register; new review items go to Slack.
+    Returns the outcome stored on the extraction: sent | skipped:<why> | failed:<why>."""
     if not config.N8N_OUTPUTS_WEBHOOK_URL:
         return "skipped:no webhook configured"
     if doc["source"] == "eval" and not config.NOTIFY_EVAL:
         return "skipped:eval upload"
-    payload = {"event": "document.processed", "document_id": str(doc["id"]), "route": record["route"],
-               "flags": record["flags"]}
-    if record["route"] == "auto":
+    to_register = record["route"] == "auto" or event == "review.approved"
+    payload = {"event": event, "document_id": str(doc["id"]), "route": record["route"], "flags": record["flags"],
+               "destination": "register" if to_register else "slack"}
+    if to_register:
         payload["sheet_row"] = sheet_row(doc, record)
     else:
         payload["slack"] = slack_message(doc, record)

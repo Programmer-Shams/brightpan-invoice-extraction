@@ -23,8 +23,8 @@
           "conditions": [
             {
               "id": "c1a2b3c4-0000-4000-8000-000000000001",
-              "leftValue": "={{ $json.body.route }}",
-              "rightValue": "auto",
+              "leftValue": "={{ $json.body.destination }}",
+              "rightValue": "register",
               "operator": {"type": "string", "operation": "equals"}
             }
           ],
@@ -33,7 +33,7 @@
         "options": {}
       },
       "id": "5f0c9a52-6d1e-4a51-9a0e-2b7f1c3d4e02",
-      "name": "Route is auto?",
+      "name": "To the register?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [240, 0]
@@ -81,8 +81,8 @@
     }
   ],
   "connections": {
-    "Document processed": {"main": [[{"node": "Route is auto?", "type": "main", "index": 0}]]},
-    "Route is auto?": {
+    "Document processed": {"main": [[{"node": "To the register?", "type": "main", "index": 0}]]},
+    "To the register?": {
       "main": [
         [{"node": "Register row", "type": "main", "index": 0}],
         [{"node": "Post review item to Slack", "type": "main", "index": 0}]
