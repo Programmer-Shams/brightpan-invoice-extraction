@@ -1,0 +1,78 @@
+{
+  "id": "8bf94047-3b3d-4a64-90af-be49e2647942",
+  "filename": "INV08.pdf",
+  "content_type": "application/pdf",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "error": null,
+  "received_at": "2026-10-19T17:23:33.433843+00:00",
+  "finished_at": "2026-10-19T17:23:38.008474+00:00",
+  "processing_seconds": 4.574631,
+  "record": {
+    "tax": 62.17,
+    "flags": [],
+    "route": "auto",
+    "total": 919.67,
+    "checks": {
+      "totals": {
+        "line_sum": 857.5,
+        "computed_total": 919.67,
+        "printed_minus_computed": 0.0,
+        "line_sum_minus_subtotal": 0.0
+      }
+    },
+    "currency": "USD",
+    "discount": 0.0,
+    "due_date": "2026-10-20",
+    "shipping": 0.0,
+    "subtotal": 857.5,
+    "po_number": null,
+    "confidence": {
+      "tax": 0.97,
+      "total": 0.98,
+      "currency": 0.98,
+      "discount": 0.95,
+      "due_date": 0.97,
+      "shipping": 0.95,
+      "subtotal": 0.98,
+      "po_number": 0.9,
+      "line_items": 0.97,
+      "vendor_name": 0.98,
+      "invoice_date": 0.98,
+      "invoice_number": 0.98
+    },
+    "line_items": [
+      {
+        "amount": 389.7,
+        "quantity": 30.0,
+        "unit_price": 12.99,
+        "description": "Thermal shipping labels 4x6 (roll)"
+      },
+      {
+        "amount": 289.8,
+        "quantity": 20.0,
+        "unit_price": 14.49,
+        "description": "Packing tape 2-inch (6-pack)"
+      },
+      {
+        "amount": 178.0,
+        "quantity": 2.0,
+        "unit_price": 89.0,
+        "description": "Printer toner, black"
+      }
+    ],
+    "vendor_name": "OfficeHub Supplies",
+    "invoice_date": "2026-09-20",
+    "invoice_number": "OH-552201"
+  },
+  "input_mode": "pdf_text",
+  "review": null,
+  "usage": {
+    "model": "claude-opus-5-5",
+    "input_tokens": 2838,
+    "output_tokens": 367,
+    "cost_usd": 0.018692
+  },
+  "seconds_source": "server"
+}

@@ -1,501 +1,501 @@
 document_id,format,kind,field,expected,actual,match,invented
-INV01,digital,header,vendor_name,Ferro Metalworks Inc.,,0,0
-INV01,digital,header,invoice_number,FM-10421,,0,0
-INV01,digital,header,invoice_date,2026-09-02,,0,0
-INV01,digital,header,due_date,2026-10-02,,0,0
-INV01,digital,header,currency,USD,,0,0
-INV01,digital,header,po_number,PO-5501,,0,0
-INV01,digital,header,subtotal,3057.5,,0,0
-INV01,digital,header,tax,0.0,,0,0
-INV01,digital,header,shipping,145.0,,0,0
-INV01,digital,header,total,3202.5,,0,0
-INV01,digital,line_item,line 1,12-inch carbon steel skillet blank | 200 | 9.4 | 1880.0,,0,
-INV01,digital,line_item,line 2,10-inch carbon steel skillet blank | 150 | 7.85 | 1177.5,,0,
-INV01,digital,route,route,auto,,0,
+INV01,digital,header,vendor_name,Ferro Metalworks Inc.,Ferro Metalworks Inc.,1,0
+INV01,digital,header,invoice_number,FM-10421,FM-10421,1,0
+INV01,digital,header,invoice_date,2026-09-02,2026-09-02,1,0
+INV01,digital,header,due_date,2026-10-02,2026-10-02,1,0
+INV01,digital,header,currency,USD,USD,1,0
+INV01,digital,header,po_number,PO-5501,PO-5501,1,0
+INV01,digital,header,subtotal,3057.5,3057.5,1,0
+INV01,digital,header,tax,0.0,0.0,1,0
+INV01,digital,header,shipping,145.0,145.0,1,0
+INV01,digital,header,total,3202.5,3202.5,1,0
+INV01,digital,line_item,line 1,12-inch carbon steel skillet blank | 200 | 9.4 | 1880.0,12-inch carbon steel skillet blank | 200.0 | 9.4 | 1880.0,1,
+INV01,digital,line_item,line 2,10-inch carbon steel skillet blank | 150 | 7.85 | 1177.5,10-inch carbon steel skillet blank | 150.0 | 7.85 | 1177.5,1,
+INV01,digital,route,route,auto,auto,1,
 INV01,digital,flags,flags,,,1,
 INV01,digital,meta,status,,done,,
 INV01,digital,meta,pages,,1,,
-INV01,digital,meta,seconds,,0.050315,,
+INV01,digital,meta,seconds,,6.268597,,
 INV01,digital,meta,seconds_source,,server,,
-INV01,digital,meta,model,,stub,,
-INV01,digital,meta,input_tokens,,0,,
-INV01,digital,meta,output_tokens,,0,,
-INV01,digital,meta,cost_usd,,,,
+INV01,digital,meta,model,,claude-opus-5-5,,
+INV01,digital,meta,input_tokens,,2823,,
+INV01,digital,meta,output_tokens,,335,,
+INV01,digital,meta,cost_usd,,0.017992,,
 INV01,digital,meta,error,,,,
-INV02,digital,header,vendor_name,Pacific Packaging Co.,,0,0
-INV02,digital,header,invoice_number,PP-88310,,0,0
-INV02,digital,header,invoice_date,2026-09-05,,0,0
-INV02,digital,header,due_date,2026-10-05,,0,0
-INV02,digital,header,currency,USD,,0,0
-INV02,digital,header,po_number,PO-5502,,0,0
-INV02,digital,header,subtotal,547.0,,0,0
-INV02,digital,header,tax,0.0,,0,0
-INV02,digital,header,shipping,0.0,,0,0
-INV02,digital,header,total,547.0,,0,0
-INV02,digital,line_item,line 1,"Retail box, skillet, printed 4-color | 500 | 0.62 | 310.0",,0,
-INV02,digital,line_item,line 2,Molded pulp insert | 500 | 0.21 | 105.0,,0,
-INV02,digital,line_item,line 3,Shipping carton 18x14x6 | 120 | 1.1 | 132.0,,0,
-INV02,digital,route,route,auto,,0,
+INV02,digital,header,vendor_name,Pacific Packaging Co.,Pacific Packaging Co.,1,0
+INV02,digital,header,invoice_number,PP-88310,PP-88310,1,0
+INV02,digital,header,invoice_date,2026-09-05,2026-09-05,1,0
+INV02,digital,header,due_date,2026-10-05,2026-10-05,1,0
+INV02,digital,header,currency,USD,USD,1,0
+INV02,digital,header,po_number,PO-5502,PO-5502,1,0
+INV02,digital,header,subtotal,547.0,547.0,1,0
+INV02,digital,header,tax,0.0,0.0,1,0
+INV02,digital,header,shipping,0.0,0.0,1,0
+INV02,digital,header,total,547.0,547.0,1,0
+INV02,digital,line_item,line 1,"Retail box, skillet, printed 4-color | 500 | 0.62 | 310.0","Retail box, skillet, printed 4-color | 500.0 | 0.62 | 310.0",1,
+INV02,digital,line_item,line 2,Molded pulp insert | 500 | 0.21 | 105.0,Molded pulp insert | 500.0 | 0.21 | 105.0,1,
+INV02,digital,line_item,line 3,Shipping carton 18x14x6 | 120 | 1.1 | 132.0,Shipping carton 18x14x6 | 120.0 | 1.1 | 132.0,1,
+INV02,digital,route,route,auto,auto,1,
 INV02,digital,flags,flags,,,1,
 INV02,digital,meta,status,,done,,
 INV02,digital,meta,pages,,1,,
-INV02,digital,meta,seconds,,0.05032,,
+INV02,digital,meta,seconds,,5.333311,,
 INV02,digital,meta,seconds_source,,server,,
-INV02,digital,meta,model,,stub,,
-INV02,digital,meta,input_tokens,,0,,
-INV02,digital,meta,output_tokens,,0,,
-INV02,digital,meta,cost_usd,,,,
+INV02,digital,meta,model,,claude-opus-5-5,,
+INV02,digital,meta,input_tokens,,2825,,
+INV02,digital,meta,output_tokens,,364,,
+INV02,digital,meta,cost_usd,,0.01858,,
 INV02,digital,meta,error,,,,
-INV03,digital,header,vendor_name,Lakeline Freight LLC,,0,0
-INV03,digital,header,invoice_number,LF-2026-0915,,0,0
-INV03,digital,header,invoice_date,2026-09-15,,0,0
-INV03,digital,header,due_date,2026-09-30,,0,0
-INV03,digital,header,currency,USD,,0,0
+INV03,digital,header,vendor_name,Lakeline Freight LLC,Lakeline Freight LLC,1,0
+INV03,digital,header,invoice_number,LF-2026-0915,LF-2026-0915,1,0
+INV03,digital,header,invoice_date,2026-09-15,2026-09-15,1,0
+INV03,digital,header,due_date,2026-09-30,2026-09-30,1,0
+INV03,digital,header,currency,USD,USD,1,0
 INV03,digital,header,po_number,,,1,0
-INV03,digital,header,subtotal,735.84,,0,0
-INV03,digital,header,tax,0.0,,0,0
-INV03,digital,header,shipping,0.0,,0,0
-INV03,digital,header,total,735.84,,0,0
-INV03,digital,line_item,line 1,"LTL freight Youngstown-Columbus, 6 pallets | 1 | 612.0 | 612.0",,0,
-INV03,digital,line_item,line 2,Liftgate service | 1 | 75.0 | 75.0,,0,
-INV03,digital,line_item,line 3,Fuel surcharge | 1 | 48.84 | 48.84,,0,
-INV03,digital,route,route,auto,,0,
+INV03,digital,header,subtotal,735.84,735.84,1,0
+INV03,digital,header,tax,0.0,0.0,1,0
+INV03,digital,header,shipping,0.0,0.0,1,0
+INV03,digital,header,total,735.84,735.84,1,0
+INV03,digital,line_item,line 1,"LTL freight Youngstown-Columbus, 6 pallets | 1 | 612.0 | 612.0","LTL freight Youngstown-Columbus, 6 pallets | 1.0 | 612.0 | 612.0",1,
+INV03,digital,line_item,line 2,Liftgate service | 1 | 75.0 | 75.0,Liftgate service | 1.0 | 75.0 | 75.0,1,
+INV03,digital,line_item,line 3,Fuel surcharge | 1 | 48.84 | 48.84,Fuel surcharge | 1.0 | 48.84 | 48.84,1,
+INV03,digital,route,route,auto,auto,1,
 INV03,digital,flags,flags,,,1,
 INV03,digital,meta,status,,done,,
 INV03,digital,meta,pages,,1,,
-INV03,digital,meta,seconds,,0.051373,,
+INV03,digital,meta,seconds,,6.272355,,
 INV03,digital,meta,seconds_source,,server,,
-INV03,digital,meta,model,,stub,,
-INV03,digital,meta,input_tokens,,0,,
-INV03,digital,meta,output_tokens,,0,,
-INV03,digital,meta,cost_usd,,,,
+INV03,digital,meta,model,,claude-opus-5-5,,
+INV03,digital,meta,input_tokens,,2808,,
+INV03,digital,meta,output_tokens,,364,,
+INV03,digital,meta,cost_usd,,0.018512,,
 INV03,digital,meta,error,,,,
-INV04,digital,header,vendor_name,BrightSteel Components,,0,0
-INV04,digital,header,invoice_number,BSC-7781,,0,0
-INV04,digital,header,invoice_date,2026-09-08,,0,0
-INV04,digital,header,due_date,2026-10-08,,0,0
-INV04,digital,header,currency,USD,,0,0
-INV04,digital,header,po_number,PO-5503,,0,0
-INV04,digital,header,subtotal,2096.0,,0,0
-INV04,digital,header,tax,120.52,,0,0
-INV04,digital,header,shipping,60.0,,0,0
-INV04,digital,header,total,2276.52,,0,0
-INV04,digital,line_item,line 1,"Stainless rivet set (pack of 1,000) | 8 | 64.5 | 516.0",,0,
-INV04,digital,line_item,line 2,"Handle assembly, Pro line | 400 | 3.95 | 1580.0",,0,
-INV04,digital,route,route,auto,,0,
+INV04,digital,header,vendor_name,BrightSteel Components,BrightSteel Components,1,0
+INV04,digital,header,invoice_number,BSC-7781,BSC-7781,1,0
+INV04,digital,header,invoice_date,2026-09-08,2026-09-08,1,0
+INV04,digital,header,due_date,2026-10-08,2026-10-08,1,0
+INV04,digital,header,currency,USD,USD,1,0
+INV04,digital,header,po_number,PO-5503,PO-5503,1,0
+INV04,digital,header,subtotal,2096.0,2096.0,1,0
+INV04,digital,header,tax,120.52,120.52,1,0
+INV04,digital,header,shipping,60.0,60.0,1,0
+INV04,digital,header,total,2276.52,2276.52,1,0
+INV04,digital,line_item,line 1,"Stainless rivet set (pack of 1,000) | 8 | 64.5 | 516.0","Stainless rivet set (pack of 1,000) | 8.0 | 64.5 | 516.0",1,
+INV04,digital,line_item,line 2,"Handle assembly, Pro line | 400 | 3.95 | 1580.0","Handle assembly, Pro line | 400.0 | 3.95 | 1580.0",1,
+INV04,digital,route,route,auto,auto,1,
 INV04,digital,flags,flags,,,1,
 INV04,digital,meta,status,,done,,
 INV04,digital,meta,pages,,1,,
-INV04,digital,meta,seconds,,0.051088,,
+INV04,digital,meta,seconds,,3.686797,,
 INV04,digital,meta,seconds_source,,server,,
-INV04,digital,meta,model,,stub,,
-INV04,digital,meta,input_tokens,,0,,
-INV04,digital,meta,output_tokens,,0,,
-INV04,digital,meta,cost_usd,,,,
+INV04,digital,meta,model,,claude-opus-5-5,,
+INV04,digital,meta,input_tokens,,2837,,
+INV04,digital,meta,output_tokens,,332,,
+INV04,digital,meta,cost_usd,,0.017988,,
 INV04,digital,meta,error,,,,
-INV05,digital,header,vendor_name,NorthCoat Finishes,,0,0
-INV05,digital,header,invoice_number,NC-40912,,0,0
-INV05,digital,header,invoice_date,2026-09-10,,0,0
-INV05,digital,header,due_date,2026-10-10,,0,0
-INV05,digital,header,currency,USD,,0,0
-INV05,digital,header,po_number,PO-5504,,0,0
-INV05,digital,header,subtotal,2378.4,,0,0
-INV05,digital,header,tax,0.0,,0,0
-INV05,digital,header,shipping,0.0,,0,0
-INV05,digital,header,total,2378.4,,0,0
-INV05,digital,line_item,line 1,"Nonstick coating, 20 L drum | 4 | 486.0 | 1944.0",,0,
-INV05,digital,line_item,line 2,"Primer, 5 L | 6 | 72.4 | 434.4",,0,
-INV05,digital,route,route,auto,,0,
+INV05,digital,header,vendor_name,NorthCoat Finishes,NorthCoat Finishes,1,0
+INV05,digital,header,invoice_number,NC-40912,NC-40912,1,0
+INV05,digital,header,invoice_date,2026-09-10,2026-09-10,1,0
+INV05,digital,header,due_date,2026-10-10,2026-10-10,1,0
+INV05,digital,header,currency,USD,USD,1,0
+INV05,digital,header,po_number,PO-5504,PO-5504,1,0
+INV05,digital,header,subtotal,2378.4,2378.4,1,0
+INV05,digital,header,tax,0.0,0.0,1,0
+INV05,digital,header,shipping,0.0,0.0,1,0
+INV05,digital,header,total,2378.4,2378.4,1,0
+INV05,digital,line_item,line 1,"Nonstick coating, 20 L drum | 4 | 486.0 | 1944.0","Nonstick coating, 20 L drum | 4.0 | 486.0 | 1944.0",1,
+INV05,digital,line_item,line 2,"Primer, 5 L | 6 | 72.4 | 434.4","Primer, 5 L | 6.0 | 72.4 | 434.4",1,
+INV05,digital,route,route,auto,auto,1,
 INV05,digital,flags,flags,,,1,
 INV05,digital,meta,status,,done,,
 INV05,digital,meta,pages,,1,,
-INV05,digital,meta,seconds,,0.051298,,
+INV05,digital,meta,seconds,,4.272349,,
 INV05,digital,meta,seconds_source,,server,,
-INV05,digital,meta,model,,stub,,
-INV05,digital,meta,input_tokens,,0,,
-INV05,digital,meta,output_tokens,,0,,
-INV05,digital,meta,cost_usd,,,,
+INV05,digital,meta,model,,claude-opus-5-5,,
+INV05,digital,meta,input_tokens,,2800,,
+INV05,digital,meta,output_tokens,,323,,
+INV05,digital,meta,cost_usd,,0.01766,,
 INV05,digital,meta,error,,,,
-INV06,digital,header,vendor_name,Maple Leaf Ceramics Ltd.,,0,0
-INV06,digital,header,invoice_number,MLC-2290,,0,0
-INV06,digital,header,invoice_date,2026-09-12,,0,0
-INV06,digital,header,due_date,2026-10-27,,0,0
-INV06,digital,header,currency,CAD,,0,0
-INV06,digital,header,po_number,PO-5505,,0,0
-INV06,digital,header,subtotal,2272.5,,0,0
-INV06,digital,header,tax,113.63,,0,0
-INV06,digital,header,shipping,95.0,,0,0
-INV06,digital,header,total,2481.13,,0,0
-INV06,digital,line_item,line 1,"Ceramic spoon rest, glazed | 300 | 3.2 | 960.0",,0,
-INV06,digital,line_item,line 2,Ceramic utensil crock | 150 | 8.75 | 1312.5,,0,
-INV06,digital,route,route,auto,,0,
+INV06,digital,header,vendor_name,Maple Leaf Ceramics Ltd.,Maple Leaf Ceramics Ltd.,1,0
+INV06,digital,header,invoice_number,MLC-2290,MLC-2290,1,0
+INV06,digital,header,invoice_date,2026-09-12,2026-09-12,1,0
+INV06,digital,header,due_date,2026-10-27,2026-10-27,1,0
+INV06,digital,header,currency,CAD,CAD,1,0
+INV06,digital,header,po_number,PO-5505,PO-5505,1,0
+INV06,digital,header,subtotal,2272.5,2272.5,1,0
+INV06,digital,header,tax,113.63,113.63,1,0
+INV06,digital,header,shipping,95.0,95.0,1,0
+INV06,digital,header,total,2481.13,2481.13,1,0
+INV06,digital,line_item,line 1,"Ceramic spoon rest, glazed | 300 | 3.2 | 960.0","Ceramic spoon rest, glazed | 300.0 | 3.2 | 960.0",1,
+INV06,digital,line_item,line 2,Ceramic utensil crock | 150 | 8.75 | 1312.5,Ceramic utensil crock | 150.0 | 8.75 | 1312.5,1,
+INV06,digital,route,route,auto,auto,1,
 INV06,digital,flags,flags,,,1,
 INV06,digital,meta,status,,done,,
 INV06,digital,meta,pages,,1,,
-INV06,digital,meta,seconds,,0.051087,,
+INV06,digital,meta,seconds,,4.354159,,
 INV06,digital,meta,seconds_source,,server,,
-INV06,digital,meta,model,,stub,,
-INV06,digital,meta,input_tokens,,0,,
-INV06,digital,meta,output_tokens,,0,,
-INV06,digital,meta,cost_usd,,,,
+INV06,digital,meta,model,,claude-opus-5-5,,
+INV06,digital,meta,input_tokens,,2847,,
+INV06,digital,meta,output_tokens,,338,,
+INV06,digital,meta,cost_usd,,0.018148,,
 INV06,digital,meta,error,,,,
-INV07,digital,header,vendor_name,PixelPro Studio,,0,0
-INV07,digital,header,invoice_number,PXS-118,,0,0
-INV07,digital,header,invoice_date,2026-09-18,,0,0
-INV07,digital,header,due_date,2026-10-18,,0,0
-INV07,digital,header,currency,USD,,0,0
+INV07,digital,header,vendor_name,PixelPro Studio,PixelPro Studio,1,0
+INV07,digital,header,invoice_number,PXS-118,PXS-118,1,0
+INV07,digital,header,invoice_date,2026-09-18,2026-09-18,1,0
+INV07,digital,header,due_date,2026-10-18,2026-10-18,1,0
+INV07,digital,header,currency,USD,USD,1,0
 INV07,digital,header,po_number,,,1,0
-INV07,digital,header,subtotal,1140.0,,0,0
-INV07,digital,header,tax,0.0,,0,0
-INV07,digital,header,shipping,0.0,,0,0
-INV07,digital,header,total,1050.0,,0,0
-INV07,digital,line_item,line 1,"Product photography, half day | 2 | 450.0 | 900.0",,0,
-INV07,digital,line_item,line 2,Image retouching per image | 40 | 6.0 | 240.0,,0,
-INV07,digital,route,route,auto,,0,
+INV07,digital,header,subtotal,1140.0,1140.0,1,0
+INV07,digital,header,tax,0.0,0.0,1,0
+INV07,digital,header,shipping,0.0,0.0,1,0
+INV07,digital,header,total,1050.0,1050.0,1,0
+INV07,digital,line_item,line 1,"Product photography, half day | 2 | 450.0 | 900.0","Product photography, half day | 2.0 | 450.0 | 900.0",1,
+INV07,digital,line_item,line 2,Image retouching per image | 40 | 6.0 | 240.0,Image retouching per image | 40.0 | 6.0 | 240.0,1,
+INV07,digital,route,route,auto,auto,1,
 INV07,digital,flags,flags,,,1,
 INV07,digital,meta,status,,done,,
 INV07,digital,meta,pages,,1,,
-INV07,digital,meta,seconds,,0.051002,,
+INV07,digital,meta,seconds,,3.770961,,
 INV07,digital,meta,seconds_source,,server,,
-INV07,digital,meta,model,,stub,,
-INV07,digital,meta,input_tokens,,0,,
-INV07,digital,meta,output_tokens,,0,,
-INV07,digital,meta,cost_usd,,,,
+INV07,digital,meta,model,,claude-opus-5-5,,
+INV07,digital,meta,input_tokens,,2789,,
+INV07,digital,meta,output_tokens,,310,,
+INV07,digital,meta,cost_usd,,0.017356,,
 INV07,digital,meta,error,,,,
-INV08,digital,header,vendor_name,OfficeHub Supplies,,0,0
-INV08,digital,header,invoice_number,OH-552201,,0,0
-INV08,digital,header,invoice_date,2026-09-20,,0,0
-INV08,digital,header,due_date,2026-10-20,,0,0
-INV08,digital,header,currency,USD,,0,0
+INV08,digital,header,vendor_name,OfficeHub Supplies,OfficeHub Supplies,1,0
+INV08,digital,header,invoice_number,OH-552201,OH-552201,1,0
+INV08,digital,header,invoice_date,2026-09-20,2026-09-20,1,0
+INV08,digital,header,due_date,2026-10-20,2026-10-20,1,0
+INV08,digital,header,currency,USD,USD,1,0
 INV08,digital,header,po_number,,,1,0
-INV08,digital,header,subtotal,857.5,,0,0
-INV08,digital,header,tax,62.17,,0,0
-INV08,digital,header,shipping,0.0,,0,0
-INV08,digital,header,total,919.67,,0,0
-INV08,digital,line_item,line 1,Thermal shipping labels 4x6 (roll) | 30 | 12.99 | 389.7,,0,
-INV08,digital,line_item,line 2,Packing tape 2-inch (6-pack) | 20 | 14.49 | 289.8,,0,
-INV08,digital,line_item,line 3,"Printer toner, black | 2 | 89.0 | 178.0",,0,
-INV08,digital,route,route,auto,,0,
+INV08,digital,header,subtotal,857.5,857.5,1,0
+INV08,digital,header,tax,62.17,62.17,1,0
+INV08,digital,header,shipping,0.0,0.0,1,0
+INV08,digital,header,total,919.67,919.67,1,0
+INV08,digital,line_item,line 1,Thermal shipping labels 4x6 (roll) | 30 | 12.99 | 389.7,Thermal shipping labels 4x6 (roll) | 30.0 | 12.99 | 389.7,1,
+INV08,digital,line_item,line 2,Packing tape 2-inch (6-pack) | 20 | 14.49 | 289.8,Packing tape 2-inch (6-pack) | 20.0 | 14.49 | 289.8,1,
+INV08,digital,line_item,line 3,"Printer toner, black | 2 | 89.0 | 178.0","Printer toner, black | 2.0 | 89.0 | 178.0",1,
+INV08,digital,route,route,auto,auto,1,
 INV08,digital,flags,flags,,,1,
 INV08,digital,meta,status,,done,,
 INV08,digital,meta,pages,,1,,
-INV08,digital,meta,seconds,,0.050373,,
+INV08,digital,meta,seconds,,4.574631,,
 INV08,digital,meta,seconds_source,,server,,
-INV08,digital,meta,model,,stub,,
-INV08,digital,meta,input_tokens,,0,,
-INV08,digital,meta,output_tokens,,0,,
-INV08,digital,meta,cost_usd,,,,
+INV08,digital,meta,model,,claude-opus-5-5,,
+INV08,digital,meta,input_tokens,,2838,,
+INV08,digital,meta,output_tokens,,367,,
+INV08,digital,meta,cost_usd,,0.018692,,
 INV08,digital,meta,error,,,,
-INV09,multipage,header,vendor_name,Ferro Metalworks Inc.,,0,0
-INV09,multipage,header,invoice_number,FM-10498,,0,0
-INV09,multipage,header,invoice_date,2026-09-22,,0,0
-INV09,multipage,header,due_date,2026-10-22,,0,0
-INV09,multipage,header,currency,USD,,0,0
-INV09,multipage,header,po_number,PO-5510,,0,0
-INV09,multipage,header,subtotal,7147.0,,0,0
-INV09,multipage,header,tax,0.0,,0,0
-INV09,multipage,header,shipping,220.0,,0,0
-INV09,multipage,header,total,7367.0,,0,0
-INV09,multipage,line_item,line 1,Cast iron skillet blank 12-inch | 300 | 11.2 | 3360.0,,0,
-INV09,multipage,line_item,line 2,Cast iron skillet blank 10-inch | 250 | 9.1 | 2275.0,,0,
-INV09,multipage,line_item,line 3,Pattern tooling fee | 1 | 350.0 | 350.0,,0,
-INV09,multipage,line_item,line 4,Pallet charge | 9 | 18.0 | 162.0,,0,
-INV09,multipage,line_item,line 5,Sample casting lot 1 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 6,Sample casting lot 2 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 7,Sample casting lot 3 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 8,Sample casting lot 4 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 9,Sample casting lot 5 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 10,Sample casting lot 6 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 11,Sample casting lot 7 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 12,Sample casting lot 8 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 13,Sample casting lot 9 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 14,Sample casting lot 10 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 15,Sample casting lot 11 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 16,Sample casting lot 12 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 17,Sample casting lot 13 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 18,Sample casting lot 14 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 19,Sample casting lot 15 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 20,Sample casting lot 16 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 21,Sample casting lot 17 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 22,Sample casting lot 18 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 23,Sample casting lot 19 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 24,Sample casting lot 20 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 25,Sample casting lot 21 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 26,Sample casting lot 22 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 27,Sample casting lot 23 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 28,Sample casting lot 24 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 29,Sample casting lot 25 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 30,Sample casting lot 26 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 31,Sample casting lot 27 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 32,Sample casting lot 28 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 33,Sample casting lot 29 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 34,Sample casting lot 30 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 35,Sample casting lot 31 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 36,Sample casting lot 32 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 37,Sample casting lot 33 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 38,Sample casting lot 34 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 39,Sample casting lot 35 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 40,Sample casting lot 36 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 41,Sample casting lot 37 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 42,Sample casting lot 38 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 43,Sample casting lot 39 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,line_item,line 44,Sample casting lot 40 | 1 | 25.0 | 25.0,,0,
-INV09,multipage,route,route,auto,,0,
+INV09,multipage,header,vendor_name,Ferro Metalworks Inc.,Ferro Metalworks Inc.,1,0
+INV09,multipage,header,invoice_number,FM-10498,FM-10498,1,0
+INV09,multipage,header,invoice_date,2026-09-22,2026-09-22,1,0
+INV09,multipage,header,due_date,2026-10-22,2026-10-22,1,0
+INV09,multipage,header,currency,USD,USD,1,0
+INV09,multipage,header,po_number,PO-5510,PO-5510,1,0
+INV09,multipage,header,subtotal,7147.0,7147.0,1,0
+INV09,multipage,header,tax,0.0,0.0,1,0
+INV09,multipage,header,shipping,220.0,220.0,1,0
+INV09,multipage,header,total,7367.0,7367.0,1,0
+INV09,multipage,line_item,line 1,Cast iron skillet blank 12-inch | 300 | 11.2 | 3360.0,Cast iron skillet blank 12-inch | 300.0 | 11.2 | 3360.0,1,
+INV09,multipage,line_item,line 2,Cast iron skillet blank 10-inch | 250 | 9.1 | 2275.0,Cast iron skillet blank 10-inch | 250.0 | 9.1 | 2275.0,1,
+INV09,multipage,line_item,line 3,Pattern tooling fee | 1 | 350.0 | 350.0,Pattern tooling fee | 1.0 | 350.0 | 350.0,1,
+INV09,multipage,line_item,line 4,Pallet charge | 9 | 18.0 | 162.0,Pallet charge | 9.0 | 18.0 | 162.0,1,
+INV09,multipage,line_item,line 5,Sample casting lot 1 | 1 | 25.0 | 25.0,Sample casting lot 1 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 6,Sample casting lot 2 | 1 | 25.0 | 25.0,Sample casting lot 2 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 7,Sample casting lot 3 | 1 | 25.0 | 25.0,Sample casting lot 3 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 8,Sample casting lot 4 | 1 | 25.0 | 25.0,Sample casting lot 4 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 9,Sample casting lot 5 | 1 | 25.0 | 25.0,Sample casting lot 5 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 10,Sample casting lot 6 | 1 | 25.0 | 25.0,Sample casting lot 6 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 11,Sample casting lot 7 | 1 | 25.0 | 25.0,Sample casting lot 7 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 12,Sample casting lot 8 | 1 | 25.0 | 25.0,Sample casting lot 8 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 13,Sample casting lot 9 | 1 | 25.0 | 25.0,Sample casting lot 9 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 14,Sample casting lot 10 | 1 | 25.0 | 25.0,Sample casting lot 10 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 15,Sample casting lot 11 | 1 | 25.0 | 25.0,Sample casting lot 11 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 16,Sample casting lot 12 | 1 | 25.0 | 25.0,Sample casting lot 12 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 17,Sample casting lot 13 | 1 | 25.0 | 25.0,Sample casting lot 13 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 18,Sample casting lot 14 | 1 | 25.0 | 25.0,Sample casting lot 14 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 19,Sample casting lot 15 | 1 | 25.0 | 25.0,Sample casting lot 15 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 20,Sample casting lot 16 | 1 | 25.0 | 25.0,Sample casting lot 16 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 21,Sample casting lot 17 | 1 | 25.0 | 25.0,Sample casting lot 17 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 22,Sample casting lot 18 | 1 | 25.0 | 25.0,Sample casting lot 18 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 23,Sample casting lot 19 | 1 | 25.0 | 25.0,Sample casting lot 19 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 24,Sample casting lot 20 | 1 | 25.0 | 25.0,Sample casting lot 20 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 25,Sample casting lot 21 | 1 | 25.0 | 25.0,Sample casting lot 21 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 26,Sample casting lot 22 | 1 | 25.0 | 25.0,Sample casting lot 22 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 27,Sample casting lot 23 | 1 | 25.0 | 25.0,Sample casting lot 23 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 28,Sample casting lot 24 | 1 | 25.0 | 25.0,Sample casting lot 24 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 29,Sample casting lot 25 | 1 | 25.0 | 25.0,Sample casting lot 25 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 30,Sample casting lot 26 | 1 | 25.0 | 25.0,Sample casting lot 26 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 31,Sample casting lot 27 | 1 | 25.0 | 25.0,Sample casting lot 27 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 32,Sample casting lot 28 | 1 | 25.0 | 25.0,Sample casting lot 28 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 33,Sample casting lot 29 | 1 | 25.0 | 25.0,Sample casting lot 29 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 34,Sample casting lot 30 | 1 | 25.0 | 25.0,Sample casting lot 30 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 35,Sample casting lot 31 | 1 | 25.0 | 25.0,Sample casting lot 31 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 36,Sample casting lot 32 | 1 | 25.0 | 25.0,Sample casting lot 32 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 37,Sample casting lot 33 | 1 | 25.0 | 25.0,Sample casting lot 33 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 38,Sample casting lot 34 | 1 | 25.0 | 25.0,Sample casting lot 34 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 39,Sample casting lot 35 | 1 | 25.0 | 25.0,Sample casting lot 35 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 40,Sample casting lot 36 | 1 | 25.0 | 25.0,Sample casting lot 36 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 41,Sample casting lot 37 | 1 | 25.0 | 25.0,Sample casting lot 37 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 42,Sample casting lot 38 | 1 | 25.0 | 25.0,Sample casting lot 38 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 43,Sample casting lot 39 | 1 | 25.0 | 25.0,Sample casting lot 39 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,line_item,line 44,Sample casting lot 40 | 1 | 25.0 | 25.0,Sample casting lot 40 | 1.0 | 25.0 | 25.0,1,
+INV09,multipage,route,route,auto,auto,1,
 INV09,multipage,flags,flags,,,1,
 INV09,multipage,meta,status,,done,,
 INV09,multipage,meta,pages,,2,,
-INV09,multipage,meta,seconds,,0.050479,,
+INV09,multipage,meta,seconds,,15.248546,,
 INV09,multipage,meta,seconds_source,,server,,
-INV09,multipage,meta,model,,stub,,
-INV09,multipage,meta,input_tokens,,0,,
-INV09,multipage,meta,output_tokens,,0,,
-INV09,multipage,meta,cost_usd,,,,
+INV09,multipage,meta,model,,claude-opus-5-5,,
+INV09,multipage,meta,input_tokens,,3982,,
+INV09,multipage,meta,output_tokens,,2047,,
+INV09,multipage,meta,cost_usd,,0.056868,,
 INV09,multipage,meta,error,,,,
-INV10,digital,header,vendor_name,Pacific Packaging Co.,,0,0
-INV10,digital,header,invoice_number,PP-88377,,0,0
-INV10,digital,header,invoice_date,2026-09-25,,0,0
-INV10,digital,header,due_date,2026-10-25,,0,0
-INV10,digital,header,currency,USD,,0,0
-INV10,digital,header,po_number,PO-5511,,0,0
-INV10,digital,header,subtotal,405.0,,0,0
-INV10,digital,header,tax,0.0,,0,0
-INV10,digital,header,shipping,35.0,,0,0
-INV10,digital,header,total,490.0,,0,0
-INV10,digital,line_item,line 1,"Retail box, knife set, printed | 300 | 0.95 | 285.0",,0,
-INV10,digital,line_item,line 2,"Foam insert, knife set | 300 | 0.4 | 120.0",,0,
-INV10,digital,route,route,review,,0,
-INV10,digital,flags,flags,totals_mismatch,,0,
+INV10,digital,header,vendor_name,Pacific Packaging Co.,Pacific Packaging Co.,1,0
+INV10,digital,header,invoice_number,PP-88377,PP-88377,1,0
+INV10,digital,header,invoice_date,2026-09-25,2026-09-25,1,0
+INV10,digital,header,due_date,2026-10-25,2026-10-25,1,0
+INV10,digital,header,currency,USD,USD,1,0
+INV10,digital,header,po_number,PO-5511,PO-5511,1,0
+INV10,digital,header,subtotal,405.0,405.0,1,0
+INV10,digital,header,tax,0.0,0.0,1,0
+INV10,digital,header,shipping,35.0,35.0,1,0
+INV10,digital,header,total,490.0,490.0,1,0
+INV10,digital,line_item,line 1,"Retail box, knife set, printed | 300 | 0.95 | 285.0","Retail box, knife set, printed | 300.0 | 0.95 | 285.0",1,
+INV10,digital,line_item,line 2,"Foam insert, knife set | 300 | 0.4 | 120.0","Foam insert, knife set | 300.0 | 0.4 | 120.0",1,
+INV10,digital,route,route,review,review,1,
+INV10,digital,flags,flags,totals_mismatch,totals_mismatch,1,
 INV10,digital,meta,status,,done,,
 INV10,digital,meta,pages,,1,,
-INV10,digital,meta,seconds,,0.050483,,
+INV10,digital,meta,seconds,,4.224637,,
 INV10,digital,meta,seconds_source,,server,,
-INV10,digital,meta,model,,stub,,
-INV10,digital,meta,input_tokens,,0,,
-INV10,digital,meta,output_tokens,,0,,
-INV10,digital,meta,cost_usd,,,,
+INV10,digital,meta,model,,claude-opus-5-5,,
+INV10,digital,meta,input_tokens,,2810,,
+INV10,digital,meta,output_tokens,,371,,
+INV10,digital,meta,cost_usd,,0.01866,,
 INV10,digital,meta,error,,,,
-INV11,scan,header,vendor_name,Lakeline Freight LLC,,0,0
-INV11,scan,header,invoice_number,LF-2026-0928,,0,0
-INV11,scan,header,invoice_date,2026-09-28,,0,0
-INV11,scan,header,due_date,2026-10-13,,0,0
-INV11,scan,header,currency,USD,,0,0
+INV11,scan,header,vendor_name,Lakeline Freight LLC,Lakeline Freight LLC,1,0
+INV11,scan,header,invoice_number,LF-2026-0928,LF-2026-0928,1,0
+INV11,scan,header,invoice_date,2026-09-28,2026-09-28,1,0
+INV11,scan,header,due_date,2026-10-13,2026-10-13,1,0
+INV11,scan,header,currency,USD,USD,1,0
 INV11,scan,header,po_number,,,1,0
-INV11,scan,header,subtotal,429.84,,0,0
-INV11,scan,header,tax,0.0,,0,0
-INV11,scan,header,shipping,0.0,,0,0
-INV11,scan,header,total,429.84,,0,0
-INV11,scan,line_item,line 1,"LTL freight Pittsburgh-Columbus, 3 pallets | 1 | 398.0 | 398.0",,0,
-INV11,scan,line_item,line 2,Fuel surcharge | 1 | 31.84 | 31.84,,0,
-INV11,scan,route,route,auto,,0,
+INV11,scan,header,subtotal,429.84,429.84,1,0
+INV11,scan,header,tax,0.0,0.0,1,0
+INV11,scan,header,shipping,0.0,0.0,1,0
+INV11,scan,header,total,429.84,429.84,1,0
+INV11,scan,line_item,line 1,"LTL freight Pittsburgh-Columbus, 3 pallets | 1 | 398.0 | 398.0","LTL freight Pittsburgh-Columbus, 3 pallets | 1.0 | 398.0 | 398.0",1,
+INV11,scan,line_item,line 2,Fuel surcharge | 1 | 31.84 | 31.84,Fuel surcharge | 1.0 | 31.84 | 31.84,1,
+INV11,scan,route,route,auto,auto,1,
 INV11,scan,flags,flags,,,1,
 INV11,scan,meta,status,,done,,
 INV11,scan,meta,pages,,1,,
-INV11,scan,meta,seconds,,0.051657,,
+INV11,scan,meta,seconds,,10.01528,,
 INV11,scan,meta,seconds_source,,server,,
-INV11,scan,meta,model,,stub,,
-INV11,scan,meta,input_tokens,,0,,
-INV11,scan,meta,output_tokens,,0,,
-INV11,scan,meta,cost_usd,,,,
+INV11,scan,meta,model,,claude-opus-5-5,,
+INV11,scan,meta,input_tokens,,7228,,
+INV11,scan,meta,output_tokens,,330,,
+INV11,scan,meta,cost_usd,,0.035512,,
 INV11,scan,meta,error,,,,
-INV12,scan,header,vendor_name,BrightSteel Components,,0,0
-INV12,scan,header,invoice_number,BSC-7802,,0,0
-INV12,scan,header,invoice_date,2026-09-29,,0,0
-INV12,scan,header,due_date,2026-10-29,,0,0
-INV12,scan,header,currency,USD,,0,0
-INV12,scan,header,po_number,PO-5512,,0,0
-INV12,scan,header,subtotal,1248.0,,0,0
-INV12,scan,header,tax,71.76,,0,0
-INV12,scan,header,shipping,40.0,,0,0
-INV12,scan,header,total,1359.76,,0,0
-INV12,scan,line_item,line 1,"Lid knob, stainless | 600 | 0.88 | 528.0",,0,
-INV12,scan,line_item,line 2,"Lid rim, 10-inch | 300 | 2.4 | 720.0",,0,
-INV12,scan,route,route,auto,,0,
+INV12,scan,header,vendor_name,BrightSteel Components,BrightSteel Components,1,0
+INV12,scan,header,invoice_number,BSC-7802,BSC-7802,1,0
+INV12,scan,header,invoice_date,2026-09-29,2026-09-29,1,0
+INV12,scan,header,due_date,2026-10-29,2026-10-29,1,0
+INV12,scan,header,currency,USD,USD,1,0
+INV12,scan,header,po_number,PO-5512,PO-5512,1,0
+INV12,scan,header,subtotal,1248.0,1248.0,1,0
+INV12,scan,header,tax,71.76,71.76,1,0
+INV12,scan,header,shipping,40.0,40.0,1,0
+INV12,scan,header,total,1359.76,1359.76,1,0
+INV12,scan,line_item,line 1,"Lid knob, stainless | 600 | 0.88 | 528.0","Lid knob, stainless | 600.0 | 0.88 | 528.0",1,
+INV12,scan,line_item,line 2,"Lid rim, 10-inch | 300 | 2.4 | 720.0","Lid rim, 10-inch | 300.0 | 2.4 | 720.0",1,
+INV12,scan,route,route,auto,auto,1,
 INV12,scan,flags,flags,,,1,
 INV12,scan,meta,status,,done,,
 INV12,scan,meta,pages,,1,,
-INV12,scan,meta,seconds,,0.04978,,
+INV12,scan,meta,seconds,,12.581614,,
 INV12,scan,meta,seconds_source,,server,,
-INV12,scan,meta,model,,stub,,
-INV12,scan,meta,input_tokens,,0,,
-INV12,scan,meta,output_tokens,,0,,
-INV12,scan,meta,cost_usd,,,,
+INV12,scan,meta,model,,claude-opus-5-5,,
+INV12,scan,meta,input_tokens,,7228,,
+INV12,scan,meta,output_tokens,,323,,
+INV12,scan,meta,cost_usd,,0.035372,,
 INV12,scan,meta,error,,,,
-INV13,scan,header,vendor_name,NorthCoat Finishes,,0,0
-INV13,scan,header,invoice_number,NC-40955,,0,0
-INV13,scan,header,invoice_date,2026-10-01,,0,0
-INV13,scan,header,due_date,2026-10-31,,0,0
-INV13,scan,header,currency,USD,,0,0
-INV13,scan,header,po_number,PO-5513,,0,0
-INV13,scan,header,subtotal,972.0,,0,0
-INV13,scan,header,tax,0.0,,0,0
-INV13,scan,header,shipping,55.0,,0,0
-INV13,scan,header,total,1027.0,,0,0
-INV13,scan,line_item,line 1,"Nonstick coating, 20 L drum | 2 | 486.0 | 972.0",,0,
-INV13,scan,route,route,auto,,0,
+INV13,scan,header,vendor_name,NorthCoat Finishes,NorthCoat Finishes,1,0
+INV13,scan,header,invoice_number,NC-40955,NC-40955,1,0
+INV13,scan,header,invoice_date,2026-10-01,2026-10-01,1,0
+INV13,scan,header,due_date,2026-10-31,2026-10-31,1,0
+INV13,scan,header,currency,USD,USD,1,0
+INV13,scan,header,po_number,PO-5513,PO-5513,1,0
+INV13,scan,header,subtotal,972.0,972.0,1,0
+INV13,scan,header,tax,0.0,0.0,1,0
+INV13,scan,header,shipping,55.0,55.0,1,0
+INV13,scan,header,total,1027.0,1027.0,1,0
+INV13,scan,line_item,line 1,"Nonstick coating, 20 L drum | 2 | 486.0 | 972.0","Nonstick coating, 20 L drum | 2.0 | 486.0 | 972.0",1,
+INV13,scan,route,route,auto,auto,1,
 INV13,scan,flags,flags,,,1,
 INV13,scan,meta,status,,done,,
 INV13,scan,meta,pages,,1,,
-INV13,scan,meta,seconds,,0.050895,,
+INV13,scan,meta,seconds,,11.947632,,
 INV13,scan,meta,seconds_source,,server,,
-INV13,scan,meta,model,,stub,,
-INV13,scan,meta,input_tokens,,0,,
-INV13,scan,meta,output_tokens,,0,,
-INV13,scan,meta,cost_usd,,,,
+INV13,scan,meta,model,,claude-opus-5-5,,
+INV13,scan,meta,input_tokens,,7228,,
+INV13,scan,meta,output_tokens,,285,,
+INV13,scan,meta,cost_usd,,0.034612,,
 INV13,scan,meta,error,,,,
-INV14,scan,header,vendor_name,OfficeHub Supplies,,0,0
-INV14,scan,header,invoice_number,OH-552288,,0,0
-INV14,scan,header,invoice_date,2026-10-02,,0,0
-INV14,scan,header,due_date,2026-11-01,,0,0
-INV14,scan,header,currency,USD,,0,0
+INV14,scan,header,vendor_name,OfficeHub Supplies,OfficeHub Supplies,1,0
+INV14,scan,header,invoice_number,OH-552288,OH-552288,1,0
+INV14,scan,header,invoice_date,2026-10-02,2026-10-02,1,0
+INV14,scan,header,due_date,2026-11-01,2026-11-01,1,0
+INV14,scan,header,currency,USD,USD,1,0
 INV14,scan,header,po_number,,,1,0
-INV14,scan,header,subtotal,339.0,,0,0
-INV14,scan,header,tax,24.58,,0,0
-INV14,scan,header,shipping,0.0,,0,0
-INV14,scan,header,total,363.58,,0,0
-INV14,scan,line_item,line 1,"Copy paper, case | 5 | 42.0 | 210.0",,0,
-INV14,scan,line_item,line 2,Shipping scale | 1 | 129.0 | 129.0,,0,
-INV14,scan,route,route,auto,,0,
+INV14,scan,header,subtotal,339.0,339.0,1,0
+INV14,scan,header,tax,24.58,24.58,1,0
+INV14,scan,header,shipping,0.0,0.0,1,0
+INV14,scan,header,total,363.58,363.58,1,0
+INV14,scan,line_item,line 1,"Copy paper, case | 5 | 42.0 | 210.0","Copy paper, case | 5.0 | 42.0 | 210.0",1,
+INV14,scan,line_item,line 2,Shipping scale | 1 | 129.0 | 129.0,Shipping scale | 1.0 | 129.0 | 129.0,1,
+INV14,scan,route,route,auto,auto,1,
 INV14,scan,flags,flags,,,1,
 INV14,scan,meta,status,,done,,
 INV14,scan,meta,pages,,1,,
-INV14,scan,meta,seconds,,0.050672,,
+INV14,scan,meta,seconds,,11.899438,,
 INV14,scan,meta,seconds_source,,server,,
-INV14,scan,meta,model,,stub,,
-INV14,scan,meta,input_tokens,,0,,
-INV14,scan,meta,output_tokens,,0,,
-INV14,scan,meta,cost_usd,,,,
+INV14,scan,meta,model,,claude-opus-5-5,,
+INV14,scan,meta,input_tokens,,7228,,
+INV14,scan,meta,output_tokens,,309,,
+INV14,scan,meta,cost_usd,,0.035092,,
 INV14,scan,meta,error,,,,
-INV15,photo,header,vendor_name,PixelPro Studio,,0,0
-INV15,photo,header,invoice_number,PXS-131,,0,0
-INV15,photo,header,invoice_date,2026-10-03,,0,0
-INV15,photo,header,due_date,2026-11-02,,0,0
-INV15,photo,header,currency,USD,,0,0
+INV15,photo,header,vendor_name,PixelPro Studio,PixelPro Studio,1,0
+INV15,photo,header,invoice_number,PXS-131,PXS-131,1,0
+INV15,photo,header,invoice_date,2026-10-03,2026-10-03,1,0
+INV15,photo,header,due_date,2026-11-02,2026-11-02,1,0
+INV15,photo,header,currency,USD,USD,1,0
 INV15,photo,header,po_number,,,1,0
-INV15,photo,header,subtotal,1140.0,,0,0
-INV15,photo,header,tax,0.0,,0,0
-INV15,photo,header,shipping,0.0,,0,0
-INV15,photo,header,total,1140.0,,0,0
-INV15,photo,line_item,line 1,"Short product video, 30 s | 3 | 380.0 | 1140.0",,0,
-INV15,photo,route,route,auto,,0,
+INV15,photo,header,subtotal,1140.0,1140.0,1,0
+INV15,photo,header,tax,0.0,0.0,1,0
+INV15,photo,header,shipping,0.0,0.0,1,0
+INV15,photo,header,total,1140.0,1140.0,1,0
+INV15,photo,line_item,line 1,"Short product video, 30 s | 3 | 380.0 | 1140.0","Short product video, 30 s | 3.0 | 380.0 | 1140.0",1,
+INV15,photo,route,route,auto,auto,1,
 INV15,photo,flags,flags,,,1,
 INV15,photo,meta,status,,done,,
 INV15,photo,meta,pages,,1,,
-INV15,photo,meta,seconds,,0.049782,,
+INV15,photo,meta,seconds,,4.546453,,
 INV15,photo,meta,seconds_source,,server,,
-INV15,photo,meta,model,,stub,,
-INV15,photo,meta,input_tokens,,0,,
-INV15,photo,meta,output_tokens,,0,,
-INV15,photo,meta,cost_usd,,,,
+INV15,photo,meta,model,,claude-opus-5-5,,
+INV15,photo,meta,input_tokens,,5290,,
+INV15,photo,meta,output_tokens,,274,,
+INV15,photo,meta,cost_usd,,0.02664,,
 INV15,photo,meta,error,,,,
-INV16,photo,header,vendor_name,Ferro Metalworks Inc.,,0,0
-INV16,photo,header,invoice_number,FM-10421,,0,0
-INV16,photo,header,invoice_date,2026-10-04,,0,0
-INV16,photo,header,due_date,2026-11-03,,0,0
-INV16,photo,header,currency,USD,,0,0
-INV16,photo,header,po_number,PO-5501,,0,0
-INV16,photo,header,subtotal,3057.5,,0,0
-INV16,photo,header,tax,0.0,,0,0
-INV16,photo,header,shipping,145.0,,0,0
-INV16,photo,header,total,3202.5,,0,0
-INV16,photo,line_item,line 1,12-inch carbon steel skillet blank | 200 | 9.4 | 1880.0,,0,
-INV16,photo,line_item,line 2,10-inch carbon steel skillet blank | 150 | 7.85 | 1177.5,,0,
-INV16,photo,route,route,review,,0,
-INV16,photo,flags,flags,duplicate_invoice,,0,
+INV16,photo,header,vendor_name,Ferro Metalworks Inc.,Ferro Metalworks Inc.,1,0
+INV16,photo,header,invoice_number,FM-10421,FM-10421,1,0
+INV16,photo,header,invoice_date,2026-10-04,2026-10-04,1,0
+INV16,photo,header,due_date,2026-11-03,2026-11-03,1,0
+INV16,photo,header,currency,USD,USD,1,0
+INV16,photo,header,po_number,PO-5501,PO-5501,1,0
+INV16,photo,header,subtotal,3057.5,3057.5,1,0
+INV16,photo,header,tax,0.0,0.0,1,0
+INV16,photo,header,shipping,145.0,145.0,1,0
+INV16,photo,header,total,3202.5,3202.5,1,0
+INV16,photo,line_item,line 1,12-inch carbon steel skillet blank | 200 | 9.4 | 1880.0,12-inch carbon steel skillet blank | 200.0 | 9.4 | 1880.0,1,
+INV16,photo,line_item,line 2,10-inch carbon steel skillet blank | 150 | 7.85 | 1177.5,10-inch carbon steel skillet blank | 150.0 | 7.85 | 1177.5,1,
+INV16,photo,route,route,review,review,1,
+INV16,photo,flags,flags,duplicate_invoice,duplicate_invoice,1,
 INV16,photo,meta,status,,done,,
 INV16,photo,meta,pages,,1,,
-INV16,photo,meta,seconds,,0.05063,,
+INV16,photo,meta,seconds,,5.940359,,
 INV16,photo,meta,seconds_source,,server,,
-INV16,photo,meta,model,,stub,,
-INV16,photo,meta,input_tokens,,0,,
-INV16,photo,meta,output_tokens,,0,,
-INV16,photo,meta,cost_usd,,,,
+INV16,photo,meta,model,,claude-opus-5-5,,
+INV16,photo,meta,input_tokens,,5570,,
+INV16,photo,meta,output_tokens,,335,,
+INV16,photo,meta,cost_usd,,0.02898,,
 INV16,photo,meta,error,,,,
-INV17,photo,header,vendor_name,Maple Leaf Ceramics Ltd.,,0,0
-INV17,photo,header,invoice_number,MLC-2301,,0,0
-INV17,photo,header,invoice_date,2026-10-05,,0,0
-INV17,photo,header,due_date,2026-11-19,,0,0
-INV17,photo,header,currency,CAD,,0,0
-INV17,photo,header,po_number,PO-5514,,0,0
-INV17,photo,header,subtotal,640.0,,0,0
-INV17,photo,header,tax,32.0,,0,0
-INV17,photo,header,shipping,95.0,,0,0
-INV17,photo,header,total,767.0,,0,0
-INV17,photo,line_item,line 1,"Ceramic spoon rest, glazed | 200 | 3.2 | 640.0",,0,
-INV17,photo,route,route,auto,,0,
+INV17,photo,header,vendor_name,Maple Leaf Ceramics Ltd.,Maple Leaf Ceramics Ltd.,1,0
+INV17,photo,header,invoice_number,MLC-2301,MLC-2301,1,0
+INV17,photo,header,invoice_date,2026-10-05,2026-10-05,1,0
+INV17,photo,header,due_date,2026-11-19,2026-11-19,1,0
+INV17,photo,header,currency,CAD,CAD,1,0
+INV17,photo,header,po_number,PO-5514,PO-5514,1,0
+INV17,photo,header,subtotal,640.0,640.0,1,0
+INV17,photo,header,tax,32.0,32.0,1,0
+INV17,photo,header,shipping,95.0,95.0,1,0
+INV17,photo,header,total,767.0,767.0,1,0
+INV17,photo,line_item,line 1,"Ceramic spoon rest, glazed | 200 | 3.2 | 640.0","Ceramic spoon rest, glazed | 200.0 | 3.2 | 640.0",1,
+INV17,photo,route,route,auto,auto,1,
 INV17,photo,flags,flags,,,1,
 INV17,photo,meta,status,,done,,
 INV17,photo,meta,pages,,1,,
-INV17,photo,meta,seconds,,0.049533,,
+INV17,photo,meta,seconds,,6.244086,,
 INV17,photo,meta,seconds_source,,server,,
-INV17,photo,meta,model,,stub,,
-INV17,photo,meta,input_tokens,,0,,
-INV17,photo,meta,output_tokens,,0,,
-INV17,photo,meta,cost_usd,,,,
+INV17,photo,meta,model,,claude-opus-5-5,,
+INV17,photo,meta,input_tokens,,5398,,
+INV17,photo,meta,output_tokens,,295,,
+INV17,photo,meta,cost_usd,,0.027492,,
 INV17,photo,meta,error,,,,
-INV18,digital,header,vendor_name,BrightSteel Components,,0,0
-INV18,digital,header,invoice_number,BSC-7815,,0,0
-INV18,digital,header,invoice_date,2026-10-07,,0,0
-INV18,digital,header,due_date,2026-11-06,,0,0
-INV18,digital,header,currency,USD,,0,0
-INV18,digital,header,po_number,PO-5515,,0,0
-INV18,digital,header,subtotal,987.5,,0,0
-INV18,digital,header,tax,0.0,,0,0
-INV18,digital,header,shipping,30.0,,0,0
-INV18,digital,header,total,1017.5,,0,0
-INV18,digital,line_item,line 1,"Handle assembly, Pro line | 250 | 3.95 | 987.5",,0,
-INV18,digital,route,route,auto,,0,
+INV18,digital,header,vendor_name,BrightSteel Components,BrightSteel Components,1,0
+INV18,digital,header,invoice_number,BSC-7815,BSC-7815,1,0
+INV18,digital,header,invoice_date,2026-10-07,2026-10-07,1,0
+INV18,digital,header,due_date,2026-11-06,2026-11-06,1,0
+INV18,digital,header,currency,USD,USD,1,0
+INV18,digital,header,po_number,PO-5515,PO-5515,1,0
+INV18,digital,header,subtotal,987.5,987.5,1,0
+INV18,digital,header,tax,0.0,0.0,1,0
+INV18,digital,header,shipping,30.0,30.0,1,0
+INV18,digital,header,total,1017.5,1017.5,1,0
+INV18,digital,line_item,line 1,"Handle assembly, Pro line | 250 | 3.95 | 987.5","Handle assembly, Pro line | 250.0 | 3.95 | 987.5",1,
+INV18,digital,route,route,auto,auto,1,
 INV18,digital,flags,flags,,,1,
 INV18,digital,meta,status,,done,,
 INV18,digital,meta,pages,,1,,
-INV18,digital,meta,seconds,,0.050325,,
+INV18,digital,meta,seconds,,4.938282,,
 INV18,digital,meta,seconds_source,,server,,
-INV18,digital,meta,model,,stub,,
-INV18,digital,meta,input_tokens,,0,,
-INV18,digital,meta,output_tokens,,0,,
-INV18,digital,meta,cost_usd,,,,
+INV18,digital,meta,model,,claude-opus-5-5,,
+INV18,digital,meta,input_tokens,,2804,,
+INV18,digital,meta,output_tokens,,279,,
+INV18,digital,meta,cost_usd,,0.016796,,
 INV18,digital,meta,error,,,,
-RCPT01,receipt,header,vendor_name,OfficeHub Supplies,,0,0
-RCPT01,receipt,header,invoice_number,R-0098812,,0,0
-RCPT01,receipt,header,invoice_date,2026-10-08,,0,0
+RCPT01,receipt,header,vendor_name,OfficeHub Supplies,OFFICEHUB SUPPLIES,1,0
+RCPT01,receipt,header,invoice_number,R-0098812,R-0098812,1,0
+RCPT01,receipt,header,invoice_date,2026-10-08,2026-10-08,1,0
 RCPT01,receipt,header,due_date,,,1,0
-RCPT01,receipt,header,currency,USD,,0,0
+RCPT01,receipt,header,currency,USD,USD,1,0
 RCPT01,receipt,header,po_number,,,1,0
-RCPT01,receipt,header,subtotal,69.45,,0,0
-RCPT01,receipt,header,tax,5.04,,0,0
-RCPT01,receipt,header,shipping,0.0,,0,0
-RCPT01,receipt,header,total,74.49,,0,0
-RCPT01,receipt,line_item,line 1,Bubble wrap roll 12in x 175ft | 2 | 24.99 | 49.98,,0,
-RCPT01,receipt,line_item,line 2,Box cutter | 3 | 6.49 | 19.47,,0,
-RCPT01,receipt,route,route,auto,,0,
+RCPT01,receipt,header,subtotal,69.45,69.45,1,0
+RCPT01,receipt,header,tax,5.04,5.04,1,0
+RCPT01,receipt,header,shipping,0.0,0.0,1,0
+RCPT01,receipt,header,total,74.49,74.49,1,0
+RCPT01,receipt,line_item,line 1,Bubble wrap roll 12in x 175ft | 2 | 24.99 | 49.98,Bubble wrap roll 12in x 17 | 2.0 | 24.99 | 49.98,0,
+RCPT01,receipt,line_item,line 2,Box cutter | 3 | 6.49 | 19.47,Box cutter | 3.0 | 6.49 | 19.47,1,
+RCPT01,receipt,route,route,auto,auto,1,
 RCPT01,receipt,flags,flags,,,1,
 RCPT01,receipt,meta,status,,done,,
 RCPT01,receipt,meta,pages,,1,,
-RCPT01,receipt,meta,seconds,,0.050543,,
+RCPT01,receipt,meta,seconds,,4.122611,,
 RCPT01,receipt,meta,seconds_source,,server,,
-RCPT01,receipt,meta,model,,stub,,
-RCPT01,receipt,meta,input_tokens,,0,,
-RCPT01,receipt,meta,output_tokens,,0,,
-RCPT01,receipt,meta,cost_usd,,,,
+RCPT01,receipt,meta,model,,claude-opus-5-5,,
+RCPT01,receipt,meta,input_tokens,,3940,,
+RCPT01,receipt,meta,output_tokens,,316,,
+RCPT01,receipt,meta,cost_usd,,0.02208,,
 RCPT01,receipt,meta,error,,,,
-RCPT02,receipt,header,vendor_name,Lakeline Freight LLC,,0,0
-RCPT02,receipt,header,invoice_number,R-LF-5521,,0,0
-RCPT02,receipt,header,invoice_date,2026-10-09,,0,0
+RCPT02,receipt,header,vendor_name,Lakeline Freight LLC,LAKELINE FREIGHT LLC,1,0
+RCPT02,receipt,header,invoice_number,R-LF-5521,R-LF-5521,1,0
+RCPT02,receipt,header,invoice_date,2026-10-09,2026-10-09,1,0
 RCPT02,receipt,header,due_date,,,1,0
-RCPT02,receipt,header,currency,USD,,0,0
+RCPT02,receipt,header,currency,USD,USD,1,0
 RCPT02,receipt,header,po_number,,,1,0
-RCPT02,receipt,header,subtotal,65.0,,0,0
-RCPT02,receipt,header,tax,0.0,,0,0
-RCPT02,receipt,header,shipping,0.0,,0,0
-RCPT02,receipt,header,total,65.0,,0,0
-RCPT02,receipt,line_item,line 1,"Pallet jack rental, 1 day | 1 | 65.0 | 65.0",,0,
-RCPT02,receipt,route,route,auto,,0,
+RCPT02,receipt,header,subtotal,65.0,65.0,1,0
+RCPT02,receipt,header,tax,0.0,0.0,1,0
+RCPT02,receipt,header,shipping,0.0,0.0,1,0
+RCPT02,receipt,header,total,65.0,65.0,1,0
+RCPT02,receipt,line_item,line 1,"Pallet jack rental, 1 day | 1 | 65.0 | 65.0","Pallet jack rental, 1 day | 1.0 | 65.0 | 65.0",1,
+RCPT02,receipt,route,route,auto,auto,1,
 RCPT02,receipt,flags,flags,,,1,
 RCPT02,receipt,meta,status,,done,,
 RCPT02,receipt,meta,pages,,1,,
-RCPT02,receipt,meta,seconds,,0.050836,,
+RCPT02,receipt,meta,seconds,,3.852512,,
 RCPT02,receipt,meta,seconds_source,,server,,
-RCPT02,receipt,meta,model,,stub,,
-RCPT02,receipt,meta,input_tokens,,0,,
-RCPT02,receipt,meta,output_tokens,,0,,
-RCPT02,receipt,meta,cost_usd,,,,
+RCPT02,receipt,meta,model,,claude-opus-5-5,,
+RCPT02,receipt,meta,input_tokens,,3958,,
+RCPT02,receipt,meta,output_tokens,,281,,
+RCPT02,receipt,meta,cost_usd,,0.021452,,
 RCPT02,receipt,meta,error,,,,

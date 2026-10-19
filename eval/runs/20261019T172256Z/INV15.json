@@ -1,0 +1,66 @@
+{
+  "id": "5ca1fbfc-d16a-4c25-bdf4-52e37a8fb36e",
+  "filename": "INV15.jpg",
+  "content_type": "image/jpeg",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "error": null,
+  "received_at": "2026-10-19T17:24:46.073800+00:00",
+  "finished_at": "2026-10-19T17:24:50.620253+00:00",
+  "processing_seconds": 4.546453,
+  "record": {
+    "tax": 0.0,
+    "flags": [],
+    "route": "auto",
+    "total": 1140.0,
+    "checks": {
+      "totals": {
+        "line_sum": 1140.0,
+        "computed_total": 1140.0,
+        "printed_minus_computed": 0.0,
+        "line_sum_minus_subtotal": 0.0
+      }
+    },
+    "currency": "USD",
+    "discount": 0.0,
+    "due_date": "2026-11-02",
+    "shipping": 0.0,
+    "subtotal": 1140.0,
+    "po_number": null,
+    "confidence": {
+      "tax": 0.93,
+      "total": 0.98,
+      "currency": 0.98,
+      "discount": 0.93,
+      "due_date": 0.96,
+      "shipping": 0.93,
+      "subtotal": 0.97,
+      "po_number": 0.9,
+      "line_items": 0.96,
+      "vendor_name": 0.98,
+      "invoice_date": 0.96,
+      "invoice_number": 0.97
+    },
+    "line_items": [
+      {
+        "amount": 1140.0,
+        "quantity": 3.0,
+        "unit_price": 380.0,
+        "description": "Short product video, 30 s"
+      }
+    ],
+    "vendor_name": "PixelPro Studio",
+    "invoice_date": "2026-10-03",
+    "invoice_number": "PXS-131"
+  },
+  "input_mode": "image",
+  "review": null,
+  "usage": {
+    "model": "claude-opus-5-5",
+    "input_tokens": 5290,
+    "output_tokens": 274,
+    "cost_usd": 0.02664
+  },
+  "seconds_source": "server"
+}

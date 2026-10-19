@@ -104,7 +104,10 @@ def main() -> None:
     with httpx.Client(base_url=args.api, timeout=60) as client:
         if not args.no_reset:
             r = client.post("/admin/reset")
-            print(f"reset: HTTP {r.status_code}")
+            if r.status_code != 200:
+                sys.exit(f"reset failed (HTTP {r.status_code}: {r.text[:200]}); a stale database would flag "
+                         "re-uploaded samples as duplicates. Start the API with ALLOW_RESET=1 or pass --no-reset.")
+            print("reset: ok")
         for m in manifest:
             path = ROOT / "samples" / m["file"]
             truth = json.loads((ROOT / "truth" / f"{m['document_id']}.json").read_text())

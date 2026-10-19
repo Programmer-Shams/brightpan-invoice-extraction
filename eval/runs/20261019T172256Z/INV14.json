@@ -1,0 +1,72 @@
+{
+  "id": "8bae83f0-ccba-4ffd-8b5d-de2e8204eb95",
+  "filename": "INV14.pdf",
+  "content_type": "application/pdf",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "error": null,
+  "received_at": "2026-10-19T17:24:33.738645+00:00",
+  "finished_at": "2026-10-19T17:24:45.638083+00:00",
+  "processing_seconds": 11.899438,
+  "record": {
+    "tax": 24.58,
+    "flags": [],
+    "route": "auto",
+    "total": 363.58,
+    "checks": {
+      "totals": {
+        "line_sum": 339.0,
+        "computed_total": 363.58,
+        "printed_minus_computed": 0.0,
+        "line_sum_minus_subtotal": 0.0
+      }
+    },
+    "currency": "USD",
+    "discount": 0.0,
+    "due_date": "2026-11-01",
+    "shipping": 0.0,
+    "subtotal": 339.0,
+    "po_number": null,
+    "confidence": {
+      "tax": 0.97,
+      "total": 0.98,
+      "currency": 0.98,
+      "discount": 0.95,
+      "due_date": 0.97,
+      "shipping": 0.93,
+      "subtotal": 0.97,
+      "po_number": 0.9,
+      "line_items": 0.96,
+      "vendor_name": 0.98,
+      "invoice_date": 0.97,
+      "invoice_number": 0.97
+    },
+    "line_items": [
+      {
+        "amount": 210.0,
+        "quantity": 5.0,
+        "unit_price": 42.0,
+        "description": "Copy paper, case"
+      },
+      {
+        "amount": 129.0,
+        "quantity": 1.0,
+        "unit_price": 129.0,
+        "description": "Shipping scale"
+      }
+    ],
+    "vendor_name": "OfficeHub Supplies",
+    "invoice_date": "2026-10-02",
+    "invoice_number": "OH-552288"
+  },
+  "input_mode": "pdf_images",
+  "review": null,
+  "usage": {
+    "model": "claude-opus-5-5",
+    "input_tokens": 7228,
+    "output_tokens": 309,
+    "cost_usd": 0.035092
+  },
+  "seconds_source": "server"
+}
