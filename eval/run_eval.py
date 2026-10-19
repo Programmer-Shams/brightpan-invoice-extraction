@@ -49,7 +49,11 @@ def run_one(client: httpx.Client, path: Path, timeout: float, poll: float) -> di
                 if g.status_code != 200:
                     body = {"status": "poll_failed", "error": f"HTTP {g.status_code}: {g.text[:200]}"}
                     break
-                body = g.json()
+                try:
+                    body = g.json()
+                except ValueError:
+                    body = {"status": "poll_failed", "error": f"non-JSON response: {g.text[:200]}"}
+                    break
                 if body.get("status") in ("done", "failed"):
                     break
                 if time.monotonic() - started > timeout:

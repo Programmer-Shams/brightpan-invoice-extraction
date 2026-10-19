@@ -40,7 +40,7 @@ def render_pdf_pages(data: bytes, dpi: int, pages: list[int] | None = None) -> l
         pdf = pdfium.PdfDocument(data)
         try:
             count = len(pdf)
-            if count > MAX_PAGES:
+            if pages is None and count > MAX_PAGES:  # whole-document renders only; a single preview page is fine
                 raise ExtractionError(f"{count} pages; documents over {MAX_PAGES} pages are not read automatically")
             images = []
             for i in pages if pages is not None else range(count):

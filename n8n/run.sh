@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # (Re)creates Demo 4's own n8n at http://localhost:5679. Data (workflows, credentials) lives in the
 # docker volume brightpan-invoice-n8n-data, so re-running this keeps everything.
-# Only the variables the workflows need are read from .env (the Anthropic key and database URL never reach n8n).
+# Only the variables the workflows need are passed from .env; run.sh never passes the Anthropic key or database URL.
 # They go in through a temporary --env-file, not the command line, so they don't show up in `ps`.
 set -euo pipefail
 cd "$(dirname "$0")/.."

@@ -76,7 +76,7 @@
       "parameters": {
         "authentication": "oAuth2",
         "resource": "sheet",
-        "operation": "append",
+        "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
           "mode": "url",
@@ -90,7 +90,9 @@
         "columns": {
           "mappingMode": "autoMapInputData",
           "value": {},
-          "matchingColumns": [],
+          "matchingColumns": [
+            "Document ID"
+          ],
           "schema": []
         },
         "options": {
@@ -98,7 +100,7 @@
         }
       },
       "id": "5f0c9a52-6d1e-4a51-9a0e-2b7f1c3d4e04",
-      "name": "Append to AP register",
+      "name": "Add or update AP register row",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
@@ -159,7 +161,7 @@
       "main": [
         [
           {
-            "node": "Append to AP register",
+            "node": "Add or update AP register row",
             "type": "main",
             "index": 0
           }

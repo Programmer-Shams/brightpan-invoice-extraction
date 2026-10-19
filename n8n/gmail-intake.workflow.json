@@ -32,7 +32,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// One item per attachment that could be an invoice; the API's own byte check makes the final call.\n// Accept by MIME type or file extension (some mail clients send PDFs as application/octet-stream),\n// and skip small images, which are signature logos and inline pictures rather than documents.\nconst TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png']);\nconst EXTENSIONS = /\\.(pdf|jpe?g|png)$/i;\nconst MIN_IMAGE_BYTES = 15000;\nconst UNITS = { B: 1, kB: 1e3, KB: 1e3, MB: 1e6, GB: 1e9 };\nconst bytes = (size) => {\n  const m = /^([\\d.]+)\\s*([kKMG]?B)$/.exec(String(size ?? '').trim());\n  return m ? Number(m[1]) * UNITS[m[2]] : NaN;\n};\nconst out = [];\nfor (const item of $input.all()) {\n  for (const [key, bin] of Object.entries(item.binary ?? {})) {\n    if (!key.startsWith('attachment_')) continue;\n    const name = bin.fileName ?? '';\n    if (!TYPES.has(bin.mimeType) && !EXTENSIONS.test(name)) continue;\n    const isImage = (bin.mimeType ?? '').startsWith('image/') || /\\.(jpe?g|png)$/i.test(name);\n    if (isImage && bytes(bin.fileSize) < MIN_IMAGE_BYTES) continue;\n    out.push({\n      json: { messageId: item.json.id, subject: item.json.subject, fileName: name },\n      binary: { data: bin },\n    });\n  }\n}\nreturn out;"
+        "jsCode": "// One item per attachment that could be an invoice; the API's own byte check makes the final call.\n// Accept by MIME type or file extension (some mail clients send PDFs as application/octet-stream),\n// and skip small images, which are signature logos and inline pictures rather than documents.\nconst TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png']);\nconst EXTENSIONS = /\\.(pdf|jpe?g|png)$/i;\nconst MIN_IMAGE_BYTES = 15000;\nconst UNITS = { B: 1, kB: 1e3, KB: 1e3, MB: 1e6, GB: 1e9 };\nconst bytes = (size) => {\n  const m = /^([\\d.]+)\\s*([kKMG]?B)$/.exec(String(size ?? '').trim());\n  return m ? Number(m[1]) * UNITS[m[2]] : NaN;\n};\n// Never take in mail if the intake address is missing: the Gmail query would then match every email.\nif (!String($env.GMAIL_INTAKE_ADDRESS ?? '').includes('@')) return [];\nconst out = [];\nfor (const item of $input.all()) {\n  for (const [key, bin] of Object.entries(item.binary ?? {})) {\n    if (!key.startsWith('attachment_')) continue;\n    const name = bin.fileName ?? '';\n    if (!TYPES.has(bin.mimeType) && !EXTENSIONS.test(name)) continue;\n    const isImage = (bin.mimeType ?? '').startsWith('image/') || /\\.(jpe?g|png)$/i.test(name);\n    if (isImage && bytes(bin.fileSize) < MIN_IMAGE_BYTES) continue;\n    out.push({\n      json: { messageId: item.json.id, subject: item.json.subject, fileName: name },\n      binary: { data: bin },\n    });\n  }\n}\nreturn out;"
       },
       "id": "6a1d2c3e-0000-4000-8000-0000000000a2",
       "name": "One item per attachment",
@@ -82,6 +82,58 @@
         0
       ],
       "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1a2b3c4-0000-4000-8000-0000000000c1",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6a1d2c3e-0000-4000-8000-0000000000a4",
+      "name": "Upload failed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: ':warning: An emailed document could not be taken in: ' + ($('One item per attachment').item.json.fileName || 'attachment').replace(/[&<>]/g, '') + ' (email: ' + String($('One item per attachment').item.json.subject || '').replace(/[&<>]/g, '') + '). Error: ' + String($json.error?.message ?? $json.error).slice(0, 200).replace(/[&<>]/g, '') + '. Upload it by hand.' }) }}",
+        "options": {}
+      },
+      "id": "6a1d2c3e-0000-4000-8000-0000000000a5",
+      "name": "Tell AP on Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        -60
+      ]
     }
   ],
   "connections": {
@@ -105,6 +157,29 @@
             "index": 0
           }
         ]
+      ]
+    },
+    "Send to extraction API": {
+      "main": [
+        [
+          {
+            "node": "Upload failed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload failed?": {
+      "main": [
+        [
+          {
+            "node": "Tell AP on Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
       ]
     }
   },

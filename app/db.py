@@ -70,7 +70,7 @@ def retry_later(document_id, error: str, attempts: int, usage: dict | None) -> b
     with pool.connection() as conn:
         conn.execute("update documents set status = 'queued', error = %s, "
                      "retry_at = now() + make_interval(secs => %s), "
-                     "failure_usage = coalesce(%s, failure_usage) where id = %s",
+                     "failure_usage = coalesce(%s, failure_usage) where id = %s and status = 'processing'",
                      (error[:2000], 30 * 2 ** (attempts - 1), Jsonb(usage) if usage else None, document_id))
     return True
 
@@ -109,7 +109,7 @@ def save_result(document_id, record: dict, key: str | None, pages: int, input_mo
 def mark_failed(document_id, error: str, usage: dict | None = None) -> None:
     with pool.connection() as conn:
         conn.execute("update documents set status = 'failed', error = %s, finished_at = now(), "
-                     "failure_usage = coalesce(%s, failure_usage) where id = %s",
+                     "failure_usage = coalesce(%s, failure_usage) where id = %s and status = 'processing'",
                      (error[:2000], Jsonb(usage) if usage else None, document_id))
 
 
@@ -129,7 +129,7 @@ def pending_outputs(limit: int = 10) -> list[dict]:
             "select d.id, d.filename, d.source, d.received_at, e.record, r.status as review_status "
             "from extractions e join documents d on d.id = e.document_id "
             "left join review_queue r on r.document_id = d.id "
-            "where d.source <> 'eval' and e.outputs_attempts < %s and "
+            "where d.source <> 'eval' and e.outputs_attempts < %s and r.status is distinct from 'rejected' and "
             "      (e.outputs_status like 'failed:%%' or (e.outputs_status is null and e.created_at < now() - interval '1 minute')) "
             "order by e.created_at limit %s", (MAX_OUTPUT_ATTEMPTS, limit)).fetchall()
 
@@ -140,6 +140,7 @@ def get_document(document_id) -> dict | None:
             "select d.id, d.filename, d.content_type, d.source, d.status, d.pages, d.error, d.received_at, "
             "d.finished_at, extract(epoch from d.finished_at - d.received_at) as processing_seconds, "
             "e.record, e.model, e.input_tokens, e.output_tokens, e.cost_usd, e.input_mode, e.outputs_status, "
+            "e.outputs_attempts, "
             "d.failure_usage, "
             "r.status as review_status, r.reviewer_note "
             "from documents d left join extractions e on e.document_id = d.id "
@@ -182,9 +183,13 @@ def list_review(status: str, include_eval: bool) -> list[dict]:
 
 
 def resolve_review(document_id, status: str, note: str | None) -> dict | None:
-    """Closes an open review item. Returns the document (with record) or None if nothing was open."""
-    with pool.connection() as conn:
+    """Closes an open review item. Returns the document (with record) or None if nothing was open.
+    Approving starts a new delivery (the register row), so its send attempts start from zero."""
+    with pool.connection() as conn, conn.transaction():
         row = conn.execute("update review_queue set status = %s, reviewer_note = %s, resolved_at = now() "
                            "where document_id = %s and status = 'open' returning document_id",
                            (status, note, document_id)).fetchone()
+        if row:
+            conn.execute("update extractions set outputs_attempts = 0, outputs_status = null where document_id = %s",
+                         (document_id,))
     return get_document(document_id) if row else None

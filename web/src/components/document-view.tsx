@@ -164,9 +164,10 @@ export function DocumentView() {
           {doc.processing_seconds !== null ? `, read in ${doc.processing_seconds.toFixed(1)} s` : ""}
           {doc.usage.cost_usd !== null ? `, cost $${doc.usage.cost_usd.toFixed(3)}` : ""}
         </p>
-        {doc.status === "done" && (record?.route === "auto" || doc.review?.status === "approved") && registerNote(doc.outputs_status) && (
-          <p className="w-full text-sm text-review">{registerNote(doc.outputs_status)}</p>
-        )}
+        {doc.status === "done" && (record?.route === "auto" || doc.review?.status === "approved") &&
+          registerNote(doc.outputs_status, doc.outputs_gave_up) && (
+            <p className="w-full text-sm text-review">{registerNote(doc.outputs_status, doc.outputs_gave_up)}</p>
+          )}
       </header>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">

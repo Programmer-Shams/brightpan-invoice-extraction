@@ -1,4 +1,6 @@
-"""The duplicate check's SQL against a real Postgres, in a throwaway schema (skipped without DATABASE_URL)."""
+"""The duplicate check's SQL against a real Postgres, in a throwaway schema that is dropped afterwards.
+Runs only when TEST_DATABASE_URL is set, so a plain `pytest` never touches a real database."""
+import os
 import uuid
 
 import psycopg
@@ -9,7 +11,8 @@ from app import config
 from app.db import DUPLICATE_SQL
 from app.validate import duplicate_key
 
-pytestmark = pytest.mark.skipif(not config.DATABASE_URL, reason="needs DATABASE_URL")
+TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "")
+pytestmark = pytest.mark.skipif(not TEST_DATABASE_URL, reason="set TEST_DATABASE_URL to run the database tests")
 KEY = duplicate_key("Ferro Metalworks Inc.", "FM-10421")
 
 
@@ -17,7 +20,7 @@ KEY = duplicate_key("Ferro Metalworks Inc.", "FM-10421")
 def conn():
     schema = f"dup_test_{uuid.uuid4().hex[:8]}"
     sql = (config.ROOT / "app" / "schema.sql").read_text().replace("invoice_extraction", schema)
-    with psycopg.connect(config.DATABASE_URL, prepare_threshold=None, autocommit=True) as c:
+    with psycopg.connect(TEST_DATABASE_URL, prepare_threshold=None, autocommit=True) as c:
         c.execute(sql)
         try:
             yield c

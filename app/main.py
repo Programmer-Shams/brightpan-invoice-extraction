@@ -111,6 +111,7 @@ def get_document(document_id: str):
         "received_at": row["received_at"], "finished_at": row["finished_at"],
         "processing_seconds": seconds(row),
         "record": row["record"], "input_mode": row["input_mode"], "outputs_status": row["outputs_status"],
+        "outputs_gave_up": (row["outputs_attempts"] or 0) >= db.MAX_OUTPUT_ATTEMPTS and row["outputs_status"] != "sent",
         "review": {"status": row["review_status"], "note": row["reviewer_note"]} if row["review_status"] else None,
         "usage": usage(row),
     }

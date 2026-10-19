@@ -23,8 +23,10 @@ POLL_SECONDS = 0.5
 MAINTENANCE_SECONDS = 60
 MAX_BACKOFF_SECONDS = 30
 
-# Errors worth another attempt: rate limits, overload/5xx, network, and a database connection dropping.
-RETRYABLE = (anthropic.RateLimitError, anthropic.InternalServerError, anthropic.APIConnectionError,
+# Errors worth another attempt: rate limits, overload (529) and other 5xx, network/timeouts, and a database
+# connection dropping. In the SDK, OverloadedError & co. are siblings of InternalServerError, so each is listed.
+RETRYABLE = (anthropic.RateLimitError, anthropic.OverloadedError, anthropic.InternalServerError,
+             anthropic.ServiceUnavailableError, anthropic.DeadlineExceededError, anthropic.APIConnectionError,
              psycopg.OperationalError)
 
 # Read by /health.
@@ -39,15 +41,14 @@ def process(client: anthropic.Anthropic, doc: dict) -> None:
                           threshold=config.CONFIDENCE_THRESHOLD, tolerance=config.TOLERANCE)
     db.save_result(doc["id"], record.model_dump(), key, result["pages"], result["input_mode"],
                    result["usage"], result["request_id"])
-    db.set_outputs_status(doc["id"], notify.send(doc, record.model_dump()))
     log.info("%s %s route=%s flags=%s", doc["id"], doc["filename"], record.route, record.flags)
+    # The document is done now. Sending is best effort: if it fails, the resend pass picks it up.
+    safely("send outputs", lambda: db.set_outputs_status(doc["id"], notify.send(doc, record.model_dump())))
 
 
 def resend_outputs() -> None:
     """Retries register rows and Slack messages that never went out (n8n down, a crash before sending)."""
     for row in db.pending_outputs():
-        if row["record"]["route"] == "review" and row["review_status"] == "rejected":
-            continue
         event = "review.approved" if row["review_status"] == "approved" else "document.processed"
         db.set_outputs_status(row["id"], notify.send(row, row["record"], event=event))
 

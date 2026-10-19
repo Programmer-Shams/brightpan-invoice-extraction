@@ -74,6 +74,7 @@ export interface DocumentDetail {
   record: ExtractedRecord | null;
   input_mode: string | null;
   outputs_status: string | null;
+  outputs_gave_up: boolean;
   review: { status: ReviewStatus; note: string | null } | null;
   usage: { model: string | null; input_tokens: number | null; output_tokens: number | null; cost_usd: number | null };
 }

@@ -75,7 +75,8 @@ export function outcome(doc: Pick<DocumentSummary, "status" | "route" | "review_
 }
 
 /** What happened to the AP register update, in words; null when there is nothing to say. */
-export function registerNote(outputsStatus: string | null): string | null {
+export function registerNote(outputsStatus: string | null, gaveUp = false): string | null {
+  if (gaveUp) return "The AP register update failed 5 times and is no longer retried. Check the n8n outputs workflow.";
   if (!outputsStatus) return "The AP register update is still being sent.";
   if (outputsStatus === "sent") return null;
   if (outputsStatus === "skipped:eval upload") return "Test upload: not added to the AP register.";

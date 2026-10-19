@@ -37,7 +37,8 @@ flowchart LR
    become a row in the AP register. Review items post to Slack; approving one adds it to the register.
 5. **Recover.** The worker survives database and API outages: rate limits, overload and network errors put the
    document back in the queue with backoff (3 attempts), documents left half-done by a stopped worker are requeued,
-   and register rows or Slack messages that didn't go out are resent. `/health` reports the database and the worker.
+   and register rows or Slack messages that didn't go out are resent (the register row is keyed on the document ID,
+   so a resend never adds a second row). `/health` reports the database and the worker.
 
 ## Test results
 
@@ -77,7 +78,8 @@ npm install && npm run dev             # http://127.0.0.1:3040 (run `npx next ty
 ./n8n/deploy.sh                   # imports the workflows, attaches credentials, publishes them
 
 uv run python eval/run_eval.py    # full eval (needs ALLOW_RESET=1 on the API; only removes earlier eval uploads)
-uv run pytest -q                  # unit tests: validation, duplicate key, routing, outputs, auth, scoring
+uv run pytest -q                  # unit tests: validation, duplicate key, routing, worker, outputs, auth, scoring
+TEST_DATABASE_URL=postgresql://… uv run pytest -q tests/test_duplicates_db.py   # duplicate SQL on a throwaway schema
 ```
 
 n8n needs a Google Sheets OAuth2 credential (AP register) and a Gmail OAuth2 credential (intake). Set
