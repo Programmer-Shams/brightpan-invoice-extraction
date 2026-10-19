@@ -17,6 +17,20 @@ from .models import Extraction
 MIN_TEXT_CHARS = 50  # below this a PDF page has no usable text layer
 RENDER_DPI = 200
 MAX_IMAGE_SIDE = 2400
+MAX_PAGES = 20  # an invoice longer than this goes to a person, not to 20+ rendered images
+MAX_RENDER_PIXELS = 8_000_000  # a hostile PDF can declare a huge page; never render beyond this
+
+
+def render_page(page, dpi: int) -> Image.Image:
+    """Renders one PDF page at `dpi`, scaled down if the page would exceed MAX_RENDER_PIXELS."""
+    width, height = page.get_size()  # in points (1/72 inch)
+    scale = dpi / 72
+    if width * height * scale * scale > MAX_RENDER_PIXELS:
+        scale = (MAX_RENDER_PIXELS / (width * height)) ** 0.5
+    try:
+        return page.render(scale=scale).to_pil()
+    finally:
+        page.close()
 
 SYSTEM_PROMPT = """You read supplier invoices and receipts for Brightpan Kitchen Supply's accounts payable team \
 and return the values printed on the document. Brightpan is always the buyer ("Bill to"), never the vendor.
@@ -39,6 +53,12 @@ If a unit price isn't printed but quantity and amount are, unit_price is amount 
 cut-off or ambiguous text, and for null values where the field may be present but unreadable."""
 
 
+class ExtractionError(Exception):
+    def __init__(self, message: str, usage: dict | None = None):
+        super().__init__(message)
+        self.usage = usage
+
+
 def _image_block(img: Image.Image) -> dict:
     img = ImageOps.exif_transpose(img).convert("RGB")
     if max(img.size) > MAX_IMAGE_SIDE:
@@ -53,13 +73,18 @@ def prepare(data: bytes, content_type: str) -> tuple[list[dict], int, str]:
     """Returns (content blocks, page count, input mode)."""
     if content_type == "application/pdf":
         reader = PdfReader(io.BytesIO(data))
+        if len(reader.pages) > MAX_PAGES:
+            raise ExtractionError(f"{len(reader.pages)} pages; documents over {MAX_PAGES} pages are not read automatically")
         texts = [p.extract_text(extraction_mode="layout") or "" for p in reader.pages]
         if all(len(t.strip()) >= MIN_TEXT_CHARS for t in texts):
             body = "\n\n".join(f"--- page {i} of {len(texts)} ---\n" + "\n".join(l.rstrip() for l in t.splitlines() if l.strip())
                                for i, t in enumerate(texts, start=1))
             return [{"type": "text", "text": f"Text layer of the PDF:\n\n{body}"}], len(texts), "pdf_text"
         pdf = pdfium.PdfDocument(data)
-        blocks = [_image_block(page.render(scale=RENDER_DPI / 72).to_pil()) for page in pdf]
+        try:
+            blocks = [_image_block(render_page(page, RENDER_DPI)) for page in pdf]
+        finally:
+            pdf.close()
         return blocks, len(blocks), "pdf_images"
     return [_image_block(Image.open(io.BytesIO(data)))], 1, "image"
 
@@ -72,12 +97,6 @@ def cost_usd(model: str, usage) -> float | None:
               "cache_read": getattr(usage, "cache_read_input_tokens", 0) or 0,
               "cache_write": getattr(usage, "cache_creation_input_tokens", 0) or 0}
     return round(sum(tokens[k] * p[k] for k in tokens) / 1_000_000, 6)
-
-
-class ExtractionError(Exception):
-    def __init__(self, message: str, usage: dict | None = None):
-        super().__init__(message)
-        self.usage = usage
 
 
 def extract(client: anthropic.Anthropic, data: bytes, content_type: str) -> dict:

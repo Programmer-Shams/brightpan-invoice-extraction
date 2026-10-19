@@ -1,36 +1,66 @@
-// Server-side proxy to the extraction API. It adds the bearer token, so the browser never holds it,
-// and only forwards the paths the app uses (admin endpoints are not reachable from the browser).
+// Server-side proxy to the extraction API. It adds the bearer token, so the browser never holds it.
+// Only the exact routes the app uses are forwarded, only same-origin requests may change anything,
+// and uploads are always tagged as "upload" (a browser can't pass itself off as email or eval).
 
 const API_URL = process.env.API_URL ?? "http://127.0.0.1:8040";
-const ALLOWED = /^(documents|review|results)(\/|$)/;
+const ALLOWED_HOSTS = new Set((process.env.ALLOWED_HOSTS ?? "127.0.0.1:3040,localhost:3040").split(","));
+
+const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+const ROUTES: Record<string, RegExp[]> = {
+  GET: [
+    /^\/documents$/,
+    new RegExp(`^/documents/${UUID}$`),
+    new RegExp(`^/documents/${UUID}/file$`),
+    new RegExp(`^/documents/${UUID}/pages/[1-9][0-9]{0,2}$`),
+    /^\/review$/,
+    /^\/results$/,
+  ],
+  POST: [/^\/documents$/, new RegExp(`^/review/${UUID}$`)],
+};
+
+const deny = (status: number, detail: string) => Response.json({ detail }, { status });
+
+function sameOrigin(request: Request): boolean {
+  const site = request.headers.get("sec-fetch-site");
+  if (site) return site === "same-origin";
+  const origin = request.headers.get("origin");
+  return origin !== null && ALLOWED_HOSTS.has(new URL(origin).host);
+}
 
 async function forward(request: Request, path: string[]): Promise<Response> {
-  const joined = path.map(encodeURIComponent).join("/");
-  if (!ALLOWED.test(joined)) {
-    return Response.json({ detail: "not found" }, { status: 404 });
-  }
+  if (!ALLOWED_HOSTS.has(request.headers.get("host") ?? "")) return deny(400, "unexpected host");
+  if (path.some((s) => s === "" || s === "." || s === ".." || /[\\/]/.test(s))) return deny(404, "not found");
+
+  const target = new URL(path.map(encodeURIComponent).join("/"), `${API_URL}/`);
+  target.search = new URL(request.url).search;
+  if (!(ROUTES[request.method] ?? []).some((re) => re.test(target.pathname))) return deny(404, "not found");
+  if (request.method !== "GET" && !sameOrigin(request)) return deny(403, "cross-site request refused");
+
   const token = process.env.API_TOKEN;
-  if (!token) {
-    return Response.json({ detail: "API_TOKEN is not set for the web app (web/.env.local)" }, { status: 500 });
-  }
-  const search = new URL(request.url).search;
+  if (!token) return deny(500, "API_TOKEN is not set for the web app (web/.env.local)");
   const headers: Record<string, string> = { Authorization: `Bearer ${token}` };
-  const contentType = request.headers.get("content-type");
-  if (contentType) headers["Content-Type"] = contentType;
+
+  let body: BodyInit | undefined;
+  if (target.pathname === "/documents" && request.method === "POST") {
+    const form = await request.formData();
+    const file = form.get("file");
+    if (!(file instanceof File)) return deny(400, "attach a file in the 'file' field");
+    body = new FormData();
+    body.append("file", file, file.name);
+    body.append("source", "upload");
+  } else if (request.method === "POST") {
+    headers["Content-Type"] = "application/json";
+    body = await request.text();
+  }
 
   let upstream: Response;
   try {
-    upstream = await fetch(`${API_URL}/${joined}${search}`, {
-      method: request.method,
-      headers,
-      body: request.method === "GET" ? undefined : await request.arrayBuffer(),
-      cache: "no-store",
-    });
+    upstream = await fetch(target, { method: request.method, headers, body, cache: "no-store" });
   } catch {
-    return Response.json({ detail: "The extraction API is not reachable. Start it on port 8040." }, { status: 502 });
+    return deny(502, "The extraction API is not reachable. Start it on port 8040.");
   }
   const out = new Headers();
-  for (const name of ["content-type", "content-disposition"]) {
+  for (const name of ["content-type", "content-disposition", "cache-control"]) {
     const value = upstream.headers.get(name);
     if (value) out.set(name, value);
   }

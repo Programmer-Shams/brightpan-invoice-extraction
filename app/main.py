@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 from eval.scoring import HEADER_FIELDS, compute_metrics
 
 from . import config, db, notify, worker
+from .extract import render_page
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
 ACCEPTED = {"application/pdf", "image/jpeg", "image/png"}
@@ -56,7 +57,7 @@ def sniff(data: bytes, declared: str | None) -> str | None:
 
 
 @app.post("/documents", status_code=202)
-async def upload(file: UploadFile = File(...), source: str = Form("upload")):
+async def upload(file: UploadFile = File(...), source: Literal["upload", "email", "eval"] = Form("upload")):
     data = await file.read()
     if not data or len(data) > MAX_BYTES:
         raise HTTPException(413 if data else 400, "file is empty or larger than 20 MB")
@@ -134,10 +135,14 @@ def page_image(document_id: str, page: int):
     if row["content_type"] != "application/pdf":
         raise HTTPException(400, "only PDFs have page images; use /file for images")
     pdf = pdfium.PdfDocument(bytes(row["file_bytes"]))
-    if not 1 <= page <= len(pdf):
-        raise HTTPException(404, "page not found")
+    try:
+        if not 1 <= page <= len(pdf):
+            raise HTTPException(404, "page not found")
+        image = render_page(pdf[page - 1], PREVIEW_DPI)
+    finally:
+        pdf.close()
     buf = io.BytesIO()
-    pdf[page - 1].render(scale=PREVIEW_DPI / 72).to_pil().save(buf, format="PNG", optimize=True)
+    image.save(buf, format="PNG", optimize=True)
     return Response(buf.getvalue(), media_type="image/png", headers={"Cache-Control": "private, max-age=3600"})
 
 
