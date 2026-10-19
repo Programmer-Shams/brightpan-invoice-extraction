@@ -1,0 +1,35 @@
+{
+  "id": "1d3138d3-8f19-44ab-8bab-0745651c3687",
+  "filename": "INV09.pdf",
+  "source": "eval",
+  "status": "done",
+  "pages": 2,
+  "received_at": "2026-10-19T17:11:24.558092+00:00",
+  "finished_at": "2026-10-19T17:11:24.608571+00:00",
+  "processing_seconds": 0.050479,
+  "record": {
+    "vendor_name": null,
+    "invoice_number": null,
+    "invoice_date": null,
+    "due_date": null,
+    "currency": null,
+    "po_number": null,
+    "line_items": [],
+    "subtotal": null,
+    "discount": null,
+    "tax": null,
+    "shipping": null,
+    "total": null,
+    "confidence": {},
+    "flags": [],
+    "route": null
+  },
+  "usage": {
+    "model": "stub",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": null
+  },
+  "error": null,
+  "seconds_source": "server"
+}

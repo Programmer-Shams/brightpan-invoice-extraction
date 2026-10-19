@@ -1,0 +1,30 @@
+{
+  "document_id": "INV15",
+  "vendor_name": "PixelPro Studio",
+  "invoice_number": "PXS-131",
+  "invoice_date": "2026-10-03",
+  "due_date": "2026-11-02",
+  "currency": "USD",
+  "po_number": null,
+  "line_items": [
+    {
+      "description": "Short product video, 30 s",
+      "quantity": 3,
+      "unit_price": 380.0,
+      "amount": 1140.0
+    }
+  ],
+  "subtotal": 1140.0,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 0.0,
+  "total": 1140.0,
+  "notes": "Phone photo, perspective and shadow",
+  "tax_exempt": false,
+  "computed_total": 1140.0,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV15.jpg",
+  "format": "photo"
+}

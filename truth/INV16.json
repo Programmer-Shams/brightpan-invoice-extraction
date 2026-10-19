@@ -1,0 +1,38 @@
+{
+  "document_id": "INV16",
+  "vendor_name": "Ferro Metalworks Inc.",
+  "invoice_number": "FM-10421",
+  "invoice_date": "2026-10-04",
+  "due_date": "2026-11-03",
+  "currency": "USD",
+  "po_number": "PO-5501",
+  "line_items": [
+    {
+      "description": "12-inch carbon steel skillet blank",
+      "quantity": 200,
+      "unit_price": 9.4,
+      "amount": 1880.0
+    },
+    {
+      "description": "10-inch carbon steel skillet blank",
+      "quantity": 150,
+      "unit_price": 7.85,
+      "amount": 1177.5
+    }
+  ],
+  "subtotal": 3057.5,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 145.0,
+  "total": 3202.5,
+  "notes": "Duplicate of INV01 (same vendor and invoice number), resent as a phone photo",
+  "tax_exempt": false,
+  "computed_total": 3202.5,
+  "expected_flags": [
+    "duplicate_invoice"
+  ],
+  "expected_route": "review",
+  "file": "INV16.jpg",
+  "format": "photo"
+}

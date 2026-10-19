@@ -1,0 +1,35 @@
+{
+  "id": "5a882fe4-dbde-4b8e-aaba-3445c211e1df",
+  "filename": "INV16.jpg",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "received_at": "2026-10-19T17:11:28.131517+00:00",
+  "finished_at": "2026-10-19T17:11:28.182147+00:00",
+  "processing_seconds": 0.05063,
+  "record": {
+    "vendor_name": null,
+    "invoice_number": null,
+    "invoice_date": null,
+    "due_date": null,
+    "currency": null,
+    "po_number": null,
+    "line_items": [],
+    "subtotal": null,
+    "discount": null,
+    "tax": null,
+    "shipping": null,
+    "total": null,
+    "confidence": {},
+    "flags": [],
+    "route": null
+  },
+  "usage": {
+    "model": "stub",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": null
+  },
+  "error": null,
+  "seconds_source": "server"
+}

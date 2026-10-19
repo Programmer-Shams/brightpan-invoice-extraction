@@ -1,0 +1,288 @@
+{
+  "document_id": "INV09",
+  "vendor_name": "Ferro Metalworks Inc.",
+  "invoice_number": "FM-10498",
+  "invoice_date": "2026-09-22",
+  "due_date": "2026-10-22",
+  "currency": "USD",
+  "po_number": "PO-5510",
+  "line_items": [
+    {
+      "description": "Cast iron skillet blank 12-inch",
+      "quantity": 300,
+      "unit_price": 11.2,
+      "amount": 3360.0
+    },
+    {
+      "description": "Cast iron skillet blank 10-inch",
+      "quantity": 250,
+      "unit_price": 9.1,
+      "amount": 2275.0
+    },
+    {
+      "description": "Pattern tooling fee",
+      "quantity": 1,
+      "unit_price": 350.0,
+      "amount": 350.0
+    },
+    {
+      "description": "Pallet charge",
+      "quantity": 9,
+      "unit_price": 18.0,
+      "amount": 162.0
+    },
+    {
+      "description": "Sample casting lot 1",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 2",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 3",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 4",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 5",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 6",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 7",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 8",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 9",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 10",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 11",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 12",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 13",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 14",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 15",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 16",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 17",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 18",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 19",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 20",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 21",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 22",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 23",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 24",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 25",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 26",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 27",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 28",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 29",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 30",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 31",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 32",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 33",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 34",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 35",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 36",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 37",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 38",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 39",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    },
+    {
+      "description": "Sample casting lot 40",
+      "quantity": 1,
+      "unit_price": 25.0,
+      "amount": 25.0
+    }
+  ],
+  "subtotal": 7147.0,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 220.0,
+  "total": 7367.0,
+  "notes": "Line items continue on page 2",
+  "tax_exempt": false,
+  "computed_total": 7367.0,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV09.pdf",
+  "format": "multipage"
+}

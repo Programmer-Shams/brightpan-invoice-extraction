@@ -1,0 +1,36 @@
+{
+  "document_id": "INV05",
+  "vendor_name": "NorthCoat Finishes",
+  "invoice_number": "NC-40912",
+  "invoice_date": "2026-09-10",
+  "due_date": "2026-10-10",
+  "currency": "USD",
+  "po_number": "PO-5504",
+  "line_items": [
+    {
+      "description": "Nonstick coating, 20 L drum",
+      "quantity": 4,
+      "unit_price": 486.0,
+      "amount": 1944.0
+    },
+    {
+      "description": "Primer, 5 L",
+      "quantity": 6,
+      "unit_price": 72.4,
+      "amount": 434.4
+    }
+  ],
+  "subtotal": 2378.4,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 0.0,
+  "total": 2378.4,
+  "notes": "",
+  "tax_exempt": false,
+  "computed_total": 2378.4,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV05.pdf",
+  "format": "digital"
+}

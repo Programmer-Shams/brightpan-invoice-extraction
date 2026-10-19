@@ -1,0 +1,30 @@
+{
+  "document_id": "INV18",
+  "vendor_name": "BrightSteel Components",
+  "invoice_number": "BSC-7815",
+  "invoice_date": "2026-10-07",
+  "due_date": "2026-11-06",
+  "currency": "USD",
+  "po_number": "PO-5515",
+  "line_items": [
+    {
+      "description": "Handle assembly, Pro line",
+      "quantity": 250,
+      "unit_price": 3.95,
+      "amount": 987.5
+    }
+  ],
+  "subtotal": 987.5,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 30.0,
+  "total": 1017.5,
+  "notes": "Tax-exempt (resale certificate on file)",
+  "tax_exempt": true,
+  "computed_total": 1017.5,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV18.pdf",
+  "format": "digital"
+}

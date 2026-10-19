@@ -1,0 +1,30 @@
+{
+  "document_id": "RCPT02",
+  "vendor_name": "Lakeline Freight LLC",
+  "invoice_number": "R-LF-5521",
+  "invoice_date": "2026-10-09",
+  "due_date": null,
+  "currency": "USD",
+  "po_number": null,
+  "line_items": [
+    {
+      "description": "Pallet jack rental, 1 day",
+      "quantity": 1,
+      "unit_price": 65.0,
+      "amount": 65.0
+    }
+  ],
+  "subtotal": 65.0,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 0.0,
+  "total": 65.0,
+  "notes": "Receipt photo",
+  "tax_exempt": false,
+  "computed_total": 65.0,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "RCPT02.jpg",
+  "format": "receipt"
+}

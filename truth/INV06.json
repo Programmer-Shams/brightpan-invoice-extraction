@@ -1,0 +1,36 @@
+{
+  "document_id": "INV06",
+  "vendor_name": "Maple Leaf Ceramics Ltd.",
+  "invoice_number": "MLC-2290",
+  "invoice_date": "2026-09-12",
+  "due_date": "2026-10-27",
+  "currency": "CAD",
+  "po_number": "PO-5505",
+  "line_items": [
+    {
+      "description": "Ceramic spoon rest, glazed",
+      "quantity": 300,
+      "unit_price": 3.2,
+      "amount": 960.0
+    },
+    {
+      "description": "Ceramic utensil crock",
+      "quantity": 150,
+      "unit_price": 8.75,
+      "amount": 1312.5
+    }
+  ],
+  "subtotal": 2272.5,
+  "discount": 0.0,
+  "tax_rate": 0.05,
+  "tax": 113.63,
+  "shipping": 95.0,
+  "total": 2481.13,
+  "notes": "Canadian dollars; GST 5%",
+  "tax_exempt": false,
+  "computed_total": 2481.13,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV06.pdf",
+  "format": "digital"
+}

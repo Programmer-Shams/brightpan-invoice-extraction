@@ -1,0 +1,36 @@
+{
+  "document_id": "INV11",
+  "vendor_name": "Lakeline Freight LLC",
+  "invoice_number": "LF-2026-0928",
+  "invoice_date": "2026-09-28",
+  "due_date": "2026-10-13",
+  "currency": "USD",
+  "po_number": null,
+  "line_items": [
+    {
+      "description": "LTL freight Pittsburgh-Columbus, 3 pallets",
+      "quantity": 1,
+      "unit_price": 398.0,
+      "amount": 398.0
+    },
+    {
+      "description": "Fuel surcharge",
+      "quantity": 1,
+      "unit_price": 31.84,
+      "amount": 31.84
+    }
+  ],
+  "subtotal": 429.84,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 0.0,
+  "total": 429.84,
+  "notes": "Scanned, slight rotation",
+  "tax_exempt": false,
+  "computed_total": 429.84,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV11.pdf",
+  "format": "scan"
+}

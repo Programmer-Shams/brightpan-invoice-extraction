@@ -1,0 +1,42 @@
+{
+  "document_id": "INV02",
+  "vendor_name": "Pacific Packaging Co.",
+  "invoice_number": "PP-88310",
+  "invoice_date": "2026-09-05",
+  "due_date": "2026-10-05",
+  "currency": "USD",
+  "po_number": "PO-5502",
+  "line_items": [
+    {
+      "description": "Retail box, skillet, printed 4-color",
+      "quantity": 500,
+      "unit_price": 0.62,
+      "amount": 310.0
+    },
+    {
+      "description": "Molded pulp insert",
+      "quantity": 500,
+      "unit_price": 0.21,
+      "amount": 105.0
+    },
+    {
+      "description": "Shipping carton 18x14x6",
+      "quantity": 120,
+      "unit_price": 1.1,
+      "amount": 132.0
+    }
+  ],
+  "subtotal": 547.0,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 0.0,
+  "total": 547.0,
+  "notes": "",
+  "tax_exempt": false,
+  "computed_total": 547.0,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV02.pdf",
+  "format": "digital"
+}

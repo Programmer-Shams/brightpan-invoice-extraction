@@ -1,0 +1,36 @@
+{
+  "document_id": "RCPT01",
+  "vendor_name": "OfficeHub Supplies",
+  "invoice_number": "R-0098812",
+  "invoice_date": "2026-10-08",
+  "due_date": null,
+  "currency": "USD",
+  "po_number": null,
+  "line_items": [
+    {
+      "description": "Bubble wrap roll 12in x 175ft",
+      "quantity": 2,
+      "unit_price": 24.99,
+      "amount": 49.98
+    },
+    {
+      "description": "Box cutter",
+      "quantity": 3,
+      "unit_price": 6.49,
+      "amount": 19.47
+    }
+  ],
+  "subtotal": 69.45,
+  "discount": 0.0,
+  "tax_rate": 0.0725,
+  "tax": 5.04,
+  "shipping": 0.0,
+  "total": 74.49,
+  "notes": "Store receipt, narrow format",
+  "tax_exempt": false,
+  "computed_total": 74.49,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "RCPT01.png",
+  "format": "receipt"
+}

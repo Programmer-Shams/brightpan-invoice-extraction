@@ -1,0 +1,35 @@
+{
+  "id": "8dd793fa-6645-4253-b3ff-0c47b2bf0f80",
+  "filename": "INV15.jpg",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "received_at": "2026-10-19T17:11:27.621856+00:00",
+  "finished_at": "2026-10-19T17:11:27.671638+00:00",
+  "processing_seconds": 0.049782,
+  "record": {
+    "vendor_name": null,
+    "invoice_number": null,
+    "invoice_date": null,
+    "due_date": null,
+    "currency": null,
+    "po_number": null,
+    "line_items": [],
+    "subtotal": null,
+    "discount": null,
+    "tax": null,
+    "shipping": null,
+    "total": null,
+    "confidence": {},
+    "flags": [],
+    "route": null
+  },
+  "usage": {
+    "model": "stub",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": null
+  },
+  "error": null,
+  "seconds_source": "server"
+}

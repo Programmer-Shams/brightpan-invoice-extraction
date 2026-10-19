@@ -1,0 +1,36 @@
+{
+  "document_id": "INV07",
+  "vendor_name": "PixelPro Studio",
+  "invoice_number": "PXS-118",
+  "invoice_date": "2026-09-18",
+  "due_date": "2026-10-18",
+  "currency": "USD",
+  "po_number": null,
+  "line_items": [
+    {
+      "description": "Product photography, half day",
+      "quantity": 2,
+      "unit_price": 450.0,
+      "amount": 900.0
+    },
+    {
+      "description": "Image retouching per image",
+      "quantity": 40,
+      "unit_price": 6.0,
+      "amount": 240.0
+    }
+  ],
+  "subtotal": 1140.0,
+  "discount": 90.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 0.0,
+  "total": 1050.0,
+  "notes": "Includes a discount line",
+  "tax_exempt": false,
+  "computed_total": 1050.0,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV07.pdf",
+  "format": "digital"
+}

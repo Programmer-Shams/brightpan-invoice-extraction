@@ -1,0 +1,38 @@
+{
+  "document_id": "INV10",
+  "vendor_name": "Pacific Packaging Co.",
+  "invoice_number": "PP-88377",
+  "invoice_date": "2026-09-25",
+  "due_date": "2026-10-25",
+  "currency": "USD",
+  "po_number": "PO-5511",
+  "line_items": [
+    {
+      "description": "Retail box, knife set, printed",
+      "quantity": 300,
+      "unit_price": 0.95,
+      "amount": 285.0
+    },
+    {
+      "description": "Foam insert, knife set",
+      "quantity": 300,
+      "unit_price": 0.4,
+      "amount": 120.0
+    }
+  ],
+  "subtotal": 405.0,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 35.0,
+  "total": 490.0,
+  "notes": "Printed total is wrong on purpose (vendor error)",
+  "tax_exempt": false,
+  "computed_total": 440.0,
+  "expected_flags": [
+    "totals_mismatch"
+  ],
+  "expected_route": "review",
+  "file": "INV10.pdf",
+  "format": "digital"
+}

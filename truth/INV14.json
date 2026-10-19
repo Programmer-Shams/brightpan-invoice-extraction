@@ -1,0 +1,36 @@
+{
+  "document_id": "INV14",
+  "vendor_name": "OfficeHub Supplies",
+  "invoice_number": "OH-552288",
+  "invoice_date": "2026-10-02",
+  "due_date": "2026-11-01",
+  "currency": "USD",
+  "po_number": null,
+  "line_items": [
+    {
+      "description": "Copy paper, case",
+      "quantity": 5,
+      "unit_price": 42.0,
+      "amount": 210.0
+    },
+    {
+      "description": "Shipping scale",
+      "quantity": 1,
+      "unit_price": 129.0,
+      "amount": 129.0
+    }
+  ],
+  "subtotal": 339.0,
+  "discount": 0.0,
+  "tax_rate": 0.0725,
+  "tax": 24.58,
+  "shipping": 0.0,
+  "total": 363.58,
+  "notes": "Scanned, noisy",
+  "tax_exempt": false,
+  "computed_total": 363.58,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV14.pdf",
+  "format": "scan"
+}

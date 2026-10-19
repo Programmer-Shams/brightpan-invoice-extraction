@@ -1,0 +1,35 @@
+{
+  "id": "e48a78e1-f6fb-4125-a882-59923e44bcee",
+  "filename": "INV03.pdf",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "received_at": "2026-10-19T17:11:21.499648+00:00",
+  "finished_at": "2026-10-19T17:11:21.551021+00:00",
+  "processing_seconds": 0.051373,
+  "record": {
+    "vendor_name": null,
+    "invoice_number": null,
+    "invoice_date": null,
+    "due_date": null,
+    "currency": null,
+    "po_number": null,
+    "line_items": [],
+    "subtotal": null,
+    "discount": null,
+    "tax": null,
+    "shipping": null,
+    "total": null,
+    "confidence": {},
+    "flags": [],
+    "route": null
+  },
+  "usage": {
+    "model": "stub",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": null
+  },
+  "error": null,
+  "seconds_source": "server"
+}

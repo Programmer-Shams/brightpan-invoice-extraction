@@ -1,0 +1,35 @@
+{
+  "id": "9b7af3f1-6e48-4c7f-8bb7-4f24b3ba7913",
+  "filename": "INV06.pdf",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "received_at": "2026-10-19T17:11:23.025543+00:00",
+  "finished_at": "2026-10-19T17:11:23.076630+00:00",
+  "processing_seconds": 0.051087,
+  "record": {
+    "vendor_name": null,
+    "invoice_number": null,
+    "invoice_date": null,
+    "due_date": null,
+    "currency": null,
+    "po_number": null,
+    "line_items": [],
+    "subtotal": null,
+    "discount": null,
+    "tax": null,
+    "shipping": null,
+    "total": null,
+    "confidence": {},
+    "flags": [],
+    "route": null
+  },
+  "usage": {
+    "model": "stub",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": null
+  },
+  "error": null,
+  "seconds_source": "server"
+}

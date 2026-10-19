@@ -1,0 +1,129 @@
+"""Eval harness: uploads every sample to the API, polls until done, scores against truth/,
+writes eval/results.csv and prints the BUILD_SPEC metrics.
+
+  uv run python eval/run_eval.py                       # all 20 samples against http://localhost:8040
+  uv run python eval/run_eval.py --only INV10 INV16    # a subset
+  uv run python eval/run_eval.py --from-csv eval/results.csv   # recompute metrics, no API calls
+
+Documents are uploaded one at a time in manifest order (INV01 before INV16, so the duplicate
+check sees the original first) and each is timed from upload to finished.
+"""
+import argparse
+import csv
+import json
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+import httpx
+from pypdf import PdfReader
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from scoring import CSV_COLUMNS, compute_metrics, score_document  # noqa: E402
+
+ROOT = Path(__file__).resolve().parent.parent
+MIME = {".pdf": "application/pdf", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
+
+
+def page_count(path: Path) -> int:
+    return len(PdfReader(path).pages) if path.suffix.lower() == ".pdf" else 1
+
+
+def run_one(client: httpx.Client, path: Path, timeout: float, poll: float) -> dict:
+    started = time.monotonic()
+    with path.open("rb") as fh:
+        r = client.post("/documents", files={"file": (path.name, fh, MIME[path.suffix.lower()])},
+                        data={"source": "eval"})
+    if r.status_code != 202:
+        return {"status": "upload_failed", "error": f"HTTP {r.status_code}: {r.text[:200]}"}
+    doc_id = r.json()["id"]
+    while True:
+        body = client.get(f"/documents/{doc_id}").json()
+        if body.get("status") in ("done", "failed"):
+            break
+        if time.monotonic() - started > timeout:
+            body["status"] = "timeout"
+            break
+        time.sleep(poll)
+    client_seconds = time.monotonic() - started
+    if body.get("processing_seconds") is None:
+        body["processing_seconds"] = round(client_seconds, 3)
+        body["seconds_source"] = "client"
+    else:
+        body["seconds_source"] = "server"
+    return body
+
+
+def print_metrics(m: dict) -> None:
+    print("\n=== Demo 4 eval metrics (measured) ===")
+    print(f"Documents finished:   {m['documents_done']}/{m['documents']}"
+          + (f"  not done: {', '.join(m['documents_not_done'])}" if m["documents_not_done"] else ""))
+    print(f"Field accuracy:       {m['field_accuracy']}")
+    for k, v in m["field_accuracy_by_format"].items():
+        print(f"  {k:<10}          {v}")
+    print("  by field:")
+    for k, v in m["field_accuracy_by_field"].items():
+        print(f"    {k:<16}  {v}")
+    print(f"Line-item accuracy:   {m['line_item_accuracy']}   (extra extracted lines: {m['extra_line_items']})")
+    print(f"Planted to review:    {m['planted_caught']}   correct flag: {m['planted_flag_correct']}")
+    print(f"False reviews:        {m['false_reviews']}")
+    print(f"Invented values:      {m['invented_values']}" + (f"  {m['invented_detail']}" if m["invented_detail"] else ""))
+    print(f"Seconds per doc:      median {m['seconds_per_doc_median']}  max {m['seconds_per_doc_max']}")
+    print(f"Pages per minute:     {m['pages_per_minute']}")
+    print(f"Cost per doc (USD):   mean {m['cost_per_doc_mean_usd']}  max {m['cost_per_doc_max_usd']}  total {m['cost_total_usd']}")
+    print(f"Tokens:               in {m['input_tokens_total']}  out {m['output_tokens_total']}  models {m['models']}")
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--api", default="http://localhost:8040")
+    ap.add_argument("--only", nargs="*", help="document ids to run (default: all in manifest)")
+    ap.add_argument("--timeout", type=float, default=300, help="seconds per document")
+    ap.add_argument("--poll", type=float, default=0.5)
+    ap.add_argument("--no-reset", action="store_true", help="do not call POST /admin/reset first")
+    ap.add_argument("--out", default=str(ROOT / "eval" / "results.csv"))
+    ap.add_argument("--from-csv", help="recompute metrics from an existing results.csv")
+    args = ap.parse_args()
+
+    if args.from_csv:
+        with open(args.from_csv, newline="") as fh:
+            print_metrics(compute_metrics(list(csv.DictReader(fh))))
+        return
+
+    with open(ROOT / "truth" / "manifest.csv", newline="") as fh:
+        manifest = list(csv.DictReader(fh))
+    if args.only:
+        manifest = [m for m in manifest if m["document_id"] in set(args.only)]
+
+    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    raw_dir = ROOT / "eval" / "runs" / run_id
+    raw_dir.mkdir(parents=True, exist_ok=True)
+
+    rows = []
+    with httpx.Client(base_url=args.api, timeout=60) as client:
+        if not args.no_reset:
+            r = client.post("/admin/reset")
+            print(f"reset: HTTP {r.status_code}")
+        for m in manifest:
+            path = ROOT / "samples" / m["file"]
+            truth = json.loads((ROOT / "truth" / f"{m['document_id']}.json").read_text())
+            body = run_one(client, path, args.timeout, args.poll)
+            body["pages"] = page_count(path)  # property of the file, not of the extractor
+            (raw_dir / f"{m['document_id']}.json").write_text(json.dumps(body, indent=2))
+            doc_rows = score_document(truth, body)
+            rows.extend(doc_rows)
+            hdr = [r for r in doc_rows if r["kind"] == "header"]
+            print(f"{m['document_id']:<7} {body.get('status'):<9} {body['processing_seconds']:>7.2f}s "
+                  f"fields {sum(int(r['match']) for r in hdr)}/{len(hdr)}  route={(body.get('record') or {}).get('route')}")
+
+    with open(args.out, "w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=CSV_COLUMNS)
+        w.writeheader()
+        w.writerows(rows)
+    print(f"\nwrote {args.out} ({len(rows)} rows); raw responses in {raw_dir.relative_to(ROOT)}/")
+    print_metrics(compute_metrics(rows))
+
+
+if __name__ == "__main__":
+    main()

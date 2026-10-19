@@ -1,0 +1,42 @@
+{
+  "document_id": "INV08",
+  "vendor_name": "OfficeHub Supplies",
+  "invoice_number": "OH-552201",
+  "invoice_date": "2026-09-20",
+  "due_date": "2026-10-20",
+  "currency": "USD",
+  "po_number": null,
+  "line_items": [
+    {
+      "description": "Thermal shipping labels 4x6 (roll)",
+      "quantity": 30,
+      "unit_price": 12.99,
+      "amount": 389.7
+    },
+    {
+      "description": "Packing tape 2-inch (6-pack)",
+      "quantity": 20,
+      "unit_price": 14.49,
+      "amount": 289.8
+    },
+    {
+      "description": "Printer toner, black",
+      "quantity": 2,
+      "unit_price": 89.0,
+      "amount": 178.0
+    }
+  ],
+  "subtotal": 857.5,
+  "discount": 0.0,
+  "tax_rate": 0.0725,
+  "tax": 62.17,
+  "shipping": 0.0,
+  "total": 919.67,
+  "notes": "Sales tax 7.25%",
+  "tax_exempt": false,
+  "computed_total": 919.67,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV08.pdf",
+  "format": "digital"
+}

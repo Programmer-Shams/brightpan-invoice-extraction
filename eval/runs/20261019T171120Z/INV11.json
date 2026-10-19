@@ -1,0 +1,35 @@
+{
+  "id": "e0e42e1d-3845-4b37-8f9c-a4e42d9165dc",
+  "filename": "INV11.pdf",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "received_at": "2026-10-19T17:11:25.578565+00:00",
+  "finished_at": "2026-10-19T17:11:25.630222+00:00",
+  "processing_seconds": 0.051657,
+  "record": {
+    "vendor_name": null,
+    "invoice_number": null,
+    "invoice_date": null,
+    "due_date": null,
+    "currency": null,
+    "po_number": null,
+    "line_items": [],
+    "subtotal": null,
+    "discount": null,
+    "tax": null,
+    "shipping": null,
+    "total": null,
+    "confidence": {},
+    "flags": [],
+    "route": null
+  },
+  "usage": {
+    "model": "stub",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": null
+  },
+  "error": null,
+  "seconds_source": "server"
+}

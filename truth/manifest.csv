@@ -1,0 +1,21 @@
+document_id,file,format,vendor,currency,total,computed_total,expected_route,expected_flags,notes
+INV01,INV01.pdf,digital,Ferro Metalworks Inc.,USD,3202.5,3202.5,auto,,
+INV02,INV02.pdf,digital,Pacific Packaging Co.,USD,547.0,547.0,auto,,
+INV03,INV03.pdf,digital,Lakeline Freight LLC,USD,735.84,735.84,auto,,Net 15
+INV04,INV04.pdf,digital,BrightSteel Components,USD,2276.52,2276.52,auto,,Ohio sales tax 5.75%
+INV05,INV05.pdf,digital,NorthCoat Finishes,USD,2378.4,2378.4,auto,,
+INV06,INV06.pdf,digital,Maple Leaf Ceramics Ltd.,CAD,2481.13,2481.13,auto,,Canadian dollars; GST 5%
+INV07,INV07.pdf,digital,PixelPro Studio,USD,1050.0,1050.0,auto,,Includes a discount line
+INV08,INV08.pdf,digital,OfficeHub Supplies,USD,919.67,919.67,auto,,Sales tax 7.25%
+INV09,INV09.pdf,multipage,Ferro Metalworks Inc.,USD,7367.0,7367.0,auto,,Line items continue on page 2
+INV10,INV10.pdf,digital,Pacific Packaging Co.,USD,490.0,440.0,review,totals_mismatch,Printed total is wrong on purpose (vendor error)
+INV11,INV11.pdf,scan,Lakeline Freight LLC,USD,429.84,429.84,auto,,"Scanned, slight rotation"
+INV12,INV12.pdf,scan,BrightSteel Components,USD,1359.76,1359.76,auto,,"Scanned, low contrast"
+INV13,INV13.pdf,scan,NorthCoat Finishes,USD,1027.0,1027.0,auto,,Scanned
+INV14,INV14.pdf,scan,OfficeHub Supplies,USD,363.58,363.58,auto,,"Scanned, noisy"
+INV15,INV15.jpg,photo,PixelPro Studio,USD,1140.0,1140.0,auto,,"Phone photo, perspective and shadow"
+INV16,INV16.jpg,photo,Ferro Metalworks Inc.,USD,3202.5,3202.5,review,duplicate_invoice,"Duplicate of INV01 (same vendor and invoice number), resent as a phone photo"
+INV17,INV17.jpg,photo,Maple Leaf Ceramics Ltd.,CAD,767.0,767.0,auto,,"Phone photo, Canadian dollars"
+INV18,INV18.pdf,digital,BrightSteel Components,USD,1017.5,1017.5,auto,,Tax-exempt (resale certificate on file)
+RCPT01,RCPT01.png,receipt,OfficeHub Supplies,USD,74.49,74.49,auto,,"Store receipt, narrow format"
+RCPT02,RCPT02.jpg,receipt,Lakeline Freight LLC,USD,65.0,65.0,auto,,Receipt photo

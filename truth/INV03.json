@@ -1,0 +1,42 @@
+{
+  "document_id": "INV03",
+  "vendor_name": "Lakeline Freight LLC",
+  "invoice_number": "LF-2026-0915",
+  "invoice_date": "2026-09-15",
+  "due_date": "2026-09-30",
+  "currency": "USD",
+  "po_number": null,
+  "line_items": [
+    {
+      "description": "LTL freight Youngstown-Columbus, 6 pallets",
+      "quantity": 1,
+      "unit_price": 612.0,
+      "amount": 612.0
+    },
+    {
+      "description": "Liftgate service",
+      "quantity": 1,
+      "unit_price": 75.0,
+      "amount": 75.0
+    },
+    {
+      "description": "Fuel surcharge",
+      "quantity": 1,
+      "unit_price": 48.84,
+      "amount": 48.84
+    }
+  ],
+  "subtotal": 735.84,
+  "discount": 0.0,
+  "tax_rate": 0.0,
+  "tax": 0.0,
+  "shipping": 0.0,
+  "total": 735.84,
+  "notes": "Net 15",
+  "tax_exempt": false,
+  "computed_total": 735.84,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV03.pdf",
+  "format": "digital"
+}

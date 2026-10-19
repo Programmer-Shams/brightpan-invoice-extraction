@@ -1,0 +1,36 @@
+{
+  "document_id": "INV04",
+  "vendor_name": "BrightSteel Components",
+  "invoice_number": "BSC-7781",
+  "invoice_date": "2026-09-08",
+  "due_date": "2026-10-08",
+  "currency": "USD",
+  "po_number": "PO-5503",
+  "line_items": [
+    {
+      "description": "Stainless rivet set (pack of 1,000)",
+      "quantity": 8,
+      "unit_price": 64.5,
+      "amount": 516.0
+    },
+    {
+      "description": "Handle assembly, Pro line",
+      "quantity": 400,
+      "unit_price": 3.95,
+      "amount": 1580.0
+    }
+  ],
+  "subtotal": 2096.0,
+  "discount": 0.0,
+  "tax_rate": 0.0575,
+  "tax": 120.52,
+  "shipping": 60.0,
+  "total": 2276.52,
+  "notes": "Ohio sales tax 5.75%",
+  "tax_exempt": false,
+  "computed_total": 2276.52,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV04.pdf",
+  "format": "digital"
+}

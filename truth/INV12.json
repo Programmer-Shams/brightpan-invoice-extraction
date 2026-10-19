@@ -1,0 +1,36 @@
+{
+  "document_id": "INV12",
+  "vendor_name": "BrightSteel Components",
+  "invoice_number": "BSC-7802",
+  "invoice_date": "2026-09-29",
+  "due_date": "2026-10-29",
+  "currency": "USD",
+  "po_number": "PO-5512",
+  "line_items": [
+    {
+      "description": "Lid knob, stainless",
+      "quantity": 600,
+      "unit_price": 0.88,
+      "amount": 528.0
+    },
+    {
+      "description": "Lid rim, 10-inch",
+      "quantity": 300,
+      "unit_price": 2.4,
+      "amount": 720.0
+    }
+  ],
+  "subtotal": 1248.0,
+  "discount": 0.0,
+  "tax_rate": 0.0575,
+  "tax": 71.76,
+  "shipping": 40.0,
+  "total": 1359.76,
+  "notes": "Scanned, low contrast",
+  "tax_exempt": false,
+  "computed_total": 1359.76,
+  "expected_flags": [],
+  "expected_route": "auto",
+  "file": "INV12.pdf",
+  "format": "scan"
+}
