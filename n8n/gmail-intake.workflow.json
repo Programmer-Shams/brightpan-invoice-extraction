@@ -1,0 +1,60 @@
+{
+  "id": "brightpanGmailIntake",
+  "name": "Demo 4 - Gmail intake",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {"item": [{"mode": "everyMinute"}]},
+        "simple": false,
+        "filters": {
+          "q": "={{ 'deliveredto:' + $env.GMAIL_INTAKE_ADDRESS + ' has:attachment' }}",
+          "readStatus": "both"
+        },
+        "options": {"downloadAttachments": true, "dataPropertyAttachmentsPrefixName": "attachment_"}
+      },
+      "id": "6a1d2c3e-0000-4000-8000-0000000000a1",
+      "name": "New AP email",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per attachment the API can read; everything else in the email is ignored.\nconst ACCEPTED = new Set(['application/pdf', 'image/jpeg', 'image/png']);\nconst out = [];\nfor (const item of $input.all()) {\n  for (const [key, bin] of Object.entries(item.binary ?? {})) {\n    if (!key.startsWith('attachment_') || !ACCEPTED.has(bin.mimeType)) continue;\n    out.push({\n      json: { messageId: item.json.id, subject: item.json.subject, fileName: bin.fileName },\n      binary: { data: bin },\n    });\n  }\n}\nreturn out;"
+      },
+      "id": "6a1d2c3e-0000-4000-8000-0000000000a2",
+      "name": "One item per attachment",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.API_URL_FOR_N8N }}/documents",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Authorization", "value": "=Bearer {{ $env.API_TOKEN }}"}]},
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {"parameterType": "formBinaryData", "name": "file", "inputDataFieldName": "data"},
+            {"name": "source", "value": "email"}
+          ]
+        },
+        "options": {}
+      },
+      "id": "6a1d2c3e-0000-4000-8000-0000000000a3",
+      "name": "Send to extraction API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 0]
+    }
+  ],
+  "connections": {
+    "New AP email": {"main": [[{"node": "One item per attachment", "type": "main", "index": 0}]]},
+    "One item per attachment": {"main": [[{"node": "Send to extraction API", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "active": false
+}

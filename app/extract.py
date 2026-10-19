@@ -82,7 +82,10 @@ def prepare(data: bytes, content_type: str) -> tuple[list[dict], int, str]:
             return [{"type": "text", "text": f"Text layer of the PDF:\n\n{body}"}], len(texts), "pdf_text"
         pdf = pdfium.PdfDocument(data)
         try:
-            blocks = [_image_block(render_page(page, RENDER_DPI)) for page in pdf]
+            # pdfium does the rendering, so its page count is the one that bounds the work.
+            if len(pdf) > MAX_PAGES or len(pdf) != len(texts):
+                raise ExtractionError(f"page count {len(pdf)} (pypdf: {len(texts)}); not read automatically")
+            blocks = [_image_block(render_page(pdf[i], RENDER_DPI)) for i in range(len(pdf))]
         finally:
             pdf.close()
         return blocks, len(blocks), "pdf_images"

@@ -1,0 +1,53 @@
+{
+  "id": "brightpanSendTestEmails",
+  "name": "Demo 4 - send 3 test emails (manual)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "7b2e3d4f-0000-4000-8000-0000000000b1",
+      "name": "Run by hand",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// A scan, a phone photo and a receipt, each sent as its own supplier email.\nreturn [\n  { json: { path: '/samples/INV11.pdf', subject: 'Invoice LF-2026-0928 from Lakeline Freight' } },\n  { json: { path: '/samples/INV17.jpg', subject: 'Invoice MLC-2301 (photo) from Maple Leaf Ceramics' } },\n  { json: { path: '/samples/RCPT02.jpg', subject: 'Receipt R-LF-5521, pallet jack rental' } },\n];"
+      },
+      "id": "7b2e3d4f-0000-4000-8000-0000000000b2",
+      "name": "Pick 3 samples",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {"fileSelector": "={{ $json.path }}", "options": {"dataPropertyName": "data"}},
+      "id": "7b2e3d4f-0000-4000-8000-0000000000b3",
+      "name": "Read sample file",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [480, 0]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $env.GMAIL_INTAKE_ADDRESS }}",
+        "subject": "={{ $('Pick 3 samples').item.json.subject }}",
+        "emailType": "text",
+        "message": "Hello, please find the attached document. Accounts receivable",
+        "options": {"appendAttribution": false, "attachmentsUi": {"attachmentsBinary": [{"property": "data"}]}}
+      },
+      "id": "7b2e3d4f-0000-4000-8000-0000000000b4",
+      "name": "Email it to the AP inbox",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [720, 0]
+    }
+  ],
+  "connections": {
+    "Run by hand": {"main": [[{"node": "Pick 3 samples", "type": "main", "index": 0}]]},
+    "Pick 3 samples": {"main": [[{"node": "Read sample file", "type": "main", "index": 0}]]},
+    "Read sample file": {"main": [[{"node": "Email it to the AP inbox", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "active": false
+}
