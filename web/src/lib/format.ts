@@ -62,20 +62,31 @@ export const FIELD_LABEL: Record<string, string> = {
   total: "Total",
 };
 
-export type Outcome = "reading" | "register" | "review" | "approved" | "rejected" | "failed";
+export type Outcome = "reading" | "register" | "passed" | "review" | "approved" | "rejected" | "failed";
 
-export function outcome(doc: Pick<DocumentSummary, "status" | "route" | "review_status">): Outcome {
+export function outcome(doc: Pick<DocumentSummary, "status" | "route" | "review_status" | "outputs_status">): Outcome {
   if (doc.status === "failed") return "failed";
   if (doc.status !== "done") return "reading";
   if (doc.review_status === "approved") return "approved";
   if (doc.review_status === "rejected") return "rejected";
   if (doc.route === "review") return "review";
-  return "register";
+  // "In AP register" only once the register update actually went out (the outputs webhook confirmed it).
+  return doc.outputs_status === "sent" ? "register" : "passed";
+}
+
+/** What happened to the AP register update, in words; null when there is nothing to say. */
+export function registerNote(outputsStatus: string | null): string | null {
+  if (!outputsStatus) return "The AP register update is still being sent.";
+  if (outputsStatus === "sent") return null;
+  if (outputsStatus === "skipped:eval upload") return "Test upload: not added to the AP register.";
+  if (outputsStatus.startsWith("skipped:")) return "The AP register isn't connected, so it wasn't added.";
+  return "The AP register update failed; it is retried automatically.";
 }
 
 export const OUTCOME_TEXT: Record<Outcome, string> = {
   reading: "Reading",
   register: "In AP register",
+  passed: "Passed checks",
   review: "Needs review",
   approved: "Approved",
   rejected: "Rejected",

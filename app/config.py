@@ -13,9 +13,10 @@ EFFORT = os.getenv("EXTRACTION_EFFORT", "medium")
 CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.80"))
 TOLERANCE = 0.02  # line math and totals must agree within two cents
 API_TOKEN = os.getenv("API_TOKEN", "")  # every endpoint except /health requires "Authorization: Bearer <token>"
-ALLOW_RESET = os.getenv("ALLOW_RESET", "0") == "1"  # POST /admin/reset wipes all documents; dev/eval only
+ALLOW_RESET = os.getenv("ALLOW_RESET", "0") == "1"  # POST /admin/reset deletes eval uploads only; dev/eval only
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3040")
 N8N_OUTPUTS_WEBHOOK_URL = os.getenv("N8N_OUTPUTS_WEBHOOK_URL", "http://localhost:5679/webhook/brightpan-invoice-outputs")
+OUTPUTS_WEBHOOK_SECRET = os.getenv("OUTPUTS_WEBHOOK_SECRET", "")
 NOTIFY_EVAL = os.getenv("NOTIFY_EVAL", "0") == "1"
 
 # USD per million tokens, Anthropic first-party rates (cached 2026-10-06 in the Claude API docs).

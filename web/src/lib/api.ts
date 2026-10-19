@@ -21,6 +21,7 @@ export interface DocumentSummary {
   route: "auto" | "review" | null;
   flags: Flag[];
   review_status: ReviewStatus | null;
+  outputs_status: string | null;
   cost_usd: number | null;
   review_reasons?: Flag[];
 }
@@ -117,7 +118,7 @@ export interface Results {
   };
   header_fields: string[];
   documents: ResultsDocument[];
-  generated_at: number;
+  run_at: string | null;
 }
 
 export class ApiError extends Error {
@@ -148,7 +149,7 @@ export async function uploadDocument(file: File): Promise<{ id: string; status: 
 }
 
 export async function decideReview(id: string, action: "approve" | "reject", note: string) {
-  return parse<{ id: string; review_status: ReviewStatus }>(
+  return parse<{ id: string; review_status: ReviewStatus; outputs_status: string | null }>(
     await fetch(`/api/review/${id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

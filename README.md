@@ -35,6 +35,9 @@ flowchart LR
    duplicate check on vendor + invoice number. The extractor never corrects a document; it flags it.
 4. **Route.** Any flag, or a required field read with less than 0.80 confidence, sends it to review. Clean documents
    become a row in the AP register. Review items post to Slack; approving one adds it to the register.
+5. **Recover.** The worker survives database and API outages: rate limits, overload and network errors put the
+   document back in the queue with backoff (3 attempts), documents left half-done by a stopped worker are requeued,
+   and register rows or Slack messages that didn't go out are resent. `/health` reports the database and the worker.
 
 ## Test results
 
@@ -50,6 +53,7 @@ the manual review of mismatches:
 | Clean documents wrongly sent to review | 0/18 |
 | Invented values (receipt due dates, USD on CAD invoices) | 0 |
 | Seconds per document, upload to finished | median 6.5, max 20.5 |
+| Throughput (one worker) | 6.8 pages per minute |
 | API cost per document | $0.025 mean, $0.51 for all 20 |
 
 The one line-item miss is RCPT01: the receipt prints the description cut to 26 characters, the extractor reports
@@ -67,7 +71,7 @@ uv sync
 ALLOW_RESET=1 uv run uvicorn app.main:app --port 8040   # API + worker; tables are created on startup
 
 cd web && cp .env.example .env.local   # same API_TOKEN
-npm install && npm run dev             # http://127.0.0.1:3040
+npm install && npm run dev             # http://127.0.0.1:3040 (run `npx next typegen` before a bare `tsc`)
 
 ./n8n/run.sh                      # Demo 4's own n8n at http://localhost:5679
 ./n8n/deploy.sh                   # imports the workflows, attaches credentials, publishes them
@@ -77,8 +81,9 @@ uv run pytest -q                  # unit tests: validation, duplicate key, routi
 ```
 
 n8n needs a Google Sheets OAuth2 credential (AP register) and a Gmail OAuth2 credential (intake). Set
-`SLACK_WEBHOOK_URL`, `AP_REGISTER_SHEET_URL` and `GMAIL_INTAKE_ADDRESS` in `.env`; `run.sh` passes only those and
-the API token into the container.
+`SLACK_WEBHOOK_URL`, `AP_REGISTER_SHEET_URL`, `GMAIL_INTAKE_ADDRESS` and `OUTPUTS_WEBHOOK_SECRET` in `.env`.
+`run.sh` passes only the values n8n needs into the container; `deploy.sh` creates the outputs webhook's Header Auth
+credential from the secret and won't publish the Gmail intake until its address is set.
 
 ## Adding a field
 
@@ -105,5 +110,9 @@ Say accounts payable also wants the vendor's tax ID:
 - **One worker.** Documents are processed one at a time in arrival order, which keeps the duplicate check exact.
   Running several workers in parallel would need a uniqueness constraint or lock on the duplicate key.
 - **Receipts:** when a receipt prints only quantity and amount, the unit price is amount ÷ quantity.
+- **PDFs with a scanner's OCR layer** are read from that text layer, not the page image, because any PDF with text
+  on every page counts as digital. Poor OCR text would lower accuracy; none of the test scans has an OCR layer.
+- **Cost of a server-side fallback** (a different model answering after a refusal) is priced at the answering
+  model's rate for the whole response. Calls that fail are recorded with their cost when the API reports usage.
 - **Limits:** 20 MB per file, 20 pages per PDF; longer documents are refused and should be entered by hand.
 - **Small test set:** 20 synthetic documents in three layouts.

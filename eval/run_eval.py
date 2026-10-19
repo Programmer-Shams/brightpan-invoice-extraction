@@ -32,21 +32,32 @@ def page_count(path: Path) -> int:
 
 
 def run_one(client: httpx.Client, path: Path, timeout: float, poll: float) -> dict:
+    """Uploads one file and polls until it finishes. Never raises for an API problem: the outcome is recorded
+    in the returned body (status upload_failed / poll_failed / timeout) and scored as a miss."""
     started = time.monotonic()
-    with path.open("rb") as fh:
-        r = client.post("/documents", files={"file": (path.name, fh, MIME[path.suffix.lower()])},
-                        data={"source": "eval"})
-    if r.status_code != 202:
-        return {"status": "upload_failed", "error": f"HTTP {r.status_code}: {r.text[:200]}"}
-    doc_id = r.json()["id"]
-    while True:
-        body = client.get(f"/documents/{doc_id}").json()
-        if body.get("status") in ("done", "failed"):
-            break
-        if time.monotonic() - started > timeout:
-            body["status"] = "timeout"
-            break
-        time.sleep(poll)
+    body: dict = {}
+    try:
+        with path.open("rb") as fh:
+            r = client.post("/documents", files={"file": (path.name, fh, MIME[path.suffix.lower()])},
+                            data={"source": "eval"})
+        if r.status_code != 202:
+            body = {"status": "upload_failed", "error": f"HTTP {r.status_code}: {r.text[:200]}"}
+        else:
+            doc_id = r.json()["id"]
+            while True:
+                g = client.get(f"/documents/{doc_id}")
+                if g.status_code != 200:
+                    body = {"status": "poll_failed", "error": f"HTTP {g.status_code}: {g.text[:200]}"}
+                    break
+                body = g.json()
+                if body.get("status") in ("done", "failed"):
+                    break
+                if time.monotonic() - started > timeout:
+                    body["status"] = "timeout"
+                    break
+                time.sleep(poll)
+    except httpx.HTTPError as e:
+        body = {"status": "request_failed", "error": f"{type(e).__name__}: {e}"}
     client_seconds = time.monotonic() - started
     if body.get("processing_seconds") is None:
         body["processing_seconds"] = round(client_seconds, 3)
@@ -102,6 +113,10 @@ def main() -> None:
     raw_dir.mkdir(parents=True, exist_ok=True)
 
     rows = []
+    out, partial = Path(args.out), Path(args.out + ".partial")
+    fh = partial.open("w", newline="")  # written as each document finishes; replaces results.csv only when complete
+    writer = csv.DictWriter(fh, fieldnames=CSV_COLUMNS)
+    writer.writeheader()
     token = dotenv_values(ROOT / ".env").get("API_TOKEN") or ""
     with httpx.Client(base_url=args.api, timeout=60, headers={"Authorization": f"Bearer {token}"}) as client:
         if not args.no_reset:
@@ -117,16 +132,18 @@ def main() -> None:
             body["pages"] = page_count(path)  # property of the file, not of the extractor
             (raw_dir / f"{m['document_id']}.json").write_text(json.dumps(body, indent=2))
             doc_rows = score_document(truth, body)
+            doc_rows.append({"document_id": m["document_id"], "format": truth["format"], "kind": "meta",
+                             "field": "run_id", "expected": "", "actual": run_id, "match": "", "invented": ""})
             rows.extend(doc_rows)
+            writer.writerows(doc_rows)
+            fh.flush()
             hdr = [r for r in doc_rows if r["kind"] == "header"]
             print(f"{m['document_id']:<7} {body.get('status'):<9} {body['processing_seconds']:>7.2f}s "
                   f"fields {sum(int(r['match']) for r in hdr)}/{len(hdr)}  route={(body.get('record') or {}).get('route')}")
 
-    with open(args.out, "w", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=CSV_COLUMNS)
-        w.writeheader()
-        w.writerows(rows)
-    print(f"\nwrote {args.out} ({len(rows)} rows); raw responses in {raw_dir.relative_to(ROOT)}/")
+    fh.close()
+    partial.replace(out)
+    print(f"\nwrote {out} ({len(rows)} rows); raw responses in {raw_dir.relative_to(ROOT)}/")
     print_metrics(compute_metrics(rows))
 
 

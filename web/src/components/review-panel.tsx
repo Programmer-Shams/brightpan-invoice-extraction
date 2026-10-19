@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { decideReview, type DocumentDetail } from "@/lib/api";
-import { FLAG_DETAIL, FLAG_TEXT, REVIEW_TEXT } from "@/lib/format";
+import { FLAG_DETAIL, FLAG_TEXT, REVIEW_TEXT, registerNote } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export function ReviewPanel({ doc, onDecided }: { doc: DocumentDetail; onDecided: () => void }) {
@@ -20,8 +20,10 @@ export function ReviewPanel({ doc, onDecided }: { doc: DocumentDetail; onDecided
   async function decide(action: "approve" | "reject") {
     setBusy(action);
     try {
-      await decideReview(doc.id, action, note);
-      toast.success(action === "approve" ? "Approved and added to the AP register." : "Rejected. It stays out of the register.");
+      const result = await decideReview(doc.id, action, note);
+      if (action === "reject") toast.success("Rejected. It stays out of the register.");
+      else if (result.outputs_status === "sent") toast.success("Approved and added to the AP register.");
+      else toast.warning(`Approved. ${registerNote(result.outputs_status) ?? ""}`.trim());
       onDecided();
     } catch (e) {
       toast.error(`Couldn't save the decision: ${(e as Error).message}`);

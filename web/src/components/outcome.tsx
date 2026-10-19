@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 const STYLE: Record<Outcome, string> = {
   reading: "bg-muted text-muted-foreground",
   register: "bg-balanced-soft text-balanced",
+  passed: "bg-muted text-balanced",
   review: "bg-review-soft text-review",
   approved: "bg-balanced-soft text-balanced",
   rejected: "bg-mismatch-soft text-mismatch",

@@ -2,12 +2,17 @@
 
 Runs inside the API process by default (a daemon thread started at app startup), or on its own:
   uv run python -m app.worker
+
+The loop never dies on an error: database outages are retried with backoff, transient API errors put the
+document back in the queue (up to db.MAX_ATTEMPTS), and every minute it requeues documents a stopped worker
+left behind and resends register rows / Slack messages that didn't go out.
 """
 import logging
 import threading
 import time
 
 import anthropic
+import psycopg
 
 from . import config, db, notify
 from .extract import ExtractionError, extract
@@ -15,6 +20,15 @@ from .validate import build_record, duplicate_key
 
 log = logging.getLogger("worker")
 POLL_SECONDS = 0.5
+MAINTENANCE_SECONDS = 60
+MAX_BACKOFF_SECONDS = 30
+
+# Errors worth another attempt: rate limits, overload/5xx, network, and a database connection dropping.
+RETRYABLE = (anthropic.RateLimitError, anthropic.InternalServerError, anthropic.APIConnectionError,
+             psycopg.OperationalError)
+
+# Read by /health.
+state = {"thread": None, "last_poll": None}
 
 
 def process(client: anthropic.Anthropic, doc: dict) -> None:
@@ -29,28 +43,75 @@ def process(client: anthropic.Anthropic, doc: dict) -> None:
     log.info("%s %s route=%s flags=%s", doc["id"], doc["filename"], record.route, record.flags)
 
 
+def resend_outputs() -> None:
+    """Retries register rows and Slack messages that never went out (n8n down, a crash before sending)."""
+    for row in db.pending_outputs():
+        if row["record"]["route"] == "review" and row["review_status"] == "rejected":
+            continue
+        event = "review.approved" if row["review_status"] == "approved" else "document.processed"
+        db.set_outputs_status(row["id"], notify.send(row, row["record"], event=event))
+
+
+def safely(what: str, fn, *args) -> None:
+    """Runs a database update whose failure must not stop the worker (the next maintenance pass catches up)."""
+    try:
+        fn(*args)
+    except Exception:
+        log.exception("could not %s", what)
+
+
+def handle_failure(doc: dict, error: Exception) -> None:
+    usage = getattr(error, "usage", None)
+    message = f"{type(error).__name__}: {error}"
+    if isinstance(error, RETRYABLE):
+        log.warning("%s %s will be retried: %s", doc["id"], doc["filename"], message)
+        safely("requeue the document", db.retry_later, doc["id"], message, doc["attempts"], usage)
+    else:
+        log.warning("%s %s failed: %s", doc["id"], doc["filename"], message)
+        safely("mark the document failed", db.mark_failed, doc["id"], message, usage)
+
+
 def run(stop: threading.Event | None = None) -> None:
     client = anthropic.Anthropic()
-    db.requeue_stale()
+    backoff, last_maintenance = 1.0, 0.0
     while not (stop and stop.is_set()):
-        doc = db.claim_next()
+        try:
+            if time.monotonic() - last_maintenance > MAINTENANCE_SECONDS:
+                if n := db.requeue_stale():
+                    log.info("requeued or failed %d stale documents", n)
+                resend_outputs()
+                last_maintenance = time.monotonic()
+            doc = db.claim_next()
+            state["last_poll"] = time.time()
+            backoff = 1.0
+        except Exception:
+            log.exception("database unavailable; retrying in %.0fs", backoff)
+            time.sleep(backoff)
+            backoff = min(backoff * 2, MAX_BACKOFF_SECONDS)
+            continue
         if doc is None:
             time.sleep(POLL_SECONDS)
             continue
         try:
             process(client, doc)
-        except (ExtractionError, anthropic.APIError) as e:
-            log.warning("%s %s failed: %s", doc["id"], doc["filename"], e)
-            db.mark_failed(doc["id"], f"{type(e).__name__}: {e}")
-        except Exception as e:  # keep the worker alive; the document records the failure
-            log.exception("%s %s crashed", doc["id"], doc["filename"])
-            db.mark_failed(doc["id"], f"{type(e).__name__}: {e}")
+        except Exception as e:  # recorded on the document; the loop keeps going
+            if not isinstance(e, (ExtractionError, anthropic.APIError, psycopg.Error)):
+                log.exception("%s %s crashed", doc["id"], doc["filename"])
+            handle_failure(doc, e)
 
 
 def start_in_background() -> threading.Event:
     stop = threading.Event()
-    threading.Thread(target=run, args=(stop,), daemon=True, name="worker").start()
+    thread = threading.Thread(target=run, args=(stop,), daemon=True, name="worker")
+    thread.start()
+    state["thread"] = thread
     return stop
+
+
+def health() -> dict:
+    thread, last = state["thread"], state["last_poll"]
+    return {"running": bool(thread and thread.is_alive()),
+            "seconds_since_poll": round(time.time() - last, 1) if last else None}
 
 
 if __name__ == "__main__":

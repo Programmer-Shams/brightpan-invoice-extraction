@@ -92,7 +92,9 @@ export function ResultsView() {
   const planted = ratio(m.planted_caught);
   const falseReviews = ratio(m.false_reviews);
   const mismatched = data.documents.filter((d) => d.mismatches.length > 0);
-  const runDate = new Date(data.generated_at * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  const runDate = data.run_at
+    ? new Date(data.run_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
+    : "an unrecorded date";
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-8">
@@ -110,7 +112,7 @@ export function ResultsView() {
         <Figure value={`${lines.n}/${lines.d}`} label="Line items correct" detail="description, qty, price and amount all right" />
         <Figure value={`${planted.n}/${planted.d}`} label="Planted errors caught" detail="wrong total, duplicate invoice" />
         <Figure value={`${falseReviews.n}`} label="Clean ones sent to review" detail={`out of ${falseReviews.d}`} />
-        <Figure value={`${m.seconds_per_doc_median ?? "—"} s`} label="Per document" detail={`median, slowest ${m.seconds_per_doc_max ?? "—"} s`} />
+        <Figure value={`${m.seconds_per_doc_median ?? "—"} s`} label="Per document" detail={`median, slowest ${m.seconds_per_doc_max ?? "—"} s, ${m.pages_per_minute ?? "—"} pages a minute`} />
         <Figure
           value={m.cost_per_doc_mean_usd !== null ? `$${m.cost_per_doc_mean_usd.toFixed(3)}` : "—"}
           label="Cost per document"

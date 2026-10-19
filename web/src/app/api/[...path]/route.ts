@@ -5,6 +5,7 @@
 const API_URL = process.env.API_URL ?? "http://127.0.0.1:8040";
 const ALLOWED_HOSTS = new Set((process.env.ALLOWED_HOSTS ?? "127.0.0.1:3040,localhost:3040").split(","));
 
+const MAX_UPLOAD_BYTES = 21 * 1024 * 1024; // the API's 20 MB file limit plus form overhead
 const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 const ROUTES: Record<string, RegExp[]> = {
   GET: [
@@ -42,6 +43,10 @@ async function forward(request: Request, path: string[]): Promise<Response> {
 
   let body: BodyInit | undefined;
   if (target.pathname === "/documents" && request.method === "POST") {
+    // Refuse oversized bodies before buffering them (browsers always send Content-Length for form uploads).
+    const length = Number(request.headers.get("content-length"));
+    if (!Number.isFinite(length) || length <= 0) return deny(411, "upload needs a Content-Length");
+    if (length > MAX_UPLOAD_BYTES) return deny(413, "file is larger than 20 MB");
     const form = await request.formData();
     const file = form.get("file");
     if (!(file instanceof File)) return deny(400, "attach a file in the 'file' field");
@@ -60,7 +65,7 @@ async function forward(request: Request, path: string[]): Promise<Response> {
     return deny(502, "The extraction API is not reachable. Start it on port 8040.");
   }
   const out = new Headers();
-  for (const name of ["content-type", "content-disposition", "cache-control"]) {
+  for (const name of ["content-type", "content-disposition", "cache-control", "x-content-type-options"]) {
     const value = upstream.headers.get(name);
     if (value) out.set(name, value);
   }

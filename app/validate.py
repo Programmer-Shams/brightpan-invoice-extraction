@@ -27,6 +27,15 @@ def money(v: float | None) -> float:
     return 0.0 if v is None else float(v)
 
 
+def cents(v: float) -> int:
+    return round(v * 100)
+
+
+def within(a: float, b: float, tolerance: float) -> bool:
+    """Money comparison in whole cents, so float error never turns an exact 2-cent gap into a mismatch."""
+    return abs(cents(a) - cents(b)) <= cents(tolerance)
+
+
 def check_totals(x: Extraction, tolerance: float) -> tuple[bool, dict]:
     """sum(line amounts) = subtotal, and subtotal - discount + tax + shipping = printed total."""
     line_sum = round(sum(money(li.amount) for li in x.line_items), 2)
@@ -34,13 +43,13 @@ def check_totals(x: Extraction, tolerance: float) -> tuple[bool, dict]:
     ok = True
     if x.subtotal is not None:
         checks["line_sum_minus_subtotal"] = round(line_sum - x.subtotal, 2)
-        ok &= abs(line_sum - x.subtotal) <= tolerance
+        ok &= within(line_sum, x.subtotal, tolerance)
     subtotal = x.subtotal if x.subtotal is not None else line_sum
     computed = round(subtotal - money(x.discount) + money(x.tax) + money(x.shipping), 2)
     checks["computed_total"] = computed
     if x.total is not None:
         checks["printed_minus_computed"] = round(x.total - computed, 2)
-        ok &= abs(x.total - computed) <= tolerance
+        ok &= within(x.total, computed, tolerance)
     if any(li.amount is None for li in x.line_items):
         checks["line_items_missing_amount"] = sum(li.amount is None for li in x.line_items)
         ok = False

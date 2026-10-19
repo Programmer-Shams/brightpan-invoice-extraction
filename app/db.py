@@ -8,8 +8,18 @@ from psycopg_pool import ConnectionPool
 from . import config
 
 pool = ConnectionPool(config.DATABASE_URL, min_size=1, max_size=5, open=False,
+                      check=ConnectionPool.check_connection,  # drop connections the pooler closed
                       kwargs={"row_factory": dict_row, "options": f"-c search_path={config.DB_SCHEMA}",
                               "prepare_threshold": None})  # no server-side prepares: safe behind Supabase's pooler
+
+
+def ping() -> bool:
+    try:
+        with pool.connection(timeout=5) as conn:
+            conn.execute("select 1")
+        return True
+    except Exception:
+        return False
 
 
 def init() -> None:
@@ -25,33 +35,58 @@ def insert_document(filename: str, content_type: str, data: bytes, source: str) 
             "returning id, status", (filename, content_type, source, data, hashlib.sha256(data).hexdigest())).fetchone()
 
 
+MAX_ATTEMPTS = 3
+
+
 def claim_next() -> dict | None:
-    """Oldest queued document, locked so concurrent workers never take the same one."""
+    """Oldest queued document that is due, locked so concurrent workers never take the same one."""
     with pool.connection() as conn:
         return conn.execute(
             "update documents set status = 'processing', started_at = now(), attempts = attempts + 1 "
-            "where id = (select id from documents where status = 'queued' order by received_at "
-            "            for update skip locked limit 1) "
-            "returning id, filename, content_type, source, received_at, file_bytes").fetchone()
+            "where id = (select id from documents where status = 'queued' and (retry_at is null or retry_at <= now()) "
+            "            order by received_at for update skip locked limit 1) "
+            "returning id, filename, content_type, source, received_at, attempts, file_bytes").fetchone()
 
 
 def requeue_stale(minutes: int = 10) -> int:
-    """Documents left 'processing' by a crashed worker go back to the queue."""
+    """Documents left 'processing' by a worker that stopped go back to the queue, unless they have used up their
+    attempts (a document that keeps crashing the worker must not loop forever)."""
     with pool.connection() as conn:
-        return conn.execute("update documents set status = 'queued' where status = 'processing' "
-                            "and started_at < now() - make_interval(mins => %s)", (minutes,)).rowcount
+        failed = conn.execute(
+            "update documents set status = 'failed', finished_at = now(), "
+            "error = 'Stopped while being read ' || attempts || ' times; not retried again' "
+            "where status = 'processing' and started_at < now() - make_interval(mins => %s) and attempts >= %s",
+            (minutes, MAX_ATTEMPTS)).rowcount
+        return failed + conn.execute(
+            "update documents set status = 'queued' where status = 'processing' "
+            "and started_at < now() - make_interval(mins => %s)", (minutes,)).rowcount
+
+
+def retry_later(document_id, error: str, attempts: int, usage: dict | None) -> bool:
+    """Puts a document back in the queue after a transient failure. Returns False once attempts are used up."""
+    if attempts >= MAX_ATTEMPTS:
+        mark_failed(document_id, f"{error} (after {attempts} attempts)", usage)
+        return False
+    with pool.connection() as conn:
+        conn.execute("update documents set status = 'queued', error = %s, "
+                     "retry_at = now() + make_interval(secs => %s), "
+                     "failure_usage = coalesce(%s, failure_usage) where id = %s",
+                     (error[:2000], 30 * 2 ** (attempts - 1), Jsonb(usage) if usage else None, document_id))
+    return True
+
+
+# Same vendor + invoice number already stored, by another document in the same scope. Eval uploads are their own
+# scope, so the test set never marks a real invoice as a duplicate (or the other way round). Tested in
+# tests/test_duplicates_db.py against a throwaway schema.
+DUPLICATE_SQL = ("select 1 from extractions e join documents d on d.id = e.document_id "
+                 "where e.duplicate_key = %s and e.document_id <> %s and (d.source = 'eval') = %s limit 1")
 
 
 def is_duplicate(key: str | None, document_id, source: str) -> bool:
-    """Same vendor + invoice number already stored. Eval uploads are their own scope, so the test set
-    never marks a real invoice as a duplicate (or the other way round)."""
     if key is None:
         return False
     with pool.connection() as conn:
-        return conn.execute(
-            "select 1 from extractions e join documents d on d.id = e.document_id "
-            "where e.duplicate_key = %s and e.document_id <> %s and (d.source = 'eval') = %s limit 1",
-            (key, document_id, source == "eval")).fetchone() is not None
+        return conn.execute(DUPLICATE_SQL, (key, document_id, source == "eval")).fetchone() is not None
 
 
 def save_result(document_id, record: dict, key: str | None, pages: int, input_mode: str, usage: dict,
@@ -71,15 +106,32 @@ def save_result(document_id, record: dict, key: str | None, pages: int, input_mo
                      "where id = %s", (pages, document_id))
 
 
+def mark_failed(document_id, error: str, usage: dict | None = None) -> None:
+    with pool.connection() as conn:
+        conn.execute("update documents set status = 'failed', error = %s, finished_at = now(), "
+                     "failure_usage = coalesce(%s, failure_usage) where id = %s",
+                     (error[:2000], Jsonb(usage) if usage else None, document_id))
+
+
 def set_outputs_status(document_id, status: str) -> None:
     with pool.connection() as conn:
-        conn.execute("update extractions set outputs_status = %s where document_id = %s", (status, document_id))
+        conn.execute("update extractions set outputs_status = %s, outputs_attempts = outputs_attempts + 1 "
+                     "where document_id = %s", (status, document_id))
 
 
-def mark_failed(document_id, error: str) -> None:
+MAX_OUTPUT_ATTEMPTS = 5
+
+
+def pending_outputs(limit: int = 10) -> list[dict]:
+    """Register rows / Slack messages that were never sent or failed, for the worker to retry."""
     with pool.connection() as conn:
-        conn.execute("update documents set status = 'failed', error = %s, finished_at = now() where id = %s",
-                     (error[:2000], document_id))
+        return conn.execute(
+            "select d.id, d.filename, d.source, d.received_at, e.record, r.status as review_status "
+            "from extractions e join documents d on d.id = e.document_id "
+            "left join review_queue r on r.document_id = d.id "
+            "where d.source <> 'eval' and e.outputs_attempts < %s and "
+            "      (e.outputs_status like 'failed:%%' or (e.outputs_status is null and e.created_at < now() - interval '1 minute')) "
+            "order by e.created_at limit %s", (MAX_OUTPUT_ATTEMPTS, limit)).fetchall()
 
 
 def get_document(document_id) -> dict | None:
@@ -88,6 +140,7 @@ def get_document(document_id) -> dict | None:
             "select d.id, d.filename, d.content_type, d.source, d.status, d.pages, d.error, d.received_at, "
             "d.finished_at, extract(epoch from d.finished_at - d.received_at) as processing_seconds, "
             "e.record, e.model, e.input_tokens, e.output_tokens, e.cost_usd, e.input_mode, e.outputs_status, "
+            "d.failure_usage, "
             "r.status as review_status, r.reviewer_note "
             "from documents d left join extractions e on e.document_id = d.id "
             "left join review_queue r on r.document_id = d.id where d.id = %s", (document_id,)).fetchone()
@@ -110,6 +163,7 @@ SUMMARY_COLUMNS = (
     "extract(epoch from d.finished_at - d.received_at) as processing_seconds, "
     "e.record->>'vendor_name' as vendor_name, e.record->>'invoice_number' as invoice_number, "
     "e.record->>'currency' as currency, (e.record->>'total')::numeric as total, e.route, e.flags, e.cost_usd, "
+    "e.outputs_status, "
     "r.status as review_status, r.reasons as review_reasons")
 SUMMARY_JOINS = ("from documents d left join extractions e on e.document_id = d.id "
                  "left join review_queue r on r.document_id = d.id")

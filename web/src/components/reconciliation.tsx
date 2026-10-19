@@ -25,9 +25,11 @@ export function Reconciliation({ record }: { record: ExtractedRecord }) {
   const t = record.checks.totals;
   if (!t) return null;
   const subtotal = record.subtotal ?? t.line_sum;
-  const linesOk = record.subtotal === null || Math.abs(t.line_sum - record.subtotal) <= TOLERANCE;
-  const gap = record.total === null ? null : Math.round((record.total - t.computed_total) * 100) / 100;
-  const balanced = gap !== null && Math.abs(gap) <= TOLERANCE && linesOk;
+  // The verdict is the server's (validate.py); the differences here are only for display.
+  const balanced = !record.flags.includes("totals_mismatch");
+  const missingAmounts = t.line_items_missing_amount ?? 0;
+  const linesOk = missingAmounts === 0 && Math.abs(t.line_sum_minus_subtotal ?? 0) <= TOLERANCE;
+  const gap = t.printed_minus_computed ?? null;
   const cur = record.currency ?? "";
 
   return (
@@ -51,7 +53,9 @@ export function Reconciliation({ record }: { record: ExtractedRecord }) {
             ? "Adds up"
             : gap !== null && Math.abs(gap) > TOLERANCE
               ? `Printed total is ${gap > 0 ? "over" : "under"} by ${cur} ${amount(Math.abs(gap))}`
-              : "Line items don't match the subtotal"}
+              : missingAmounts > 0
+                ? `${missingAmounts} line ${missingAmounts === 1 ? "item has" : "items have"} no amount`
+                : "Line items don't match the subtotal"}
         </span>
       </div>
 

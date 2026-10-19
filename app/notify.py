@@ -10,6 +10,7 @@ import httpx
 from . import config
 
 log = logging.getLogger("notify")
+WEBHOOK_HEADER = "X-Brightpan-Signature"  # checked by the webhook's Header Auth credential in n8n
 
 FLAG_TEXT = {
     "totals_mismatch": "totals don't add up",
@@ -20,9 +21,9 @@ FLAG_TEXT = {
 
 
 def cell(v) -> str:
-    """Text from a document must never run as a formula in the register (CSV/Sheets injection)."""
-    s = "" if v is None else str(v)
-    return "'" + s if s[:1] in ("=", "+", "-", "@", "\t", "\r") else s
+    """Text for the register. The n8n Sheets step writes with cellFormat RAW, so Sheets stores values literally and
+    never evaluates a formula; no apostrophe prefix is needed (with RAW it would be stored as a visible character)."""
+    return "" if v is None else str(v)
 
 
 def slack_escape(v) -> str:
@@ -70,7 +71,7 @@ def slack_message(doc: dict, r: dict) -> dict:
 def send(doc: dict, record: dict, event: str = "document.processed") -> str:
     """Auto documents and approved review items go to the AP register; new review items go to Slack.
     Returns the outcome stored on the extraction: sent | skipped:<why> | failed:<why>."""
-    if not config.N8N_OUTPUTS_WEBHOOK_URL:
+    if not config.N8N_OUTPUTS_WEBHOOK_URL or not config.OUTPUTS_WEBHOOK_SECRET:
         return "skipped:no webhook configured"
     if doc["source"] == "eval" and not config.NOTIFY_EVAL:
         return "skipped:eval upload"
@@ -82,7 +83,9 @@ def send(doc: dict, record: dict, event: str = "document.processed") -> str:
     else:
         payload["slack"] = slack_message(doc, record)
     try:
-        httpx.post(config.N8N_OUTPUTS_WEBHOOK_URL, json=payload, timeout=10).raise_for_status()
+        # The webhook answers after the Sheet / Slack step ran, so a failure there comes back as an error here.
+        httpx.post(config.N8N_OUTPUTS_WEBHOOK_URL, json=payload, timeout=30,
+                   headers={WEBHOOK_HEADER: config.OUTPUTS_WEBHOOK_SECRET}).raise_for_status()
         return "sent"
     except httpx.HTTPError as e:
         log.warning("%s output webhook failed: %s", doc["id"], e)

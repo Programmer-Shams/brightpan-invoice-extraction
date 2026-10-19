@@ -23,3 +23,6 @@ uploads/
 .DS_Store
 .vscode/
 .idea/
+
+# partial eval output (a run that did not finish)
+eval/*.partial

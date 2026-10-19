@@ -4,42 +4,71 @@
   "nodes": [
     {
       "parameters": {
-        "pollTimes": {"item": [{"mode": "everyMinute"}]},
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
         "simple": false,
         "filters": {
           "q": "={{ 'deliveredto:' + $env.GMAIL_INTAKE_ADDRESS + ' has:attachment' }}",
           "readStatus": "both"
         },
-        "options": {"downloadAttachments": true, "dataPropertyAttachmentsPrefixName": "attachment_"}
+        "options": {
+          "downloadAttachments": true,
+          "dataPropertyAttachmentsPrefixName": "attachment_"
+        }
       },
       "id": "6a1d2c3e-0000-4000-8000-0000000000a1",
       "name": "New AP email",
       "type": "n8n-nodes-base.gmailTrigger",
       "typeVersion": 1.4,
-      "position": [0, 0]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
-        "jsCode": "// One item per attachment the API can read; everything else in the email is ignored.\nconst ACCEPTED = new Set(['application/pdf', 'image/jpeg', 'image/png']);\nconst out = [];\nfor (const item of $input.all()) {\n  for (const [key, bin] of Object.entries(item.binary ?? {})) {\n    if (!key.startsWith('attachment_') || !ACCEPTED.has(bin.mimeType)) continue;\n    out.push({\n      json: { messageId: item.json.id, subject: item.json.subject, fileName: bin.fileName },\n      binary: { data: bin },\n    });\n  }\n}\nreturn out;"
+        "jsCode": "// One item per attachment that could be an invoice; the API's own byte check makes the final call.\n// Accept by MIME type or file extension (some mail clients send PDFs as application/octet-stream),\n// and skip small images, which are signature logos and inline pictures rather than documents.\nconst TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png']);\nconst EXTENSIONS = /\\.(pdf|jpe?g|png)$/i;\nconst MIN_IMAGE_BYTES = 15000;\nconst UNITS = { B: 1, kB: 1e3, KB: 1e3, MB: 1e6, GB: 1e9 };\nconst bytes = (size) => {\n  const m = /^([\\d.]+)\\s*([kKMG]?B)$/.exec(String(size ?? '').trim());\n  return m ? Number(m[1]) * UNITS[m[2]] : NaN;\n};\nconst out = [];\nfor (const item of $input.all()) {\n  for (const [key, bin] of Object.entries(item.binary ?? {})) {\n    if (!key.startsWith('attachment_')) continue;\n    const name = bin.fileName ?? '';\n    if (!TYPES.has(bin.mimeType) && !EXTENSIONS.test(name)) continue;\n    const isImage = (bin.mimeType ?? '').startsWith('image/') || /\\.(jpe?g|png)$/i.test(name);\n    if (isImage && bytes(bin.fileSize) < MIN_IMAGE_BYTES) continue;\n    out.push({\n      json: { messageId: item.json.id, subject: item.json.subject, fileName: name },\n      binary: { data: bin },\n    });\n  }\n}\nreturn out;"
       },
       "id": "6a1d2c3e-0000-4000-8000-0000000000a2",
       "name": "One item per attachment",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [240, 0]
+      "position": [
+        240,
+        0
+      ]
     },
     {
       "parameters": {
         "method": "POST",
         "url": "={{ $env.API_URL_FOR_N8N }}/documents",
         "sendHeaders": true,
-        "headerParameters": {"parameters": [{"name": "Authorization", "value": "=Bearer {{ $env.API_TOKEN }}"}]},
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.API_TOKEN }}"
+            }
+          ]
+        },
         "sendBody": true,
         "contentType": "multipart-form-data",
         "bodyParameters": {
           "parameters": [
-            {"parameterType": "formBinaryData", "name": "file", "inputDataFieldName": "data"},
-            {"name": "source", "value": "email"}
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "source",
+              "value": "email"
+            }
           ]
         },
         "options": {}
@@ -48,13 +77,39 @@
       "name": "Send to extraction API",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [480, 0]
+      "position": [
+        480,
+        0
+      ],
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
-    "New AP email": {"main": [[{"node": "One item per attachment", "type": "main", "index": 0}]]},
-    "One item per attachment": {"main": [[{"node": "Send to extraction API", "type": "main", "index": 0}]]}
+    "New AP email": {
+      "main": [
+        [
+          {
+            "node": "One item per attachment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One item per attachment": {
+      "main": [
+        [
+          {
+            "node": "Send to extraction API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
-  "settings": {"executionOrder": "v1"},
+  "settings": {
+    "executionOrder": "v1"
+  },
   "active": false
 }

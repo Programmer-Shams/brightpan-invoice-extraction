@@ -1,9 +1,12 @@
+import json
 from datetime import datetime, timezone
+from pathlib import Path
 
 from app import notify
 from app.validate import build_record
 from tests.test_validate import from_truth
 
+ROOT = Path(__file__).resolve().parent.parent
 DOC = {"id": "00000000-0000-0000-0000-000000000010", "filename": "INV10.pdf", "source": "upload",
        "received_at": datetime(2026, 10, 19, 18, 0, tzinfo=timezone.utc)}
 
@@ -38,7 +41,10 @@ def test_eval_uploads_are_not_sent(monkeypatch):
 def test_document_text_cannot_inject_formulas_or_slack_markup():
     evil = {**rec("INV10"), "vendor_name": "=HYPERLINK(\"http://x\",\"pay\")", "invoice_number": "<!channel|x>"}
     row = notify.sheet_row({**DOC, "filename": "+cmd.pdf"}, evil)
-    assert row["Vendor"].startswith("'=") and row["File"] == "'+cmd.pdf"
+    assert row["Vendor"] == "=HYPERLINK(\"http://x\",\"pay\")"   # stored literally: the Sheets step writes RAW
     assert row["Total"] == 490.0                                  # numbers stay numbers
+    wf = json.loads((ROOT / "n8n" / "ap-outputs.workflow.json").read_text())
+    sheets = next(n for n in wf["nodes"] if n["type"] == "n8n-nodes-base.googleSheets")
+    assert sheets["parameters"]["options"]["cellFormat"] == "RAW"
     text = notify.slack_message({**DOC, "filename": "<http://evil|invoice>.pdf"}, evil)["text"]
     assert "<!channel" not in text and "<http://evil" not in text and "&lt;!channel|x&gt;" in text

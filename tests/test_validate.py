@@ -75,3 +75,11 @@ def test_duplicate_key_ignores_case_spacing_and_punctuation():
     assert duplicate_key("Ferro Metalworks Inc.", "FM-10421") != duplicate_key("Ferro Metalworks Inc.", "FM-10498")
     assert duplicate_key("Ferro Metalworks Inc.", "FM-10421") != duplicate_key("Pacific Packaging Co.", "FM-10421")
     assert duplicate_key(None, "FM-10421") is None and duplicate_key("Ferro", "") is None
+
+
+def test_exactly_two_cents_is_within_tolerance_despite_float_error():
+    # 0.10 - 0.08 is 0.020000000000000004 in floats; the spec allows +-$0.02
+    x = from_truth("INV01", line_items=[{"description": "a", "quantity": 1, "unit_price": 0.08, "amount": 0.08}],
+                   subtotal=0.10, discount=0.0, tax=0.0, shipping=0.0, total=0.10)
+    assert check_totals(x, 0.02)[0]
+    assert not check_totals(from_truth("INV01", subtotal=3057.47, total=3202.47), 0.02)[0]  # 3 cents off

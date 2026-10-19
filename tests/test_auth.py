@@ -1,14 +1,28 @@
 from fastapi.testclient import TestClient
 
-from app import config
+from app import config, db, worker
 from app.main import app
 
 client = TestClient(app)  # not entered as a context manager: no lifespan, so no database or worker
 
 
-def test_health_is_open(monkeypatch):
+def test_health_is_open_and_reports_what_is_down(monkeypatch):
     monkeypatch.setattr(config, "API_TOKEN", "secret-token")
+    monkeypatch.setenv("RUN_WORKER", "0")
+    monkeypatch.setattr(db, "ping", lambda: True)
     assert client.get("/health").status_code == 200
+    monkeypatch.setattr(db, "ping", lambda: False)
+    r = client.get("/health")
+    assert r.status_code == 503 and r.json()["database"] is False
+    monkeypatch.setattr(db, "ping", lambda: True)
+    monkeypatch.setenv("RUN_WORKER", "1")
+    monkeypatch.setattr(worker, "state", {"thread": None, "last_poll": None})
+    assert client.get("/health").status_code == 503                 # worker expected but not running
+
+
+def test_api_docs_and_schema_are_not_exposed():
+    for path in ("/docs", "/redoc", "/openapi.json"):
+        assert client.get(path, headers={"Authorization": "Bearer x"}).status_code in (401, 404)
 
 
 def test_requests_without_the_token_are_rejected(monkeypatch):

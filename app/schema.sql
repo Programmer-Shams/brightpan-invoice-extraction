@@ -19,6 +19,8 @@ create table if not exists documents (
     finished_at      timestamptz
 );
 create index if not exists documents_queue on documents (received_at) where status = 'queued';
+alter table documents add column if not exists retry_at timestamptz;      -- not before this time (retry backoff)
+alter table documents add column if not exists failure_usage jsonb;       -- tokens and cost of calls that failed
 
 -- The extracted, validated record (BUILD_SPEC schema) plus model usage.
 create table if not exists extractions (
@@ -38,6 +40,7 @@ create table if not exists extractions (
     created_at       timestamptz not null default now()
 );
 alter table extractions add column if not exists outputs_status text;  -- sent | skipped:<why> | failed:<why>
+alter table extractions add column if not exists outputs_attempts int not null default 0;
 create index if not exists extractions_duplicate_key on extractions (duplicate_key);
 
 -- Documents waiting for a person. resolution is set by the reviewer.
