@@ -19,6 +19,17 @@ FLAG_TEXT = {
 }
 
 
+def cell(v) -> str:
+    """Text from a document must never run as a formula in the register (CSV/Sheets injection)."""
+    s = "" if v is None else str(v)
+    return "'" + s if s[:1] in ("=", "+", "-", "@", "\t", "\r") else s
+
+
+def slack_escape(v) -> str:
+    """Slack treats & < > as control characters (links, mentions); document text must not inject them."""
+    return str(v).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
 def money(currency: str | None, v: float | None) -> str:
     return "—" if v is None else f"{currency or ''} {v:,.2f}".strip()
 
@@ -26,32 +37,33 @@ def money(currency: str | None, v: float | None) -> str:
 def sheet_row(doc: dict, r: dict) -> dict:
     return {
         "Received": doc["received_at"].isoformat(timespec="seconds"),
-        "Vendor": r["vendor_name"], "Invoice #": r["invoice_number"],
-        "Invoice date": r["invoice_date"], "Due date": r["due_date"] or "",
-        "Currency": r["currency"], "PO #": r["po_number"] or "",
+        "Vendor": cell(r["vendor_name"]), "Invoice #": cell(r["invoice_number"]),
+        "Invoice date": cell(r["invoice_date"]), "Due date": cell(r["due_date"]),
+        "Currency": cell(r["currency"]), "PO #": cell(r["po_number"]),
         "Subtotal": r["subtotal"], "Discount": r["discount"], "Tax": r["tax"], "Shipping": r["shipping"],
         "Total": r["total"], "Line items": len(r["line_items"]),
-        "Source": doc["source"], "File": doc["filename"],
+        "Source": cell(doc["source"]), "File": cell(doc["filename"]),
         "Link": f"{config.FRONTEND_URL}/documents/{doc['id']}", "Document ID": str(doc["id"]),
     }
 
 
 def slack_message(doc: dict, r: dict) -> dict:
     t = r.get("checks", {}).get("totals", {})
+    cur = slack_escape(r["currency"]) if r["currency"] else None
     reasons = []
     for f in r["flags"]:
         line = FLAG_TEXT.get(f, f)
         if f == "totals_mismatch" and "computed_total" in t:
-            line += f" (printed {money(r['currency'], r['total'])}, lines add up to {money(r['currency'], t['computed_total'])})"
+            line += f" (printed {money(cur, r['total'])}, lines add up to {money(cur, t['computed_total'])})"
         if f == "missing_required_field":
-            line += f" ({', '.join(r.get('checks', {}).get('missing_required', []))})"
+            line += f" ({slack_escape(', '.join(r.get('checks', {}).get('missing_required', [])))})"
         if f == "low_confidence":
             line += f" ({', '.join(r.get('checks', {}).get('low_confidence_fields', []))})"
         reasons.append(f"• {line}")
-    title = f"{r['vendor_name'] or 'Unknown vendor'} {r['invoice_number'] or ''}".strip()
+    title = slack_escape(f"{r['vendor_name'] or 'Unknown vendor'} {r['invoice_number'] or ''}".strip())
     link = f"{config.FRONTEND_URL}/review/{doc['id']}"
-    text = (f":mag: *Invoice needs review:* {title}, {money(r['currency'], r['total'])}\n"
-            + "\n".join(reasons) + f"\nFile: {doc['filename']} ({doc['source']})  <{link}|Open in review queue>")
+    text = (f":mag: *Invoice needs review:* {title}, {money(cur, r['total'])}\n"
+            + "\n".join(reasons) + f"\nFile: {slack_escape(doc['filename'])} ({slack_escape(doc['source'])})  <{link}|Open in review queue>")
     return {"text": text}
 
 

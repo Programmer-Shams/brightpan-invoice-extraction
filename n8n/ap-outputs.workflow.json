@@ -1,4 +1,5 @@
 {
+  "id": "njHZvEemZ1jo9e2U",
   "name": "Demo 4 - AP outputs (Sheet + Slack)",
   "nodes": [
     {
@@ -55,7 +56,7 @@
         "documentId": {"__rl": true, "mode": "url", "value": "={{ $env.AP_REGISTER_SHEET_URL }}"},
         "sheetName": {"__rl": true, "mode": "id", "value": "0"},
         "columns": {"mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [], "schema": []},
-        "options": {}
+        "options": {"cellFormat": "RAW"}
       },
       "id": "5f0c9a52-6d1e-4a51-9a0e-2b7f1c3d4e04",
       "name": "Append to AP register",

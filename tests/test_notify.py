@@ -33,3 +33,12 @@ def test_sheet_row_has_register_columns_and_blank_nulls():
 def test_eval_uploads_are_not_sent(monkeypatch):
     monkeypatch.setattr(notify.config, "NOTIFY_EVAL", False)
     assert notify.send({**DOC, "source": "eval"}, rec("INV01")) == "skipped:eval upload"
+
+
+def test_document_text_cannot_inject_formulas_or_slack_markup():
+    evil = {**rec("INV10"), "vendor_name": "=HYPERLINK(\"http://x\",\"pay\")", "invoice_number": "<!channel|x>"}
+    row = notify.sheet_row({**DOC, "filename": "+cmd.pdf"}, evil)
+    assert row["Vendor"].startswith("'=") and row["File"] == "'+cmd.pdf"
+    assert row["Total"] == 490.0                                  # numbers stay numbers
+    text = notify.slack_message({**DOC, "filename": "<http://evil|invoice>.pdf"}, evil)["text"]
+    assert "<!channel" not in text and "<http://evil" not in text and "&lt;!channel|x&gt;" in text
