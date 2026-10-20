@@ -106,6 +106,14 @@ def save_result(document_id, record: dict, key: str | None, pages: int, input_mo
                      "where id = %s", (pages, document_id))
 
 
+def requeue_failed(document_id) -> bool:
+    """Puts a failed document back in the queue for a fresh read (a person asked for it), with a full set of attempts."""
+    with pool.connection() as conn:
+        return conn.execute("update documents set status = 'queued', attempts = 0, error = null, retry_at = null, "
+                            "started_at = null, finished_at = null where id = %s and status = 'failed'",
+                            (document_id,)).rowcount == 1
+
+
 def mark_failed(document_id, error: str, usage: dict | None = None) -> None:
     with pool.connection() as conn:
         conn.execute("update documents set status = 'failed', error = %s, finished_at = now(), "

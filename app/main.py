@@ -145,6 +145,14 @@ def get_file(document_id: str):
                              "X-Content-Type-Options": "nosniff"})
 
 
+@app.post("/documents/{document_id}/retry", status_code=202)
+def retry_document(document_id: str):
+    """Reads a document that couldn't be read again (for example after an outage or a billing problem)."""
+    if not db.requeue_failed(valid_id(document_id)):
+        raise HTTPException(409, "only a document that couldn't be read can be read again")
+    return {"id": document_id, "status": "queued"}
+
+
 PREVIEW_DPI = 110
 
 

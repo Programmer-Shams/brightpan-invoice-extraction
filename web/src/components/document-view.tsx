@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import useSWR from "swr";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 import { OutcomeBadge } from "@/components/outcome";
 import { Reconciliation } from "@/components/reconciliation";
 import { ReviewPanel } from "@/components/review-panel";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { fetcher, fileUrl, pageUrl, type DocumentDetail, type ExtractedRecord } from "@/lib/api";
+import { fetcher, fileUrl, pageUrl, readAgain, type DocumentDetail, type ExtractedRecord } from "@/lib/api";
 import { FIELD_LABEL, STATUS_TEXT, amount, dateLong, outcome, quantity, registerNote } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -176,8 +179,11 @@ export function DocumentView() {
           {doc.status === "failed" && (
             <section className="rounded-xl border border-mismatch/40 bg-mismatch-soft p-5">
               <h2 className="font-semibold text-mismatch">This document couldn&apos;t be read</h2>
-              <p className="mt-1 text-sm">{doc.error}</p>
-              <p className="mt-2 text-sm text-muted-foreground">Upload it again, or enter it by hand.</p>
+              <p className="mt-1 text-sm break-words">{doc.error}</p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                If the cause is fixed (an outage, billing), read it again. Otherwise enter it by hand.
+              </p>
+              <ReadAgainButton id={doc.id} onQueued={() => mutate()} />
             </section>
           )}
           {(doc.status === "queued" || doc.status === "processing") && (
@@ -212,6 +218,31 @@ export function DocumentView() {
         </div>
       </div>
     </div>
+  );
+}
+
+function ReadAgainButton({ id, onQueued }: { id: string; onQueued: () => void }) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <Button
+      className="mt-3"
+      variant="outline"
+      disabled={busy}
+      onClick={async () => {
+        setBusy(true);
+        try {
+          await readAgain(id);
+          toast.success("Queued. Reading it again now.");
+          onQueued();
+        } catch (e) {
+          toast.error(`Couldn't queue it: ${(e as Error).message}`);
+        } finally {
+          setBusy(false);
+        }
+      }}
+    >
+      {busy ? "Queuing…" : "Read it again"}
+    </Button>
   );
 }
 

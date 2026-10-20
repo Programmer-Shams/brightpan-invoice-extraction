@@ -159,6 +159,10 @@ export async function decideReview(id: string, action: "approve" | "reject", not
   );
 }
 
+export async function readAgain(id: string) {
+  return parse<{ id: string; status: Status }>(await fetch(`/api/documents/${id}/retry`, { method: "POST" }));
+}
+
 export const fileUrl = (id: string) => `/api/documents/${id}/file`;
 export const pageUrl = (id: string, page: number) => `/api/documents/${id}/pages/${page}`;
 

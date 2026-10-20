@@ -35,3 +35,14 @@ def test_requests_without_the_token_are_rejected(monkeypatch):
 def test_api_refuses_to_run_open_when_no_token_is_configured(monkeypatch):
     monkeypatch.setattr(config, "API_TOKEN", "")
     assert client.get("/documents", headers={"Authorization": "Bearer "}).status_code == 503
+
+
+def test_read_again_only_for_failed_documents(monkeypatch):
+    monkeypatch.setattr(config, "API_TOKEN", "secret-token")
+    auth = {"Authorization": "Bearer secret-token"}
+    doc = "/documents/00000000-0000-0000-0000-000000000001/retry"
+    monkeypatch.setattr(db, "requeue_failed", lambda _id: True)
+    assert client.post(doc, headers=auth).status_code == 202
+    monkeypatch.setattr(db, "requeue_failed", lambda _id: False)        # not failed (or not found)
+    assert client.post(doc, headers=auth).status_code == 409
+    assert client.post(doc).status_code == 401

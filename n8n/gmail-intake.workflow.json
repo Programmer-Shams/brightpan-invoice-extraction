@@ -13,7 +13,7 @@
         },
         "simple": false,
         "filters": {
-          "q": "={{ 'deliveredto:' + $env.GMAIL_INTAKE_ADDRESS + ' has:attachment' }}",
+          "q": "={{ '{to:' + $env.GMAIL_INTAKE_ADDRESS + ' deliveredto:' + $env.GMAIL_INTAKE_ADDRESS + '} has:attachment' }}",
           "readStatus": "both"
         },
         "options": {

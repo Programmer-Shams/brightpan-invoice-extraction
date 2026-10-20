@@ -16,7 +16,7 @@ const ROUTES: Record<string, RegExp[]> = {
     /^\/review$/,
     /^\/results$/,
   ],
-  POST: [/^\/documents$/, new RegExp(`^/review/${UUID}$`)],
+  POST: [/^\/documents$/, new RegExp(`^/documents/${UUID}/retry$`), new RegExp(`^/review/${UUID}$`)],
 };
 
 const deny = (status: number, detail: string) => Response.json({ detail }, { status });
@@ -53,6 +53,8 @@ async function forward(request: Request, path: string[]): Promise<Response> {
     body = new FormData();
     body.append("file", file, file.name);
     body.append("source", "upload");
+  } else if (target.pathname.endsWith("/retry")) {
+    body = undefined; // no body
   } else if (request.method === "POST") {
     headers["Content-Type"] = "application/json";
     body = await request.text();
