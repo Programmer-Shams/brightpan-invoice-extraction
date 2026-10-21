@@ -82,9 +82,10 @@ def handle_failure(doc: dict, error: Exception) -> None:
         safely("mark the document failed", db.mark_failed, doc["id"], message, usage)
 
 
-def run(stop: threading.Event | None = None) -> None:
+def run(stop: threading.Event | None = None, maintenance: bool = True) -> None:
+    """One worker loop. Only one worker should run maintenance (requeue stale documents, resend outputs)."""
     client = anthropic.Anthropic()
-    backoff, last_maintenance = 1.0, 0.0
+    backoff, last_maintenance = 1.0, 0.0 if maintenance else float("inf")
     while not (stop and stop.is_set()):
         try:
             if time.monotonic() - last_maintenance > MAINTENANCE_SECONDS:
@@ -115,7 +116,7 @@ def start_in_background(threads: int = config.WORKER_THREADS) -> threading.Event
     """Starts the worker threads. Documents are claimed with SKIP LOCKED, so each is read by exactly one."""
     stop = threading.Event()
     for i in range(threads):
-        thread = threading.Thread(target=run, args=(stop,), daemon=True, name=f"worker-{i + 1}")
+        thread = threading.Thread(target=run, args=(stop, i == 0), daemon=True, name=f"worker-{i + 1}")
         thread.start()
         state["threads"].append(thread)
     return stop

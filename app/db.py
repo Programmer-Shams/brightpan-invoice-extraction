@@ -95,8 +95,8 @@ def save_result(document_id, build, key: str | None, source: str, pages: int, in
         record = build(is_dup)
         conn.execute(
             "insert into extractions (document_id, record, vendor_name, invoice_number, duplicate_key, route, flags, "
-            "input_mode, model, input_tokens, output_tokens, cost_usd, request_id) "
-            "values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            "input_mode, model, input_tokens, output_tokens, cost_usd, request_id, outputs_status, outputs_claimed_at) "
+            "values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'sending', now())",
             (document_id, Jsonb(record), record["vendor_name"], record["invoice_number"], key, record["route"],
              record["flags"], input_mode, usage["model"], usage["input_tokens"], usage["output_tokens"],
              usage["cost_usd"], request_id))
@@ -132,16 +132,28 @@ def set_outputs_status(document_id, status: str) -> None:
 MAX_OUTPUT_ATTEMPTS = 5
 
 
+STALE_SENDING = "interval '5 minutes'"  # a 'sending' claim older than this belonged to a process that stopped
+
+
 def pending_outputs(limit: int = 10) -> list[dict]:
-    """Register rows / Slack messages that were never sent or failed, for the worker to retry."""
-    with pool.connection() as conn:
+    """Claims register rows / Slack messages to retry: failed ones, and ones whose sender stopped mid-way.
+    The claim is atomic (SKIP LOCKED + status 'sending'), so each delivery has exactly one sender."""
+    with pool.connection() as conn, conn.transaction():
+        ids = [r["document_id"] for r in conn.execute(
+            "with c as (select e.document_id from extractions e join documents d on d.id = e.document_id "
+            "           left join review_queue r on r.document_id = d.id "
+            "           where d.source <> 'eval' and e.outputs_attempts < %s and r.status is distinct from 'rejected' and "
+            "                 (e.outputs_status like 'failed:%%' or e.outputs_status is null or "
+            f"                  (e.outputs_status = 'sending' and e.outputs_claimed_at < now() - {STALE_SENDING})) "
+            "           order by e.created_at limit %s for update of e skip locked) "
+            "update extractions e set outputs_status = 'sending', outputs_claimed_at = now() from c "
+            "where e.document_id = c.document_id returning e.document_id", (MAX_OUTPUT_ATTEMPTS, limit)).fetchall()]
+        if not ids:
+            return []
         return conn.execute(
             "select d.id, d.filename, d.source, d.received_at, e.record, r.status as review_status "
             "from extractions e join documents d on d.id = e.document_id "
-            "left join review_queue r on r.document_id = d.id "
-            "where d.source <> 'eval' and e.outputs_attempts < %s and r.status is distinct from 'rejected' and "
-            "      (e.outputs_status like 'failed:%%' or (e.outputs_status is null and e.created_at < now() - interval '1 minute')) "
-            "order by e.created_at limit %s", (MAX_OUTPUT_ATTEMPTS, limit)).fetchall()
+            "left join review_queue r on r.document_id = d.id where d.id = any(%s)", (ids,)).fetchall()
 
 
 def get_document(document_id) -> dict | None:
@@ -199,7 +211,8 @@ def resolve_review(document_id, status: str, note: str | None) -> dict | None:
         row = conn.execute("update review_queue set status = %s, reviewer_note = %s, resolved_at = now() "
                            "where document_id = %s and status = 'open' returning document_id",
                            (status, note, document_id)).fetchone()
-        if row:
-            conn.execute("update extractions set outputs_attempts = 0, outputs_status = null where document_id = %s",
+        if row and status == "approved":  # the approver's request sends the register row; a rejection sends nothing
+            conn.execute("update extractions set outputs_attempts = 0, outputs_status = 'sending', "
+                         "outputs_claimed_at = now() where document_id = %s",
                          (document_id,))
     return get_document(document_id) if row else None

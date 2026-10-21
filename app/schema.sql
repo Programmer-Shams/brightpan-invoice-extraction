@@ -41,6 +41,7 @@ create table if not exists extractions (
 );
 alter table extractions add column if not exists outputs_status text;  -- sent | skipped:<why> | failed:<why>
 alter table extractions add column if not exists outputs_attempts int not null default 0;
+alter table extractions add column if not exists outputs_claimed_at timestamptz;  -- when a sender took the delivery
 create index if not exists extractions_duplicate_key on extractions (duplicate_key);
 
 -- Documents waiting for a person. resolution is set by the reviewer.

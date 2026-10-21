@@ -85,3 +85,28 @@ def test_two_copies_saved_at_the_same_moment_still_catch_each_other(conn):
     for t in threads: t.start()
     for t in threads: t.join()
     assert sorted(results) == [False, True]      # exactly one of the two is flagged as the duplicate
+
+
+def test_a_failed_delivery_is_claimed_by_exactly_one_sender(conn):
+    """The resend claim (as app.db.pending_outputs): two passes at the same moment never take the same row."""
+    import threading
+    schema = conn.execute("select current_schema()").fetchone()[0]
+    doc = stored(conn, "upload")
+    conn.execute("update extractions set outputs_status = 'failed:ConnectError' where document_id = %s", (doc,))
+    claimed, barrier = [], threading.Barrier(2)
+
+    def claim():
+        with psycopg.connect(TEST_DATABASE_URL, prepare_threshold=None, options=f"-c search_path={schema}") as c:
+            barrier.wait()
+            with c.transaction():
+                rows = c.execute(
+                    "with x as (select document_id from extractions where outputs_status like 'failed:%%' "
+                    "           for update skip locked) "
+                    "update extractions e set outputs_status = 'sending', outputs_claimed_at = now() from x "
+                    "where e.document_id = x.document_id returning e.document_id").fetchall()
+            claimed.append(len(rows))
+
+    threads = [threading.Thread(target=claim) for _ in range(2)]
+    for t in threads: t.start()
+    for t in threads: t.join()
+    assert sorted(claimed) == [0, 1]
