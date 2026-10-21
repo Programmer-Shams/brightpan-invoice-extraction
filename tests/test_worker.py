@@ -35,8 +35,24 @@ def test_outputs_are_sent_off_the_worker_thread(monkeypatch):
                                                        "input_mode": "pdf_text", "usage": {}, "request_id": "r"})
     monkeypatch.setattr(worker.db, "save_result", lambda _id, build, *a: build(False))
     monkeypatch.setattr(worker.notify, "send", lambda *a, **k: (time.sleep(1), "sent")[1])
-    monkeypatch.setattr(worker.db, "set_outputs_status", lambda *a: sent.set())
+    monkeypatch.setattr(worker.db, "start_send", lambda _id: "token")
+    monkeypatch.setattr(worker.db, "set_outputs_status", lambda *a: (sent.set(), True)[1])
     t = time.monotonic()
     worker.process(None, DOC)
     assert time.monotonic() - t < 0.5               # the slow register write doesn't hold up the next document
     assert sent.wait(5)                             # and it is still delivered
+
+
+def test_a_delivery_whose_claim_is_gone_is_not_sent(monkeypatch):
+    calls = []
+    monkeypatch.setattr(worker.db, "start_send", lambda _id: None)        # another sender has it, or it was delivered
+    monkeypatch.setattr(worker.notify, "send", lambda *a, **k: calls.append("sent") or "sent")
+    assert worker.deliver({"id": "d1"}, {}) is None and calls == []
+
+
+def test_an_outcome_is_recorded_only_under_the_senders_own_claim(monkeypatch):
+    recorded = []
+    monkeypatch.setattr(worker.db, "start_send", lambda _id: "token-1")
+    monkeypatch.setattr(worker.notify, "send", lambda *a, **k: "sent")
+    monkeypatch.setattr(worker.db, "set_outputs_status", lambda _id, status, token: recorded.append(token) or True)
+    assert worker.deliver({"id": "d1"}, {}) == "sent" and recorded == ["token-1"]

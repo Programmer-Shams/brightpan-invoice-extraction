@@ -123,10 +123,22 @@ def mark_failed(document_id, error: str, usage: dict | None = None) -> None:
                      (error[:2000], Jsonb(usage) if usage else None, document_id))
 
 
-def set_outputs_status(document_id, status: str) -> None:
+def start_send(document_id):
+    """Takes the claim right before sending: returns a token, or None if no claim is pending (someone else has it,
+    or it was delivered). The token is the claim time, so waiting in the outputs queue never counts as stale."""
     with pool.connection() as conn:
-        conn.execute("update extractions set outputs_status = %s, outputs_attempts = outputs_attempts + 1 "
-                     "where document_id = %s", (status, document_id))
+        row = conn.execute("update extractions set outputs_claimed_at = clock_timestamp() "
+                           "where document_id = %s and outputs_status = 'sending' returning outputs_claimed_at",
+                           (document_id,)).fetchone()
+    return row["outputs_claimed_at"] if row else None
+
+
+def set_outputs_status(document_id, status: str, token) -> bool:
+    """Records the outcome only if this sender still holds the claim (fenced by the token)."""
+    with pool.connection() as conn:
+        return conn.execute("update extractions set outputs_status = %s, outputs_attempts = outputs_attempts + 1 "
+                            "where document_id = %s and outputs_status = 'sending' and outputs_claimed_at = %s",
+                            (status, document_id, token)).rowcount == 1
 
 
 MAX_OUTPUT_ATTEMPTS = 5

@@ -38,8 +38,19 @@ state = {"threads": [], "last_poll": None}
 outputs = ThreadPoolExecutor(max_workers=1, thread_name_prefix="outputs")
 
 
-def deliver(doc: dict, record: dict, event: str = "document.processed") -> None:
-    safely("send outputs", lambda: db.set_outputs_status(doc["id"], notify.send(doc, record, event=event)))
+def deliver(doc: dict, record: dict, event: str = "document.processed") -> str | None:
+    """Sends one claimed delivery and records the outcome. Returns the outcome, or None if the claim was gone."""
+    token = db.start_send(doc["id"])
+    if token is None:
+        return None
+    outcome = notify.send(doc, record, event=event)
+    if not db.set_outputs_status(doc["id"], outcome, token):
+        log.warning("%s delivery claim was taken over; outcome %s not recorded", doc["id"], outcome)
+    return outcome
+
+
+def deliver_safely(doc: dict, record: dict, event: str = "document.processed") -> None:
+    safely("send outputs", deliver, doc, record, event)
 
 
 def process(client: anthropic.Anthropic, doc: dict) -> None:
@@ -53,14 +64,14 @@ def process(client: anthropic.Anthropic, doc: dict) -> None:
     log.info("%s %s route=%s flags=%s", doc["id"], doc["filename"], record["route"], record["flags"])
     # The document is done now; delivery happens on the outputs thread (the file bytes are not needed there).
     slim = {k: doc[k] for k in ("id", "filename", "source", "received_at")}
-    outputs.submit(deliver, slim, record)
+    outputs.submit(deliver_safely, slim, record)
 
 
 def resend_outputs() -> None:
     """Retries register rows and Slack messages that never went out (n8n down, a crash before sending)."""
     for row in db.pending_outputs():
         event = "review.approved" if row["review_status"] == "approved" else "document.processed"
-        db.set_outputs_status(row["id"], notify.send(row, row["record"], event=event))
+        deliver(row, row["record"], event)
 
 
 def safely(what: str, fn, *args) -> None:

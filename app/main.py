@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field
 
 from eval.scoring import HEADER_FIELDS, compute_metrics
 
-from . import config, db, notify, worker
+from . import config, db, worker
 from .extract import ExtractionError, render_pdf_pages
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
@@ -194,8 +194,7 @@ def resolve_review(document_id: str, decision: ReviewDecision):
         raise HTTPException(409, "no open review item for this document")
     outputs = None
     if status == "approved":
-        outputs = notify.send(row, row["record"], event="review.approved")
-        db.set_outputs_status(row["id"], outputs)
+        outputs = worker.deliver(row, row["record"], event="review.approved")
     return {"id": str(row["id"]), "review_status": status, "outputs_status": outputs}
 
 
