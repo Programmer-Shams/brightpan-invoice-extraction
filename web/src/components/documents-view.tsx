@@ -15,8 +15,12 @@ import { FLAG_TEXT, amount, outcome, received } from "@/lib/format";
 export function DocumentsView() {
   const router = useRouter();
   const { data, error, mutate } = useSWR<DocumentSummary[]>("/api/documents?limit=200", fetcher, {
-    // Poll quickly while something is being read, slowly otherwise.
-    refreshInterval: (latest) => (latest?.some((d) => d.status === "queued" || d.status === "processing") ? 1500 : 8000),
+    // Poll quickly while something is being read or its register update is still on its way, slowly otherwise.
+    refreshInterval: (latest) =>
+      latest?.some((d) => d.status === "queued" || d.status === "processing" ||
+                          (d.status === "done" && d.route === "auto" && (d.outputs_status === null || d.outputs_status === "sending" || d.outputs_status === "in_flight")))
+        ? 1500
+        : 8000,
   });
 
   const counts = {

@@ -124,10 +124,10 @@ def mark_failed(document_id, error: str, usage: dict | None = None) -> None:
 
 
 def start_send(document_id):
-    """Takes the claim right before sending: returns a token, or None if no claim is pending (someone else has it,
-    or it was delivered). The token is the claim time, so waiting in the outputs queue never counts as stale."""
+    """Moves a claimed delivery from 'sending' to 'in_flight' right before it is sent. Only one sender can make that
+    move, so only one sends; the others get None. The token (the move's time) fences the outcome write."""
     with pool.connection() as conn:
-        row = conn.execute("update extractions set outputs_claimed_at = clock_timestamp() "
+        row = conn.execute("update extractions set outputs_status = 'in_flight', outputs_claimed_at = clock_timestamp() "
                            "where document_id = %s and outputs_status = 'sending' returning outputs_claimed_at",
                            (document_id,)).fetchone()
     return row["outputs_claimed_at"] if row else None
@@ -137,14 +137,14 @@ def set_outputs_status(document_id, status: str, token) -> bool:
     """Records the outcome only if this sender still holds the claim (fenced by the token)."""
     with pool.connection() as conn:
         return conn.execute("update extractions set outputs_status = %s, outputs_attempts = outputs_attempts + 1 "
-                            "where document_id = %s and outputs_status = 'sending' and outputs_claimed_at = %s",
+                            "where document_id = %s and outputs_status = 'in_flight' and outputs_claimed_at = %s",
                             (status, document_id, token)).rowcount == 1
 
 
 MAX_OUTPUT_ATTEMPTS = 5
 
 
-STALE_SENDING = "interval '5 minutes'"  # a 'sending' claim older than this belonged to a process that stopped
+STALE_SENDING = "interval '5 minutes'"  # a claim this old belonged to a process that stopped (sends time out at 30 s)
 
 
 def pending_outputs(limit: int = 10) -> list[dict]:
@@ -156,7 +156,7 @@ def pending_outputs(limit: int = 10) -> list[dict]:
             "           left join review_queue r on r.document_id = d.id "
             "           where d.source <> 'eval' and e.outputs_attempts < %s and r.status is distinct from 'rejected' and "
             "                 (e.outputs_status like 'failed:%%' or e.outputs_status is null or "
-            f"                  (e.outputs_status = 'sending' and e.outputs_claimed_at < now() - {STALE_SENDING})) "
+            f"                  (e.outputs_status in ('sending', 'in_flight') and e.outputs_claimed_at < now() - {STALE_SENDING})) "
             "           order by e.created_at limit %s for update of e skip locked) "
             "update extractions e set outputs_status = 'sending', outputs_claimed_at = now() from c "
             "where e.document_id = c.document_id returning e.document_id", (MAX_OUTPUT_ATTEMPTS, limit)).fetchall()]

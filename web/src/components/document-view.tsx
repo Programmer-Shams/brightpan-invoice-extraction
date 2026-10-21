@@ -129,7 +129,10 @@ function RecordDetails({ record }: { record: ExtractedRecord }) {
 export function DocumentView() {
   const { id } = useParams<{ id: string }>();
   const { data: doc, error, mutate } = useSWR<DocumentDetail>(`/api/documents/${id}`, fetcher, {
-    refreshInterval: (latest) => (latest && (latest.status === "done" || latest.status === "failed") ? 0 : 1000),
+    refreshInterval: (latest) =>
+      latest && (latest.status === "failed" || (latest.status === "done" && latest.outputs_status !== null && latest.outputs_status !== "sending" && latest.outputs_status !== "in_flight"))
+        ? 0
+        : 1000,
   });
 
   if (error) {

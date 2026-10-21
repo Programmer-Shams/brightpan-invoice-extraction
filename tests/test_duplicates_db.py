@@ -110,3 +110,25 @@ def test_a_failed_delivery_is_claimed_by_exactly_one_sender(conn):
     for t in threads: t.start()
     for t in threads: t.join()
     assert sorted(claimed) == [0, 1]
+
+
+def test_only_one_sender_moves_a_claimed_delivery_to_in_flight(conn):
+    """start_send (as app.db.start_send): two senders racing for the same claimed row, exactly one may send."""
+    import threading
+    schema = conn.execute("select current_schema()").fetchone()[0]
+    doc = stored(conn, "upload")
+    conn.execute("update extractions set outputs_status = 'sending' where document_id = %s", (doc,))
+    won, barrier = [], threading.Barrier(2)
+
+    def start():
+        with psycopg.connect(TEST_DATABASE_URL, prepare_threshold=None, autocommit=True,
+                             options=f"-c search_path={schema}") as c:
+            barrier.wait()
+            row = c.execute("update extractions set outputs_status = 'in_flight', outputs_claimed_at = clock_timestamp() "
+                            "where document_id = %s and outputs_status = 'sending' returning 1", (doc,)).fetchone()
+            won.append(row is not None)
+
+    threads = [threading.Thread(target=start) for _ in range(2)]
+    for t in threads: t.start()
+    for t in threads: t.join()
+    assert sorted(won) == [False, True]
