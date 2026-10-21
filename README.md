@@ -44,7 +44,8 @@ flowchart LR
 
 `eval/run_eval.py` uploads all 20 samples to the running system, scores every field against `truth/` and writes
 `eval/results.csv`. The web app's Test results page is built from that file. Latest full run (2026-10-21, run
-`20261021T110006Z`, on Supabase), before the manual review of mismatches:
+`20261021T110006Z`, on Supabase). Every mismatch was reviewed by hand; the verdicts are in
+`eval/manual-review.md`. The case study for this project is in `docs/case-study.md`.
 
 | Measure | Result |
 | --- | --- |
@@ -59,7 +60,7 @@ flowchart LR
 | Gmail intake | 3 emailed documents (a scan, a phone photo, a receipt) read and added to the AP register |
 
 The one line-item miss is RCPT01: the receipt prints the description cut to 26 characters, the extractor reports
-what is printed, and the answer key has the full name. All 20 samples come from one generator with three invoice
+what is printed, and the answer key has the full name. On review it is kept as a miss (strict reporting). All 20 samples come from one generator with three invoice
 layouts, so these numbers describe this test set, not every supplier's paperwork.
 
 ## Run it
