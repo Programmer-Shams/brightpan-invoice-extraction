@@ -59,3 +59,29 @@ def test_different_key_is_not_a_duplicate(conn):
     stored(conn, "upload", key=duplicate_key("Ferro Metalworks Inc.", "FM-10498"))
     other = stored(conn, "upload", key=None)
     assert not dup(conn, other, "upload")
+
+
+def test_two_copies_saved_at_the_same_moment_still_catch_each_other(conn):
+    """The worker's save path: lock on the key, check, insert, all in one transaction (as app.db.save_result)."""
+    import threading
+    schema = conn.execute("select current_schema()").fetchone()[0]
+    results, barrier = [], threading.Barrier(2)
+
+    def save(source):
+        with psycopg.connect(TEST_DATABASE_URL, prepare_threshold=None, options=f"-c search_path={schema}") as c:
+            doc = c.execute("insert into documents (filename, content_type, source, file_bytes, sha256, status) "
+                            "values ('x.pdf', 'application/pdf', %s, '\\x00', 'h', 'processing') returning id",
+                            (source,)).fetchone()[0]
+            c.commit()
+            barrier.wait()
+            with c.transaction():
+                c.execute("select pg_advisory_xact_lock(hashtext(%s))", (KEY,))
+                dup = c.execute(DUPLICATE_SQL, (KEY, doc, False)).fetchone() is not None
+                c.execute("insert into extractions (document_id, record, duplicate_key, route) values (%s, %s, %s, 'auto')",
+                          (doc, Jsonb({}), KEY))
+            results.append(dup)
+
+    threads = [threading.Thread(target=save, args=(s,)) for s in ("upload", "email")]
+    for t in threads: t.start()
+    for t in threads: t.join()
+    assert sorted(results) == [False, True]      # exactly one of the two is flagged as the duplicate

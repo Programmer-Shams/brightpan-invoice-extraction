@@ -10,6 +10,7 @@ left behind and resends register rows / Slack messages that didn't go out.
 import logging
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import anthropic
 import psycopg
@@ -30,20 +31,29 @@ RETRYABLE = (anthropic.RateLimitError, anthropic.OverloadedError, anthropic.Inte
              psycopg.OperationalError)
 
 # Read by /health.
-state = {"thread": None, "last_poll": None}
+state = {"threads": [], "last_poll": None}
+
+# Register rows and Slack alerts are sent by one separate thread, in order, so a slow Google Sheets write never
+# holds up the next document. If the process stops first, the resend pass delivers what is still unsent.
+outputs = ThreadPoolExecutor(max_workers=1, thread_name_prefix="outputs")
+
+
+def deliver(doc: dict, record: dict, event: str = "document.processed") -> None:
+    safely("send outputs", lambda: db.set_outputs_status(doc["id"], notify.send(doc, record, event=event)))
 
 
 def process(client: anthropic.Anthropic, doc: dict) -> None:
     result = extract(client, bytes(doc["file_bytes"]), doc["content_type"])
     x = result["extraction"]
     key = duplicate_key(x.vendor_name, x.invoice_number)
-    record = build_record(x, is_duplicate=db.is_duplicate(key, doc["id"], doc["source"]),
-                          threshold=config.CONFIDENCE_THRESHOLD, tolerance=config.TOLERANCE)
-    db.save_result(doc["id"], record.model_dump(), key, result["pages"], result["input_mode"],
-                   result["usage"], result["request_id"])
-    log.info("%s %s route=%s flags=%s", doc["id"], doc["filename"], record.route, record.flags)
-    # The document is done now. Sending is best effort: if it fails, the resend pass picks it up.
-    safely("send outputs", lambda: db.set_outputs_status(doc["id"], notify.send(doc, record.model_dump())))
+    build = lambda is_dup: build_record(x, is_duplicate=is_dup, threshold=config.CONFIDENCE_THRESHOLD,
+                                        tolerance=config.TOLERANCE).model_dump()
+    record = db.save_result(doc["id"], build, key, doc["source"], result["pages"], result["input_mode"],
+                            result["usage"], result["request_id"])
+    log.info("%s %s route=%s flags=%s", doc["id"], doc["filename"], record["route"], record["flags"])
+    # The document is done now; delivery happens on the outputs thread (the file bytes are not needed there).
+    slim = {k: doc[k] for k in ("id", "filename", "source", "received_at")}
+    outputs.submit(deliver, slim, record)
 
 
 def resend_outputs() -> None:
@@ -101,17 +111,20 @@ def run(stop: threading.Event | None = None) -> None:
             handle_failure(doc, e)
 
 
-def start_in_background() -> threading.Event:
+def start_in_background(threads: int = config.WORKER_THREADS) -> threading.Event:
+    """Starts the worker threads. Documents are claimed with SKIP LOCKED, so each is read by exactly one."""
     stop = threading.Event()
-    thread = threading.Thread(target=run, args=(stop,), daemon=True, name="worker")
-    thread.start()
-    state["thread"] = thread
+    for i in range(threads):
+        thread = threading.Thread(target=run, args=(stop,), daemon=True, name=f"worker-{i + 1}")
+        thread.start()
+        state["threads"].append(thread)
     return stop
 
 
 def health() -> dict:
-    thread, last = state["thread"], state["last_poll"]
-    return {"running": bool(thread and thread.is_alive()),
+    threads, last = state["threads"], state["last_poll"]
+    alive = sum(t.is_alive() for t in threads)
+    return {"running": bool(threads) and alive == len(threads), "threads": alive,
             "seconds_since_poll": round(time.time() - last, 1) if last else None}
 
 

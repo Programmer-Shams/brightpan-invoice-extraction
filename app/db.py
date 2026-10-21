@@ -82,16 +82,17 @@ DUPLICATE_SQL = ("select 1 from extractions e join documents d on d.id = e.docum
                  "where e.duplicate_key = %s and e.document_id <> %s and (d.source = 'eval') = %s limit 1")
 
 
-def is_duplicate(key: str | None, document_id, source: str) -> bool:
-    if key is None:
-        return False
-    with pool.connection() as conn:
-        return conn.execute(DUPLICATE_SQL, (key, document_id, source == "eval")).fetchone() is not None
-
-
-def save_result(document_id, record: dict, key: str | None, pages: int, input_mode: str, usage: dict,
-                request_id: str | None) -> None:
+def save_result(document_id, build, key: str | None, source: str, pages: int, input_mode: str, usage: dict,
+                request_id: str | None) -> dict:
+    """Checks for a duplicate and stores the record in one transaction, under a lock on the duplicate key, so two
+    workers reading copies of the same invoice at the same moment can't both miss each other.
+    `build(is_duplicate)` returns the record to store."""
     with pool.connection() as conn, conn.transaction():
+        is_dup = False
+        if key is not None:
+            conn.execute("select pg_advisory_xact_lock(hashtext(%s))", (key,))
+            is_dup = conn.execute(DUPLICATE_SQL, (key, document_id, source == "eval")).fetchone() is not None
+        record = build(is_dup)
         conn.execute(
             "insert into extractions (document_id, record, vendor_name, invoice_number, duplicate_key, route, flags, "
             "input_mode, model, input_tokens, output_tokens, cost_usd, request_id) "
@@ -104,6 +105,7 @@ def save_result(document_id, record: dict, key: str | None, pages: int, input_mo
                          (document_id, record["flags"]))
         conn.execute("update documents set status = 'done', pages = %s, finished_at = now(), error = null "
                      "where id = %s", (pages, document_id))
+    return record
 
 
 def requeue_failed(document_id) -> bool:

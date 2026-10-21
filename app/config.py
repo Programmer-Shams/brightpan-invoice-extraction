@@ -10,6 +10,7 @@ DATABASE_URL = os.getenv("DATABASE_URL", "")
 DB_SCHEMA = "invoice_extraction"
 MODEL = os.getenv("EXTRACTION_MODEL", "claude-opus-5-5")
 EFFORT = os.getenv("EXTRACTION_EFFORT", "medium")
+WORKER_THREADS = int(os.getenv("WORKER_THREADS", "2"))  # documents read in parallel
 CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.80"))
 TOLERANCE = 0.02  # line math and totals must agree within two cents
 API_TOKEN = os.getenv("API_TOKEN", "")  # every endpoint except /health requires "Authorization: Bearer <token>"

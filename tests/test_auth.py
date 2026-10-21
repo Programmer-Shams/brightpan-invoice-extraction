@@ -16,7 +16,7 @@ def test_health_is_open_and_reports_what_is_down(monkeypatch):
     assert r.status_code == 503 and r.json()["database"] is False
     monkeypatch.setattr(db, "ping", lambda: True)
     monkeypatch.setenv("RUN_WORKER", "1")
-    monkeypatch.setattr(worker, "state", {"thread": None, "last_poll": None})
+    monkeypatch.setattr(worker, "state", {"threads": [], "last_poll": None})
     assert client.get("/health").status_code == 503                 # worker expected but not running
 
 
