@@ -1,0 +1,74 @@
+{
+  "id": "2bf713e7-0329-4bd2-b2fd-058c715675c2",
+  "filename": "INV05.pdf",
+  "content_type": "application/pdf",
+  "source": "eval",
+  "status": "done",
+  "pages": 1,
+  "error": null,
+  "received_at": "2026-10-21T11:00:44.567445+00:00",
+  "finished_at": "2026-10-21T11:00:50.040228+00:00",
+  "processing_seconds": 5.472783,
+  "record": {
+    "tax": 0.0,
+    "flags": [],
+    "route": "auto",
+    "total": 2378.4,
+    "checks": {
+      "totals": {
+        "line_sum": 2378.4,
+        "computed_total": 2378.4,
+        "printed_minus_computed": 0.0,
+        "line_sum_minus_subtotal": 0.0
+      }
+    },
+    "currency": "USD",
+    "discount": 0.0,
+    "due_date": "2026-10-10",
+    "shipping": 0.0,
+    "subtotal": 2378.4,
+    "po_number": "PO-5504",
+    "confidence": {
+      "tax": 0.92,
+      "total": 0.98,
+      "currency": 0.98,
+      "discount": 0.93,
+      "due_date": 0.97,
+      "shipping": 0.93,
+      "subtotal": 0.98,
+      "po_number": 0.97,
+      "line_items": 0.97,
+      "vendor_name": 0.98,
+      "invoice_date": 0.98,
+      "invoice_number": 0.98
+    },
+    "line_items": [
+      {
+        "amount": 1944.0,
+        "quantity": 4.0,
+        "unit_price": 486.0,
+        "description": "Nonstick coating, 20 L drum"
+      },
+      {
+        "amount": 434.4,
+        "quantity": 6.0,
+        "unit_price": 72.4,
+        "description": "Primer, 5 L"
+      }
+    ],
+    "vendor_name": "NorthCoat Finishes",
+    "invoice_date": "2026-09-10",
+    "invoice_number": "NC-40912"
+  },
+  "input_mode": "pdf_text",
+  "outputs_status": null,
+  "outputs_gave_up": false,
+  "review": null,
+  "usage": {
+    "model": "claude-opus-5-5",
+    "input_tokens": 2800,
+    "output_tokens": 323,
+    "cost_usd": 0.01766
+  },
+  "seconds_source": "server"
+}

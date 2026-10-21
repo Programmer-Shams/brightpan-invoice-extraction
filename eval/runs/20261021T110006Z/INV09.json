@@ -1,0 +1,326 @@
+{
+  "id": "ed8cc38a-8582-4641-87f0-f74fcc03a3c1",
+  "filename": "INV09.pdf",
+  "content_type": "application/pdf",
+  "source": "eval",
+  "status": "done",
+  "pages": 2,
+  "error": null,
+  "received_at": "2026-10-21T11:01:15.347443+00:00",
+  "finished_at": "2026-10-21T11:01:32.039840+00:00",
+  "processing_seconds": 16.692397,
+  "record": {
+    "tax": 0.0,
+    "flags": [],
+    "route": "auto",
+    "total": 7367.0,
+    "checks": {
+      "totals": {
+        "line_sum": 7147.0,
+        "computed_total": 7367.0,
+        "printed_minus_computed": 0.0,
+        "line_sum_minus_subtotal": 0.0
+      }
+    },
+    "currency": "USD",
+    "discount": 0.0,
+    "due_date": "2026-10-22",
+    "shipping": 220.0,
+    "subtotal": 7147.0,
+    "po_number": "PO-5510",
+    "confidence": {
+      "tax": 0.9,
+      "total": 0.99,
+      "currency": 0.99,
+      "discount": 0.95,
+      "due_date": 0.99,
+      "shipping": 0.99,
+      "subtotal": 0.99,
+      "po_number": 0.98,
+      "line_items": 0.97,
+      "vendor_name": 0.99,
+      "invoice_date": 0.99,
+      "invoice_number": 0.99
+    },
+    "line_items": [
+      {
+        "amount": 3360.0,
+        "quantity": 300.0,
+        "unit_price": 11.2,
+        "description": "Cast iron skillet blank 12-inch"
+      },
+      {
+        "amount": 2275.0,
+        "quantity": 250.0,
+        "unit_price": 9.1,
+        "description": "Cast iron skillet blank 10-inch"
+      },
+      {
+        "amount": 350.0,
+        "quantity": 1.0,
+        "unit_price": 350.0,
+        "description": "Pattern tooling fee"
+      },
+      {
+        "amount": 162.0,
+        "quantity": 9.0,
+        "unit_price": 18.0,
+        "description": "Pallet charge"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 1"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 2"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 3"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 4"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 5"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 6"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 7"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 8"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 9"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 10"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 11"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 12"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 13"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 14"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 15"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 16"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 17"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 18"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 19"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 20"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 21"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 22"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 23"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 24"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 25"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 26"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 27"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 28"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 29"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 30"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 31"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 32"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 33"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 34"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 35"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 36"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 37"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 38"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 39"
+      },
+      {
+        "amount": 25.0,
+        "quantity": 1.0,
+        "unit_price": 25.0,
+        "description": "Sample casting lot 40"
+      }
+    ],
+    "vendor_name": "Ferro Metalworks Inc.",
+    "invoice_date": "2026-09-22",
+    "invoice_number": "FM-10498"
+  },
+  "input_mode": "pdf_text",
+  "outputs_status": null,
+  "outputs_gave_up": false,
+  "review": null,
+  "usage": {
+    "model": "claude-opus-5-5",
+    "input_tokens": 3982,
+    "output_tokens": 2061,
+    "cost_usd": 0.057148
+  },
+  "seconds_source": "server"
+}

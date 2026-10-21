@@ -43,8 +43,8 @@ flowchart LR
 ## Test results
 
 `eval/run_eval.py` uploads all 20 samples to the running system, scores every field against `truth/` and writes
-`eval/results.csv`. The web app's Test results page is built from that file. First full run on Supabase, before
-the manual review of mismatches:
+`eval/results.csv`. The web app's Test results page is built from that file. Latest full run (2026-10-21, run
+`20261021T110006Z`, on Supabase), before the manual review of mismatches:
 
 | Measure | Result |
 | --- | --- |
@@ -53,9 +53,10 @@ the manual review of mismatches:
 | Planted errors routed to review (INV10 wrong total, INV16 duplicate) | 2/2, correct flags |
 | Clean documents wrongly sent to review | 0/18 |
 | Invented values (receipt due dates, USD on CAD invoices) | 0 |
-| Seconds per document, upload to finished | median 6.5, max 20.5 |
-| Throughput (one worker) | 6.8 pages per minute |
+| Seconds per document, upload to finished | median 7.6, max 21.5 |
+| Throughput (one worker) | 6.3 pages per minute |
 | API cost per document | $0.025 mean, $0.51 for all 20 |
+| Gmail intake | 3 emailed documents (a scan, a phone photo, a receipt) read and added to the AP register |
 
 The one line-item miss is RCPT01: the receipt prints the description cut to 26 characters, the extractor reports
 what is printed, and the answer key has the full name. All 20 samples come from one generator with three invoice
