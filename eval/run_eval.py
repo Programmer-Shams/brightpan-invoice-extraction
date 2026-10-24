@@ -72,7 +72,7 @@ def run_one(client: httpx.Client, path: Path, timeout: float, poll: float) -> di
 
 
 def print_metrics(m: dict) -> None:
-    print("\n=== Demo 4 eval metrics (measured) ===")
+    print("\n=== Eval metrics (measured) ===")
     print(f"Documents finished:   {m['documents_done']}/{m['documents']}"
           + (f"  not done: {', '.join(m['documents_not_done'])}" if m["documents_not_done"] else ""))
     print(f"Field accuracy:       {m['field_accuracy']}")

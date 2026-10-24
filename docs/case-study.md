@@ -2,7 +2,7 @@
 
 ## The problem
 
-Brightpan Kitchen Supply (a fictional store, used here as the client) gets supplier invoices and receipts by email
+Brightpan Kitchen Supply (the store in this portfolio project) gets supplier invoices and receipts by email
 and by upload. Some are PDFs, some are scans, some are phone photos taken at a loading dock. Someone in accounts
 payable typed every one into a spreadsheet: vendor, invoice number, dates, every line, the totals. That is slow,
 and it lets two expensive mistakes through: an invoice whose total doesn't match its own lines, and the same invoice

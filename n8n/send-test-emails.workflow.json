@@ -1,6 +1,6 @@
 {
   "id": "brightpanSendTestEmails",
-  "name": "Demo 4 - send 3 test emails (manual)",
+  "name": "Brightpan - send 3 test emails (manual)",
   "nodes": [
     {
       "parameters": {},

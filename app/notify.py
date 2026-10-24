@@ -1,4 +1,4 @@
-"""Sends each processed document to Demo 4's n8n: auto -> a row in the AP register sheet, review -> Slack.
+"""Sends each processed document to this project's n8n: auto -> a row in the AP register sheet, review -> Slack.
 
 The payload is fully shaped here (sheet row + Slack message) so the n8n workflow only routes it.
 Eval uploads are not sent unless NOTIFY_EVAL=1, so eval runs don't fill the register or the channel.

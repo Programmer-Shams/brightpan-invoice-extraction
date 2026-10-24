@@ -1,4 +1,4 @@
--- Demo 4 schema. Lives in its own schema so it never collides with other tables in the database.
+-- Invoice extraction schema. Lives in its own schema so it never collides with other tables in the database.
 create schema if not exists invoice_extraction;
 set search_path to invoice_extraction;
 

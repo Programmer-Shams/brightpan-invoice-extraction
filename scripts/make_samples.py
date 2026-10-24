@@ -1,5 +1,5 @@
-"""Generates the fictional sample invoices for Demo 4 and their ground-truth JSON.
-All vendors, addresses and numbers are fictional. Re-run to regenerate: python scripts/make_samples.py"""
+"""Generates the sample invoices for this project and their ground-truth JSON.
+All vendors, addresses and numbers are test data. Re-run to regenerate: python scripts/make_samples.py"""
 import json, random, os, io
 from decimal import Decimal, ROUND_HALF_UP
 from reportlab.lib.pagesizes import letter

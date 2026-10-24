@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Imports the Demo 4 workflows into Demo 4's n8n, attaches the credentials that exist there (looked up by type,
+# Imports the workflows into this project's n8n, attaches the credentials that exist there (looked up by type,
 # so the repo files stay instance-independent), publishes the ones that run on their own, and restarts n8n.
 # It also (re)creates the outputs webhook's Header Auth credential from OUTPUTS_WEBHOOK_SECRET in .env.
 set -euo pipefail
